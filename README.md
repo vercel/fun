@@ -1,4 +1,4 @@
-# lambda-dev
+# ƒun
 
 Local Lambda development environment.
 
@@ -10,7 +10,7 @@ Given a Lambda function like this one:
 ```js
 // index.js
 exports.handler = function(event, context, callback) {
-  callback(null, JSON.stringify({ event, context }));
+  callback(null, { hello: 'world' });
 };
 ```
 
@@ -39,7 +39,9 @@ async function main() {
   // Invoke the function with a custom payload. A new instance of the function
   // will be initialized if there is not an available one ready to process.
   const res = await fn({ hello: 'world' });
+
   console.log(res);
+  // Prints: { hello: 'world' }
 
   // Once we are done with the function, destroy it so that the processes are
   // cleaned up, and the API server is shut down (useful for hot-reloading).
@@ -63,9 +65,9 @@ The `native` provider executes Lambda functions directly on the machine executin
 real Lambda environment, with some key differences that are documented here:
 
  * Processes are *not* sandboxed nor chrooted, so do not rely on hard-coded
-   locations like `/var/task`, `/var/runtime` and `/opt`. Instead, your function
-   code should use the environment variables that represent these locations
-   (namely `LAMBDA_TASK_ROOT` and `LAMBDA_RUNTIME_DIR`).
+   locations like `/var/task`, `/var/runtime`, `/opt`, etc.. Instead, your
+   function code should use the environment variables that represent these
+   locations (namely `LAMBDA_TASK_ROOT` and `LAMBDA_RUNTIME_DIR`).
 
 ### `docker`
 
@@ -76,8 +78,11 @@ including the ability to execute Linux x64 binaries / shared libraries.
 
 ## Runtimes
 
- `lambda-dev` aims to support all runtimes that AWS Lambda provides. Currently
- implemented are:
+`lambda-dev` aims to support all runtimes that AWS Lambda provides. Currently
+implemented are:
 
-   * `nodejs` for Node.js Lambda functions
-   * `provided` for custom runtimes
+ * `nodejs` for Node.js Lambda functions using the system `node` binary
+ * `nodejs6.10` for Node.js Lambda functions using a downloaded Node v6.10.0 binary
+ * `nodejs8.10` for Node.js Lambda functions using a downloaded Node v8.10.0 binary
+ * `go1.x` for Lambda functions written in Go - binary must be compiled for your platform
+ * `provided` for custom runtimes
