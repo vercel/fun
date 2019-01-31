@@ -17,7 +17,7 @@ exports.handler = function(event, context, callback) {
 You can invoke this function locally using the code below:
 
 ```js
-const { createFunction } = require('@zeit/lambda-dev');
+const { createFunction } = require('@zeit/fun');
 
 async function main() {
   // Starts up the necessary server to be able to invoke the function
