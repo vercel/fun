@@ -65,9 +65,14 @@ The `native` provider executes Lambda functions directly on the machine executin
 real Lambda environment, with some key differences that are documented here:
 
  * Processes are *not* sandboxed nor chrooted, so do not rely on hard-coded
-   locations like `/var/task`, `/var/runtime`, `/opt`, etc.. Instead, your
+   locations like `/var/task`, `/var/runtime`, `/opt`, etc. Instead, your
    function code should use the environment variables that represent these
    locations (namely `LAMBDA_TASK_ROOT` and `LAMBDA_RUNTIME_DIR`).
+ * Processes are frozen by sending the `SIGSTOP` signal to the lambda process,
+   and unfrozen by sending the `SIGCONT` signal.
+ * Lambdas that compile to native executables (i.e. Go) will need to be compiled
+   for your operating system. So if you are on MacOS, then the binary needs to be
+   executable on MacOS.
 
 ### `docker`
 
@@ -85,4 +90,4 @@ implemented are:
  * `nodejs6.10` for Node.js Lambda functions using a downloaded Node v6.10.0 binary
  * `nodejs8.10` for Node.js Lambda functions using a downloaded Node v8.10.0 binary
  * `go1.x` for Lambda functions written in Go - binary must be compiled for your platform
- * `provided` for custom runtimes
+ * `provided` for [custom runtimes](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html)
