@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+# Ensure the downloaded Node.js version is used
+export PATH="$LAMBDA_DEV_CACHE_DIR/bin:$PATH"
+
+# Execute the "nodejs" runtime bootstrap
+export LAMBDA_RUNTIME_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}")"/../nodejs >/dev/null 2>&1 && pwd )"
+cd "$LAMBDA_RUNTIME_DIR"
+exec "$LAMBDA_RUNTIME_DIR/bootstrap" "$@"

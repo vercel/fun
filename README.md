@@ -1,0 +1,83 @@
+# lambda-dev
+
+Local Lambda development environment.
+
+
+## Example
+
+Given a Lambda function like this one:
+
+```js
+// index.js
+exports.handler = function(event, context, callback) {
+  callback(null, JSON.stringify({ event, context }));
+};
+```
+
+You can invoke this function locally using the code below:
+
+```js
+const { createFunction } = require('@zeit/lambda-dev');
+
+async function main() {
+  // Starts up the necessary server to be able to invoke the function
+  const fn = await createFunction({
+    Code: {
+      // `ZipFile` works, or an already unzipped directory may be specified
+      Directory: __dirname + '/example'
+    },
+    Handler: 'index.handler',
+    Runtime: 'nodejs',
+    Environment: {
+      Variables: {
+        "HELLO": "world"
+      }
+    },
+    MemorySize: 512
+  });
+
+  // Invoke the function with a custom payload. A new instance of the function
+  // will be initialized if there is not an available one ready to process.
+  const res = await fn({ hello: 'world' });
+  console.log(res);
+
+  // Once we are done with the function, destroy it so that the processes are
+  // cleaned up, and the API server is shut down (useful for hot-reloading).
+  await fn.destroy();
+}
+
+main().catch(console.error);
+```
+
+
+## Providers
+
+`lambda-dev` has a concept of pluggable "providers", which are responsible for
+creating, freezing, unfreezing and shutting down the processes that execute the
+Lambda function.
+
+### `native`
+
+The `native` provider executes Lambda functions directly on the machine executing
+`lambda-dev`. This provides an execution environment that closely resembles the
+real Lambda environment, with some key differences that are documented here:
+
+ * Processes are *not* sandboxed nor chrooted, so do not rely on hard-coded
+   locations like `/var/task`, `/var/runtime` and `/opt`. Instead, your function
+   code should use the environment variables that represent these locations
+   (namely `LAMBDA_TASK_ROOT` and `LAMBDA_RUNTIME_DIR`).
+
+### `docker`
+
+A `docker` provider is planned, but not yet implemented. This will allow for an
+execution environment that more closely matches the AWS Lambda environment,
+including the ability to execute Linux x64 binaries / shared libraries.
+
+
+## Runtimes
+
+ `lambda-dev` aims to support all runtimes that AWS Lambda provides. Currently
+ implemented are:
+
+   * `nodejs` for Node.js Lambda functions
+   * `provided` for custom runtimes

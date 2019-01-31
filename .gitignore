@@ -1,0 +1,6 @@
+handler
+node_modules
+/dist
+/?.js
+/examples/*/*.zip
+/test/functions/*/*.zip

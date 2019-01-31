@@ -1,0 +1,50 @@
+{
+  "name": "@zeit/fun",
+  "version": "0.0.0",
+  "description": "Local Lambda development environment",
+  "main": "./dist/src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "./util/build.sh",
+    "test": "npm run build && best --include dist/test/test.js --verbose",
+    "lint:staged": "lint-staged",
+    "prettier": "prettier --write --single-quote './{src,test}/**/*.ts'",
+    "prepublishOnly": "npm run build && rm -rf dist/test"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "adm-zip": "0.4.13",
+    "async-listen": "1.0.0",
+    "cachedir": "2.1.0",
+    "debug": "4.1.1",
+    "execa": "1.0.0",
+    "fs-extra": "7.0.1",
+    "generic-pool": "3.4.2",
+    "micro": "9.3.3",
+    "node-fetch": "2.3.0",
+    "path-match": "1.2.4",
+    "tar": "4.4.8",
+    "uid-promise": "1.0.0",
+    "util.promisify": "1.0.0",
+    "uuid": "3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "10.12.18",
+    "@types/tar": "4.0.0",
+    "@zeit/best": "0.5.1",
+    "lint-staged": "8.1.0",
+    "pre-commit": "1.2.2",
+    "prettier": "1.15.3",
+    "source-map-support": "0.5.10",
+    "typescript": "3.2.2"
+  },
+  "pre-commit": "lint:staged",
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write --single-quote",
+      "git add"
+    ]
+  }
+}
