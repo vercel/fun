@@ -1,6 +1,12 @@
 # ƒun
 
-Local Lambda development environment.
+Local serverless function λ development runtime.
+
+ * Programmatic. A TypeScript API is exposed to trigger invocations.
+ * Provider agnostic. AWS Lambda + other cloud providers planned.
+ * Runtime agnostic. Node, go, python and custom runtime APIs.
+ * Platform agnostic. Functions can be executed natively (e.g.: macOS) or via Docker.
+ * Zero setup needed. ƒun acquires the necessary runtime files (e.g.: `node`).
 
 
 ## Example
@@ -54,14 +60,14 @@ main().catch(console.error);
 
 ## Providers
 
-`lambda-dev` has a concept of pluggable "providers", which are responsible for
+ƒun has a concept of pluggable "providers", which are responsible for
 creating, freezing, unfreezing and shutting down the processes that execute the
 Lambda function.
 
 ### `native`
 
 The `native` provider executes Lambda functions directly on the machine executing
-`lambda-dev`. This provides an execution environment that closely resembles the
+ƒun. This provides an execution environment that closely resembles the
 real Lambda environment, with some key differences that are documented here:
 
  * Processes are *not* sandboxed nor chrooted, so do not rely on hard-coded
@@ -83,7 +89,7 @@ including the ability to execute Linux x64 binaries / shared libraries.
 
 ## Runtimes
 
-`lambda-dev` aims to support all runtimes that AWS Lambda provides. Currently
+ƒun aims to support all runtimes that AWS Lambda provides. Currently
 implemented are:
 
  * `nodejs` for Node.js Lambda functions using the system `node` binary
