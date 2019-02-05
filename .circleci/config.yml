@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  test-linux:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: sudo apt-get install -y golang
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          command: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          command: bash test/go-build.sh
+      - run:
+          command: DEBUG=* yarn test
+workflows:
+  version: 2
+  build:
+    jobs:
+      - test-linux
