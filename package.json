@@ -2,7 +2,8 @@
   "name": "@zeit/fun",
   "version": "0.0.1",
   "description": "Local Lambda development environment",
-  "main": "./dist/src/index.js",
+  "main": "dist/src/index",
+  "typings": "dist/src/index",
   "license": "MIT",
   "scripts": {
     "build": "./util/build.sh",
