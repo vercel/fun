@@ -4,23 +4,53 @@ jobs:
     docker:
       - image: circleci/node:10
     steps:
-      - checkout
-      - run: sudo apt-get install -y golang
+      - run:
+          name: Install Apt Dependencies
+          command: sudo apt-get install -y golang
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
+          name: Install '@zeit/fun' Dependencies
           command: yarn
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
       - run:
+          name: Compile Go Test Functions
           command: bash test/go-build.sh
       - run:
+          name: Run Tests
+          command: DEBUG=* yarn test
+  test-macos:
+    macos:
+      xcode: "9.3.0"
+    steps:
+      - run:
+          name: Install Homebrew Dependencies
+          command: brew install golang
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install '@zeit/fun' Dependencies
+          command: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: Compile Go Test Functions
+          command: bash test/go-build.sh
+      - run:
+          name: Run Tests
           command: DEBUG=* yarn test
 workflows:
   version: 2
   build:
     jobs:
       - test-linux
+      - test-macos
