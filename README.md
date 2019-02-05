@@ -1,5 +1,7 @@
 # ƒun
 
+[![CircleCI](https://circleci.com/gh/zeit/fun/tree/master.svg?style=svg&circle-token=8df270134881b60f9ec91f47f5268e0b5cce2acd)](https://circleci.com/gh/zeit/fun/tree/master)
+
 Local serverless function λ development runtime.
 
  * Programmatic. A TypeScript API is exposed to trigger invocations.
