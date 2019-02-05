@@ -10,12 +10,12 @@ jobs:
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-linux-{{ checksum "package.json" }}
       - run:
           name: Install '@zeit/fun' Dependencies
           command: yarn
       - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-linux-{{ checksum "package.json" }}
           paths:
             - node_modules
       - run:
@@ -34,12 +34,12 @@ jobs:
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-macos-{{ checksum "package.json" }}
       - run:
           name: Install '@zeit/fun' Dependencies
           command: yarn
       - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-macos-{{ checksum "package.json" }}
           paths:
             - node_modules
       - run:
@@ -50,7 +50,7 @@ jobs:
           command: DEBUG=* yarn test
 workflows:
   version: 2
-  build:
+  test:
     jobs:
       - test-linux
       - test-macos
