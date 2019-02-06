@@ -16,6 +16,8 @@ import {
 
 const debug = createDebug('@zeit/lambda-dev:providers/native');
 
+const {TESTING} = process.env;
+
 export default class NativeProvider implements Provider {
 	pool: Pool;
 	lambda: Lambda;
@@ -69,10 +71,18 @@ export default class NativeProvider implements Provider {
 			};
 		}
 
+		let PATH = '/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin';
+
+		// When running `mocha` tests, add the `.node_modules/.bin` so
+		// that `ts-node` is available to invoke the `bootstrap.ts` file
+		if (TESTING) {
+			PATH += `:${join(__dirname, '../../../node_modules/.bin')}`;
+		}
+
 		// https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html
 		const env = {
 			// Non-reserved env vars (can overwrite with params)
-			PATH: '/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin',
+			PATH,
 			LANG: 'en_US.UTF-8',
 
 			// User env vars
@@ -94,7 +104,6 @@ export default class NativeProvider implements Provider {
 			LAMBDA_TASK_ROOT: taskDir,
 			TZ: ':UTC'
 		};
-		//console.error({ env });
 
 		const proc = spawn(bootstrap, [], {
 			env,

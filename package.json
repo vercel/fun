@@ -7,8 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "./util/build.sh",
-    "test": "npm run build && best --include dist/test/test.js --verbose",
-    "test-codecov": "nyc npm test",
+    "test": "nyc mocha --require ts-node/register --require source-map-support/register test/*.ts",
     "report-codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint:staged": "lint-staged",
     "prettier": "prettier --write --single-quote './{src,test}/**/*.ts'",
@@ -34,15 +33,17 @@
     "uuid": "3.3.2"
   },
   "devDependencies": {
+    "@types/mocha": "5.2.5",
     "@types/node": "10.12.18",
     "@types/tar": "4.0.0",
-    "@zeit/best": "0.5.1",
     "codecov": "3.1.0",
     "lint-staged": "8.1.0",
+    "mocha": "5.2.0",
     "nyc": "13.2.0",
     "pre-commit": "1.2.2",
     "prettier": "1.15.3",
     "source-map-support": "0.5.10",
+    "ts-node": "8.0.2",
     "typescript": "3.2.2"
   },
   "pre-commit": "lint:staged",

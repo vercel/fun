@@ -1,63 +1,14 @@
-import { basename, join } from 'path';
-import { tmpdir } from 'os';
-import * as execa from 'execa';
+process.env.TESTING = '1';
+
 import * as assert from 'assert';
-import { mkdirp, remove, readdir, readFile } from 'fs-extra';
+import { basename } from 'path';
+import { readdir, readFile } from 'fs-extra';
+import { Lambda } from '../src/types';
 import { createFunction, ValidationError } from '../src';
-import { generateTarballUrl, installNode } from '../src/install-node';
 
-// `install-node.ts` tests
-export function test_install_node_tarball_url() {
-	assert.equal(
-		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-darwin-x64.tar.gz',
-		generateTarballUrl('8.10.0', 'darwin', 'x64')
-	);
-}
-
-export async function test_install_node() {
-	const version = 'v10.0.0';
-	const dest = join(
-		tmpdir(),
-		`install-node-${Math.random()
-			.toString(16)
-			.substring(2)}`
-	);
-	await mkdirp(dest);
-	try {
-		await installNode(dest, version);
-		const res = await execa(join(dest, 'bin/node'), [
-			'-p',
-			'process.version'
-		]);
-		assert.equal(res.stdout.trim(), version);
-	} finally {
-		// Clean up
-		await remove(dest);
-	}
-}
-
-// Validation
-export const test_lambda_properties = async () => {
-	const fn = await createFunction({
-		Code: {
-			Directory: __dirname + '/functions/nodejs-echo'
-		},
-		Handler: 'handler.handler',
-		Runtime: 'nodejs',
-		Environment: {
-			Variables: {
-				HELLO: 'world'
-			}
-		}
-	});
-	assert.equal(fn.version, '$LATEST');
-	//assert.equal(fn.functionName, 'nodejs-echo');
-};
-
-export const test_reserved_env = async () => {
-	let err;
-	try {
-		await createFunction({
+describe('createFunction() validation', () => {
+	it('should return a function with the expected properties', async function () {
+		const fn = await createFunction({
 			Code: {
 				Directory: __dirname + '/functions/nodejs-echo'
 			},
@@ -65,36 +16,93 @@ export const test_reserved_env = async () => {
 			Runtime: 'nodejs',
 			Environment: {
 				Variables: {
-					AWS_REGION: 'foo',
-					TZ: 'US/Pacific'
+					HELLO: 'world'
 				}
 			}
 		});
-	} catch (_err) {
-		err = _err;
-	}
-	assert(err);
-	assert(err instanceof ValidationError);
-	assert.equal(err.name, 'ValidationError');
-	assert.deepEqual(err.reserved, ['AWS_REGION', 'TZ']);
-	assert.equal(
-		err.toString(),
-		'ValidationError: The following environment variables can not be configured: AWS_REGION, TZ'
-	);
-};
+		assert.equal(typeof fn, 'function');
+		assert.equal(fn.version, '$LATEST');
+		//assert.equal(fn.functionName, 'nodejs-echo');
+	});
 
-// Invocation
-function testInvoke(fnPromise, test) {
-	return async function() {
-		const fn = await fnPromise();
+	it('should throw an error when given reserved environment variables', async function () {
+		let err;
 		try {
-			await test(fn);
-		} finally {
-			await fn.destroy();
+			await createFunction({
+				Code: {
+					Directory: __dirname + '/functions/nodejs-echo'
+				},
+				Handler: 'handler.handler',
+				Runtime: 'nodejs',
+				Environment: {
+					Variables: {
+						AWS_REGION: 'foo',
+						TZ: 'US/Pacific'
+					}
+				}
+			});
+		} catch (_err) {
+			err = _err;
 		}
-	};
-}
+		assert(err);
+		assert(err instanceof ValidationError);
+		assert.equal(err.name, 'ValidationError');
+		assert.deepEqual(err.reserved, ['AWS_REGION', 'TZ']);
+		assert.equal(
+			err.toString(),
+			'ValidationError: The following environment variables can not be configured: AWS_REGION, TZ'
+		);
+	});
+});
 
+describe('createFunction() invocation', function () {
+	let fn: Lambda = null;
+
+	afterEach(async function () {
+		if (fn) {
+			await fn.destroy();
+			fn = null;
+		}
+	});
+
+	this.slow(500);
+	this.timeout(5 * 1000);
+
+	// `nodejs` runtime
+	it('should invoke `nodejs-echo` function', async function () {
+		fn = await createFunction({
+			Code: {
+				Directory: __dirname + '/functions/nodejs-echo'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'nodejs'
+		});
+
+		const res = await fn.invoke({
+			Payload: JSON.stringify({ hello: 'world' })
+		});
+		assert.equal(res.StatusCode, 200);
+		assert.equal(res.ExecutedVersion, '$LATEST');
+		assert.equal(typeof res.Payload, 'string');
+		const payload = JSON.parse(String(res.Payload));
+		assert.deepEqual(payload.event, { hello: 'world' });
+	});
+
+	// `go1.x` runtime
+	it('should invoke `go-echo` function', async function () {
+		fn = await createFunction({
+			Code: {
+				Directory: __dirname + '/functions/go-echo'
+			},
+			Handler: 'handler',
+			Runtime: 'go1.x'
+		});
+		const payload = await fn({ hello: 'world' });
+		assert.deepEqual(payload, { hello: 'world' });
+	});
+});
+
+/*
 export const test_nodejs_event = testInvoke(
 	() =>
 		createFunction({
@@ -290,22 +298,6 @@ export const test_nodejs810_version = testInvoke(
 	}
 );
 
-// `go1.x` runtime
-export const test_go1x_echo = testInvoke(
-	() =>
-		createFunction({
-			Code: {
-				Directory: __dirname + '/functions/go-echo'
-			},
-			Handler: 'handler',
-			Runtime: 'go1.x'
-		}),
-	async fn => {
-		const payload = await fn({ hello: 'world' });
-		assert.deepEqual(payload, { hello: 'world' });
-	}
-);
-
 // `ZipFile` Buffer support
 export const test_lambda_zip_file_buffer = testInvoke(
 	async () => {
@@ -352,3 +344,4 @@ export const test_lambda_zip_file_string = testInvoke(
 		assert(/^lambda-dev-/.test(basename(env.LAMBDA_TASK_ROOT)));
 	}
 );
+*/
