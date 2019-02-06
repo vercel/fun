@@ -4,3 +4,4 @@ node_modules
 /?.js
 /examples/*/*.zip
 /test/functions/*/*.zip
+/.nyc_output
