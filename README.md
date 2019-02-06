@@ -38,7 +38,7 @@ async function main() {
     Runtime: 'nodejs',
     Environment: {
       Variables: {
-        "HELLO": "world"
+        HELLO: 'world'
       }
     },
     MemorySize: 512
