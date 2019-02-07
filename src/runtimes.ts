@@ -1,38 +1,46 @@
 import { join } from 'path';
 import createDebug from 'debug';
-import { Runtime } from './types';
 import * as cachedir from 'cachedir';
-import { readdirSync, statSync, stat, mkdirp, remove, rename } from 'fs-extra';
+import { stat, mkdirp, remove, rename } from 'fs-extra';
+
+import { Runtime } from './types';
+import * as go1x from './runtimes/go1.x';
+import * as node6 from './runtimes/nodejs6.10';
+import * as node8 from './runtimes/nodejs8.10';
 
 const debug = createDebug('@zeit/lambda-dev:runtimes');
-
 const runtimesDir = join(__dirname, 'runtimes');
-export const runtimes = readdirSync(runtimesDir)
-	.filter(p => {
-		return statSync(join(runtimesDir, p)).isDirectory();
-	})
-	.reduce((o, v) => {
-		const dir = join(runtimesDir, v);
-		let runtime = {};
-		try {
-			runtime = require(dir);
-		} catch (err) {
-			if (err.code !== 'MODULE_NOT_FOUND') {
-				throw err;
-			}
-		}
 
-		const r: Runtime = {
-			...runtime,
-			name: v,
-			runtimeDir: join(runtimesDir, v)
-		};
+interface Runtimes {
+	[name: string]: Runtime;
+}
 
-		o[v] = r;
-		return o;
-	}, {});
+interface RuntimeImpl {
+	init?(runtime: Runtime): Promise<void>;
+}
 
-async function isDirectory(f) {
+export const runtimes: Runtimes = {};
+
+function createRuntime(
+	runtimes: Runtimes,
+	name: string,
+	mod?: RuntimeImpl
+): void {
+	const runtime: Runtime = {
+		name,
+		runtimeDir: join(runtimesDir, name),
+		...mod
+	};
+	runtimes[name] = runtime;
+}
+
+createRuntime(runtimes, 'nodejs');
+createRuntime(runtimes, 'provided');
+createRuntime(runtimes, 'nodejs6.10', node6);
+createRuntime(runtimes, 'nodejs8.10', node8);
+createRuntime(runtimes, 'go1.x', go1x);
+
+async function isDirectory(f: string): Promise<boolean> {
 	try {
 		const s = await stat(f);
 		return s.isDirectory();
