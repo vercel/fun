@@ -1,6 +1,6 @@
 # ƒun
 
-[![CircleCI](https://circleci.com/gh/zeit/fun/tree/master.svg?style=svg&circle-token=8df270134881b60f9ec91f47f5268e0b5cce2acd)](https://circleci.com/gh/zeit/fun/tree/master)
+[![CircleCI](https://circleci.com/gh/zeit/fun/tree/master.svg?style=svg&circle-token=8df270134881b60f9ec91f47f5268e0b5cce2acd)](https://circleci.com/gh/zeit/fun/tree/master) [![codecov](https://codecov.io/gh/zeit/fun/branch/master/graph/badge.svg?token=6bZSbITKbj)](https://codecov.io/gh/zeit/fun)
 
 Local serverless function λ development runtime.
 
