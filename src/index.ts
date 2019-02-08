@@ -14,7 +14,7 @@ import * as providers from './providers';
 import { RuntimeServer } from './runtime-server';
 import { runtimes, initializeRuntime } from './runtimes';
 
-const debug = createDebug('@zeit/lambda-dev:index');
+const debug = createDebug('@zeit/fun:index');
 
 export { runtimes, providers };
 

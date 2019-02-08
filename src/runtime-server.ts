@@ -8,7 +8,7 @@ import { Lambda, InvokeParams, InvokeResult } from './types';
 
 const pathMatch = createPathMatch();
 const match = pathMatch('/:version/runtime/:subject/:target/:action?');
-const debug = createDebug('@zeit/lambda-dev:runtime-server');
+const debug = createDebug('@zeit/fun:runtime-server');
 
 function send404(res) {
 	res.statusCode = 404;

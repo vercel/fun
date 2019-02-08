@@ -4,7 +4,7 @@ import createDebug from 'debug';
 import { promisify } from 'util';
 import * as AdmZip from 'adm-zip';
 
-const debug = createDebug('@zeit/lambda-dev:index');
+const debug = createDebug('@zeit/fun:index');
 
 export async function unzipToTemp(
 	data: Buffer | string,
@@ -12,7 +12,7 @@ export async function unzipToTemp(
 ): Promise<string> {
 	const dir = join(
 		tmpDir,
-		`lambda-dev-${Math.random()
+		`zeit-fun-${Math.random()
 			.toString(16)
 			.substring(2)}`
 	);

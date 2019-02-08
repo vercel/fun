@@ -4,7 +4,7 @@ import createDebug from 'debug';
 import { Runtime } from '../../types';
 import { copyFile, mkdirp, remove } from 'fs-extra';
 
-const debug = createDebug('@zeit/lambda-dev:runtimes/go1.x');
+const debug = createDebug('@zeit/fun:runtimes/go1.x');
 
 function _go(opts) {
 	return function go(...args) {

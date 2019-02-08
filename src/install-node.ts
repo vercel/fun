@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'zlib';
 
-const debug = createDebug('@zeit/lambda-dev:install-node');
+const debug = createDebug('@zeit/fun:install-node');
 
 export function generateTarballUrl(
 	version: string,

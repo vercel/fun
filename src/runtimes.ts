@@ -8,7 +8,7 @@ import * as go1x from './runtimes/go1.x';
 import * as node6 from './runtimes/nodejs6.10';
 import * as node8 from './runtimes/nodejs8.10';
 
-const debug = createDebug('@zeit/lambda-dev:runtimes');
+const debug = createDebug('@zeit/fun:runtimes');
 const runtimesDir = join(__dirname, 'runtimes');
 
 interface Runtimes {
@@ -36,9 +36,9 @@ function createRuntime(
 
 createRuntime(runtimes, 'nodejs');
 createRuntime(runtimes, 'provided');
+createRuntime(runtimes, 'go1.x', go1x);
 createRuntime(runtimes, 'nodejs6.10', node6);
 createRuntime(runtimes, 'nodejs8.10', node8);
-createRuntime(runtimes, 'go1.x', go1x);
 
 async function isDirectory(f: string): Promise<boolean> {
 	try {
@@ -56,7 +56,7 @@ async function isDirectory(f: string): Promise<boolean> {
 const initPromises: Map<Runtime, Promise<void>> = new Map();
 
 async function _initializeRuntime(runtime: Runtime): Promise<void> {
-	const cacheDir = join(cachedir('lambda-dev'), runtime.name);
+	const cacheDir = join(cachedir('fun'), runtime.name);
 	if (await isDirectory(cacheDir)) {
 		debug('Runtime %o is already initialized', runtime.name);
 		runtime.cacheDir = cacheDir;

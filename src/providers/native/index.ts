@@ -14,7 +14,7 @@ import {
 	Provider
 } from '../../types';
 
-const debug = createDebug('@zeit/lambda-dev:providers/native');
+const debug = createDebug('@zeit/fun:providers/native');
 
 export default class NativeProvider implements Provider {
 	pool: Pool;
