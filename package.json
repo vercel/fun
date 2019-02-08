@@ -5,6 +5,7 @@
   "main": "dist/src/index",
   "typings": "dist/src/index",
   "license": "MIT",
+  "repository": "zeit/fun",
   "scripts": {
     "build": "./util/build.sh",
     "test": "npm run build && best --include dist/test/test.js --verbose",
