@@ -27,36 +27,36 @@ jobs:
       - run:
           name: Report Code Coverage
           command: DEBUG=* yarn report-codecov
-  test-macos:
-    macos:
-      xcode: "9.3.0"
-    steps:
-      - run:
-          name: Install Homebrew Dependencies
-          command: brew install golang
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - checkout
-      - restore_cache:
-          key: dependency-cache-macos-{{ checksum "package.json" }}
-      - run:
-          name: Install '@zeit/fun' Dependencies
-          command: yarn
-      - save_cache:
-          key: dependency-cache-macos-{{ checksum "package.json" }}
-          paths:
-            - node_modules
-      - run:
-          name: Compile Go Test Functions
-          command: bash test/go-build.sh
-      - run:
-          name: Run Tests
-          command: DEBUG=* yarn test-codecov
-      - run:
-          name: Report Code Coverage
-          command: DEBUG=* yarn report-codecov
+# test-macos:
+#   macos:
+#     xcode: "9.3.0"
+#   steps:
+#     - run:
+#         name: Install Homebrew Dependencies
+#         command: brew install golang
+#     - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+#     - checkout
+#     - restore_cache:
+#         key: dependency-cache-macos-{{ checksum "package.json" }}
+#     - run:
+#         name: Install '@zeit/fun' Dependencies
+#         command: yarn
+#     - save_cache:
+#         key: dependency-cache-macos-{{ checksum "package.json" }}
+#         paths:
+#           - node_modules
+#     - run:
+#         name: Compile Go Test Functions
+#         command: bash test/go-build.sh
+#     - run:
+#         name: Run Tests
+#         command: DEBUG=* yarn test-codecov
+#     - run:
+#         name: Report Code Coverage
+#         command: DEBUG=* yarn report-codecov
 workflows:
   version: 2
   test:
     jobs:
       - test-linux
-      - test-macos
+#     - test-macos
