@@ -7,8 +7,8 @@ Local serverless function λ development runtime.
  * Programmatic. A TypeScript API is exposed to trigger invocations.
  * Provider agnostic. AWS Lambda + other cloud providers planned.
  * Runtime agnostic. Node, go, python and custom runtime APIs.
- * Platform agnostic. Functions can be executed natively (e.g.: macOS) or via Docker.
- * Zero setup needed. ƒun acquires the necessary runtime files (e.g.: `node`).
+ * Platform agnostic. Functions can be executed natively (e.g. macOS) or via Docker.
+ * Zero setup needed. ƒun acquires the necessary runtime files (e.g. `node`).
 
 
 ## Example
