@@ -18,7 +18,7 @@ Given a Lambda function like this one:
 ```js
 // index.js
 exports.handler = function(event, context, callback) {
-  callback(null, { hello: 'world' });
+	callback(null, { hello: 'world' });
 };
 ```
 
@@ -28,32 +28,32 @@ You can invoke this function locally using the code below:
 const { createFunction } = require('@zeit/fun');
 
 async function main() {
-  // Starts up the necessary server to be able to invoke the function
-  const fn = await createFunction({
-    Code: {
-      // `ZipFile` works, or an already unzipped directory may be specified
-      Directory: __dirname + '/example'
-    },
-    Handler: 'index.handler',
-    Runtime: 'nodejs',
-    Environment: {
-      Variables: {
-        HELLO: 'world'
-      }
-    },
-    MemorySize: 512
-  });
+	// Starts up the necessary server to be able to invoke the function
+	const fn = await createFunction({
+		Code: {
+			// `ZipFile` works, or an already unzipped directory may be specified
+			Directory: __dirname + '/example'
+		},
+		Handler: 'index.handler',
+		Runtime: 'nodejs',
+		Environment: {
+			Variables: {
+				HELLO: 'world'
+			}
+		},
+		MemorySize: 512
+	});
 
-  // Invoke the function with a custom payload. A new instance of the function
-  // will be initialized if there is not an available one ready to process.
-  const res = await fn({ hello: 'world' });
+	// Invoke the function with a custom payload. A new instance of the function
+	// will be initialized if there is not an available one ready to process.
+	const res = await fn({ hello: 'world' });
 
-  console.log(res);
-  // Prints: { hello: 'world' }
+	console.log(res);
+	// Prints: { hello: 'world' }
 
-  // Once we are done with the function, destroy it so that the processes are
-  // cleaned up, and the API server is shut down (useful for hot-reloading).
-  await fn.destroy();
+	// Once we are done with the function, destroy it so that the processes are
+	// cleaned up, and the API server is shut down (useful for hot-reloading).
+	await fn.destroy();
 }
 
 main().catch(console.error);
