@@ -325,8 +325,8 @@ export const test_lambda_zip_file_buffer = testInvoke(
 	async fn => {
 		const env = await fn();
 		assert.equal(env.HELLO, 'world');
-		// Assert that the `TASK_ROOT` dir includes the "lambda-dev-" prefix
-		assert(/^lambda-dev-/.test(basename(env.LAMBDA_TASK_ROOT)));
+		// Assert that the `TASK_ROOT` dir includes the "zeit-fun-" prefix
+		assert(/^zeit-fun-/.test(basename(env.LAMBDA_TASK_ROOT)));
 	}
 );
 
@@ -348,7 +348,7 @@ export const test_lambda_zip_file_string = testInvoke(
 	async fn => {
 		const env = await fn();
 		assert.equal(env.HELLO, 'world');
-		// Assert that the `TASK_ROOT` dir includes the "lambda-dev-" prefix
-		assert(/^lambda-dev-/.test(basename(env.LAMBDA_TASK_ROOT)));
+		// Assert that the `TASK_ROOT` dir includes the "zeit-fun-" prefix
+		assert(/^zeit-fun-/.test(basename(env.LAMBDA_TASK_ROOT)));
 	}
 );
