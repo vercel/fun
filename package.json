@@ -19,7 +19,7 @@
     "dist"
   ],
   "dependencies": {
-    "adm-zip": "0.4.13",
+    "@types/yauzl-promise": "2.1.0",
     "async-listen": "1.0.0",
     "cachedir": "2.1.0",
     "debug": "4.1.1",
@@ -29,10 +29,14 @@
     "micro": "9.3.3",
     "node-fetch": "2.3.0",
     "path-match": "1.2.4",
+    "promisepipe": "3.0.0",
+    "stat-mode": "0.2.2",
+    "stream-to-promise": "2.2.0",
     "tar": "4.4.8",
     "uid-promise": "1.0.0",
     "util.promisify": "1.0.0",
-    "uuid": "3.3.2"
+    "uuid": "3.3.2",
+    "yauzl-promise": "2.1.3"
   },
   "devDependencies": {
     "@types/node": "10.12.18",
