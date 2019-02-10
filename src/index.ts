@@ -82,9 +82,7 @@ export async function createFunction(params: LambdaParams): Promise<Lambda> {
 		throw err;
 	}
 
-	const fn: Lambda = async function(
-		payload?: string | object
-	): Promise<InvokeResult> {
+	const fn: Lambda = async function(payload?: string | object): Promise<any> {
 		const result = await fn.invoke({
 			InvocationType: 'RequestResponse',
 			Payload: JSON.stringify(payload)
