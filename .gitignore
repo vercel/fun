@@ -5,3 +5,4 @@ node_modules
 /examples/*/*.zip
 /test/functions/*/*.zip
 /.nyc_output
+/zeit-fun-*.tgz
