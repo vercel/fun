@@ -5,6 +5,7 @@ import { stat, mkdirp, remove, rename } from 'fs-extra';
 
 import { Runtime } from './types';
 import * as go1x from './runtimes/go1.x';
+import * as node from './runtimes/nodejs';
 import * as node6 from './runtimes/nodejs6.10';
 import * as node8 from './runtimes/nodejs8.10';
 
@@ -34,9 +35,9 @@ function createRuntime(
 	runtimes[name] = runtime;
 }
 
-createRuntime(runtimes, 'nodejs');
 createRuntime(runtimes, 'provided');
 createRuntime(runtimes, 'go1.x', go1x);
+createRuntime(runtimes, 'nodejs', node);
 createRuntime(runtimes, 'nodejs6.10', node6);
 createRuntime(runtimes, 'nodejs8.10', node8);
 
