@@ -20,7 +20,7 @@ jobs:
             - node_modules
       - run:
           name: Compile Go Test Functions
-          command: bash test/go-build.sh
+          command: ./test/go-build.sh
       - run:
           name: Run Tests
           command: DEBUG=* yarn test-codecov
@@ -47,7 +47,7 @@ jobs:
 #           - node_modules
 #     - run:
 #         name: Compile Go Test Functions
-#         command: bash test/go-build.sh
+#         command: ./test/go-build.sh
 #     - run:
 #         name: Run Tests
 #         command: DEBUG=* yarn test-codecov
