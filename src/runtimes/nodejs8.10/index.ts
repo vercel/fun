@@ -1,6 +1,8 @@
+import * as node from '../nodejs';
 import { Runtime } from '../../types';
 import { installNode } from '../../install-node';
 
-export async function init({ cacheDir }: Runtime): Promise<void> {
-	await installNode(cacheDir, '8.10.0');
+export async function init(runtime: Runtime): Promise<void> {
+	await node.init(runtime);
+	await installNode(runtime.cacheDir, '8.10.0');
 }
