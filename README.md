@@ -72,12 +72,13 @@ The `native` provider executes Lambda functions directly on the machine executin
 ƒun. This provides an execution environment that closely resembles the
 real Lambda environment, with some key differences that are documented here:
 
+ * Lambdas processes are ran as your own user, not the `sbx_user1051` user.
  * Processes are *not* sandboxed nor chrooted, so do not rely on hard-coded
    locations like `/var/task`, `/var/runtime`, `/opt`, etc. Instead, your
    function code should use the environment variables that represent these
    locations (namely `LAMBDA_TASK_ROOT` and `LAMBDA_RUNTIME_DIR`).
  * Processes are frozen by sending the `SIGSTOP` signal to the lambda process,
-   and unfrozen by sending the `SIGCONT` signal.
+   and unfrozen by sending the `SIGCONT` signal, not using the cgroup freezer.
  * Lambdas that compile to native executables (i.e. Go) will need to be compiled
    for your operating system. So if you are on MacOS, then the binary needs to be
    executable on MacOS.
