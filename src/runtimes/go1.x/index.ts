@@ -13,7 +13,7 @@ function _go(opts) {
 	};
 }
 
-export async function init({ runtimeDir, cacheDir }: Runtime): Promise<void> {
+export async function init({ cacheDir, runtimeDir }: Runtime): Promise<void> {
 	const source = join(runtimeDir, 'bootstrap.go');
 
 	// Prepare a temporary `$GOPATH`
