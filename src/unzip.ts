@@ -68,10 +68,10 @@ export async function unzip(zipFile: ZipFile, dir: string): Promise<void> {
 			} else {
 				const modeOctal = mode.toOctal();
 				debug(
-					'Unzipping file to %o with mode %o (%s)',
+					'Unzipping file to %o with mode %s (%s)',
 					destPath,
-					String(mode),
-					modeOctal
+					modeOctal,
+					String(mode)
 				);
 				const destStream = createWriteStream(destPath, {
 					mode: parseInt(modeOctal, 8)
