@@ -35,7 +35,7 @@ async function main() {
 			Directory: __dirname + '/example'
 		},
 		Handler: 'index.handler',
-		Runtime: 'nodejs',
+		Runtime: 'nodejs8.10',
 		Environment: {
 			Variables: {
 				HELLO: 'world'
