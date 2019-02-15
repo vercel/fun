@@ -2,7 +2,6 @@
  * Credit: https://github.com/lambci/node-custom-lambda/blob/master/v10.x/bootstrap.js
  */
 import * as http from 'http';
-import * as promisify from 'util.promisify';
 
 interface LambdaEvent {}
 
@@ -50,6 +49,19 @@ delete process.env.SHLVL;
 const [HOST, PORT] = AWS_LAMBDA_RUNTIME_API.split(':');
 
 start();
+
+// Simple `util.promisify()` polyfill for Node 6.x
+function promisify(fn) {
+	return function(...args) {
+		return new Promise((resolve, reject) => {
+			args.push((err, result) => {
+				if (err) return reject(err);
+				resolve(result);
+			});
+			fn.apply(this, args);
+		});
+	};
+}
 
 async function start(): Promise<void> {
 	let handler;
