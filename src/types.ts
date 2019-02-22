@@ -40,7 +40,7 @@ export interface Runtime {
 }
 
 export interface Lambda {
-	(payload?: string | object): Promise<any>;
+	<T>(payload?: string | object): Promise<T>;
 	invoke(params: InvokeParams): Promise<InvokeResult>;
 	destroy(): Promise<void>;
 	params: LambdaParams;
