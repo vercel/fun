@@ -352,3 +352,17 @@ export const test_lambda_zip_file_string = testInvoke(
 		assert(/^zeit-fun-/.test(basename(env.LAMBDA_TASK_ROOT)));
 	}
 );
+
+/*
+// `pkg` compilation support
+export const test_pkg_support = async () => {
+	const root = require.resolve('pkg').replace(/\/node_modules(.*)$/, '');
+	const pkg = join(root, 'node_modules/.bin/pkg');
+	await execa(pkg, ['-t', 'node8', 'test/pkg-invoke.js'], {
+		cwd: root,
+		stdio: 'inherit'
+	});
+	const output = await execa.stdout(join(root, 'pkg-invoke'));
+	console.error({ output });
+};
+ */

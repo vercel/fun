@@ -63,10 +63,7 @@ export async function createFunction(params: LambdaParams): Promise<Lambda> {
 	if (!runtime) {
 		throw new TypeError(`Runtime "${params.Runtime}" is not implemented`);
 	}
-
-	if (typeof runtime.init === 'function') {
-		await initializeRuntime(runtime);
-	}
+	await initializeRuntime(runtime);
 
 	const envVars = (params.Environment && params.Environment.Variables) || {};
 	const reserved = Object.keys(envVars).filter(name => {

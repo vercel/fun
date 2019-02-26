@@ -34,6 +34,7 @@ export interface Provider {
 
 export interface Runtime {
 	name: string;
+	version: number;
 	runtimeDir: string;
 	cacheDir?: string;
 	init?(runtime: Runtime): Promise<void>;

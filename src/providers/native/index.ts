@@ -45,7 +45,7 @@ export default class NativeProvider implements Provider {
 
 	async createProcess(): Promise<ChildProcess> {
 		const { runtime, params, region, version, extractedDir } = this.lambda;
-		const bootstrap = join(runtime.runtimeDir, 'bootstrap');
+		const bootstrap = join(runtime.cacheDir, 'bootstrap');
 
 		const server = new RuntimeServer(this.lambda);
 		await listen(server, 0, '127.0.0.1');
@@ -90,7 +90,7 @@ export default class NativeProvider implements Provider {
 			AWS_LAMBDA_RUNTIME_API: `127.0.0.1:${port}`,
 			AWS_LAMBDA_LOG_GROUP_NAME: logGroupName,
 			AWS_LAMBDA_LOG_STREAM_NAME: logStreamName,
-			LAMBDA_RUNTIME_DIR: runtime.runtimeDir,
+			LAMBDA_RUNTIME_DIR: runtime.cacheDir,
 			LAMBDA_TASK_ROOT: taskDir,
 			TZ: ':UTC'
 		};

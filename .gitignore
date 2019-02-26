@@ -6,3 +6,4 @@ node_modules
 /test/functions/*/*.zip
 /.nyc_output
 /zeit-fun-*.tgz
+/pkg-invoke

@@ -1,13 +1,20 @@
 import { join } from 'path';
 import createDebug from 'debug';
-import * as cachedir from 'cachedir';
-import { stat, mkdirp, remove, rename } from 'fs-extra';
+import * as cachedir from 'cache-or-tmp-directory';
+import {
+	copy,
+	stat,
+	mkdirp,
+	remove,
+	rename,
+	readFile,
+	writeFile
+} from 'fs-extra';
 
 import { Runtime } from './types';
 import * as go1x from './runtimes/go1.x';
-import * as node from './runtimes/nodejs';
-import * as node6 from './runtimes/nodejs6.10';
-import * as node8 from './runtimes/nodejs8.10';
+import * as nodejs6 from './runtimes/nodejs6.10';
+import * as nodejs8 from './runtimes/nodejs8.10';
 
 const debug = createDebug('@zeit/fun:runtimes');
 const runtimesDir = join(__dirname, 'runtimes');
@@ -29,6 +36,7 @@ function createRuntime(
 ): void {
 	const runtime: Runtime = {
 		name,
+		version: 0,
 		runtimeDir: join(runtimesDir, name),
 		...mod
 	};
@@ -37,17 +45,17 @@ function createRuntime(
 
 createRuntime(runtimes, 'provided');
 createRuntime(runtimes, 'go1.x', go1x);
-createRuntime(runtimes, 'nodejs', node);
-createRuntime(runtimes, 'nodejs6.10', node6);
-createRuntime(runtimes, 'nodejs8.10', node8);
+createRuntime(runtimes, 'nodejs');
+createRuntime(runtimes, 'nodejs6.10', nodejs6);
+createRuntime(runtimes, 'nodejs8.10', nodejs8);
 
-async function isDirectory(f: string): Promise<boolean> {
+async function getRuntimeVersion(f: string): Promise<number> {
 	try {
-		const s = await stat(f);
-		return s.isDirectory();
+		const contents = await readFile(f, 'ascii');
+		return parseInt(contents, 10);
 	} catch (err) {
 		if (err.code === 'ENOENT') {
-			return false;
+			return null;
 		}
 		throw err;
 	}
@@ -57,24 +65,41 @@ async function isDirectory(f: string): Promise<boolean> {
 const initPromises: Map<Runtime, Promise<void>> = new Map();
 
 async function _initializeRuntime(runtime: Runtime): Promise<void> {
-	const cacheDir = join(cachedir('fun'), runtime.name);
-	if (await isDirectory(cacheDir)) {
-		debug('Runtime %o is already initialized', runtime.name);
-		runtime.cacheDir = cacheDir;
-	} else {
+	const cacheDir = join(cachedir('co.zeit.fun'), 'runtimes', runtime.name);
+	const versionFile = join(cacheDir, '.version');
+	const installedVersion = await getRuntimeVersion(versionFile);
+	if (installedVersion === runtime.version) {
 		debug(
-			'Initializing %o runtime with cache dir %o',
+			'Runtime %o is already initialized at %o',
 			runtime.name,
 			cacheDir
 		);
+		runtime.cacheDir = cacheDir;
+	} else {
+		debug('Initializing %o runtime at %o', runtime.name, cacheDir);
 		const cacheDirTemp = `${cacheDir}.temp${Math.random()
 			.toString(16)
 			.substring(2)}`;
-		runtime.cacheDir = cacheDirTemp;
 		try {
 			// During initialization, the cache dir is a temporary name.
+			runtime.cacheDir = cacheDirTemp;
 			await mkdirp(cacheDirTemp);
-			await runtime.init.call(runtime, runtime);
+
+			// The runtime directory is copied from the module dir to the cache
+			// dir. This is so that when compiled through `pkg`, then the
+			// bootstrap files exist on a real file system so that `execve()`
+			// works as expected.
+			await copy(runtime.runtimeDir, cacheDirTemp);
+
+			// Perform any runtime-specific initialization logic
+			if (typeof runtime.init === 'function') {
+				await runtime.init(runtime);
+			}
+
+			await writeFile(
+				join(cacheDirTemp, '.version'),
+				String(runtime.version)
+			);
 
 			// After `init()` is successful, the cache dir is atomically renamed
 			// to the final name, after which `init()` will not be invoked in the

@@ -1,12 +1,12 @@
-import { join } from 'path';
-import * as node from '../nodejs';
 import { Runtime } from '../../types';
 import { installNode } from '../../install-node';
+import { runtimes, initializeRuntime } from '../../runtimes';
 
-export async function init(runtime: Runtime): Promise<void> {
-	await node.init({
-		...runtime,
-		runtimeDir: join(runtime.runtimeDir, '../nodejs')
-	});
-	await installNode(runtime.cacheDir, '8.10.0');
+export const version = 1;
+
+export async function init({ cacheDir }: Runtime): Promise<void> {
+	await Promise.all([
+		initializeRuntime(runtimes.nodejs),
+		installNode(cacheDir, '8.10.0')
+	]);
 }
