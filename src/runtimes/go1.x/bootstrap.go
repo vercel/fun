@@ -18,6 +18,7 @@ import (
 	"net/rpc"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path"
 	"reflect"
 	"strconv"
@@ -92,6 +93,15 @@ func main() {
 	mockContext.Pid = cmd.Process.Pid
 
 	defer syscall.Kill(-mockContext.Pid, syscall.SIGKILL)
+
+	// Terminate the child process upon SIGINT / SIGTERM
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func(){
+		<-c
+		syscall.Kill(-mockContext.Pid, syscall.SIGKILL)
+		os.Exit(0)
+	}()
 
 	var conn net.Conn
 	for {
