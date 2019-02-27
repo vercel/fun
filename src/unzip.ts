@@ -38,18 +38,12 @@ export async function unzipToTemp(
 	return dir;
 }
 
-export async function* entries(zipFile: ZipFile) {
-	let entry: Entry;
-	while ((entry = await zipFile.readEntry()) !== null) {
-		yield entry;
-	}
-}
-
 const getMode = (entry: Entry) =>
 	new Mode({ mode: entry.externalFileAttributes >>> 16 });
 
 export async function unzip(zipFile: ZipFile, dir: string): Promise<void> {
-	for await (const entry of entries(zipFile)) {
+	let entry: Entry;
+	while ((entry = await zipFile.readEntry()) !== null) {
 		const destPath = join(dir, entry.fileName);
 		if (/\/$/.test(entry.fileName)) {
 			debug('Creating directory %o', destPath);
