@@ -353,16 +353,16 @@ export const test_lambda_zip_file_string = testInvoke(
 	}
 );
 
-/*
 // `pkg` compilation support
 export const test_pkg_support = async () => {
 	const root = require.resolve('pkg').replace(/\/node_modules(.*)$/, '');
 	const pkg = join(root, 'node_modules/.bin/pkg');
 	await execa(pkg, ['-t', 'node8', 'test/pkg-invoke.js'], {
-		cwd: root,
-		stdio: 'inherit'
+		cwd: root
 	});
-	const output = await execa.stdout(join(root, 'pkg-invoke'));
-	console.error({ output });
+	const output = await execa.stdout(join(root, 'pkg-invoke'), {
+		cwd: __dirname,
+		stdio: ['ignore', 'pipe', 'inherit']
+	});
+	assert.equal(JSON.parse(output).hello, 'world');
 };
- */

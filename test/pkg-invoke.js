@@ -14,9 +14,8 @@ async function main() {
 	});
 
 	const res = await fn({ hello: 'world' });
-
-	console.log(res);
-	// Prints: { hello: 'world' }
+	console.log(JSON.stringify(res));
+	// Prints: { "hello": "world" }
 
 	await fn.destroy();
 }
