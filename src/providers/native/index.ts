@@ -113,12 +113,16 @@ export default class NativeProvider implements Provider {
 	}
 
 	async destroyProcess(proc: ChildProcess): Promise<void> {
+		// Unfreeze the process first so that any cleanup logic
+		// by the runtime may be executed
+		this.unfreezeProcess(proc);
+
 		debug('Stopping process %o', proc.pid);
 		const server = this.runtimeApis.get(proc);
 		server.close();
 
 		this.runtimeApis.delete(proc);
-		process.kill(proc.pid, 'SIGKILL');
+		process.kill(proc.pid, 'SIGTERM');
 	}
 
 	async freezeProcess(proc: ChildProcess): Promise<void> {
