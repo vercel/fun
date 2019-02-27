@@ -1,3 +1,0 @@
-#!/bin/sh
-set -eu
-exec "$LAMBDA_DEV_CACHE_DIR/bootstrap" "$@"
