@@ -2,9 +2,9 @@ import { join } from 'path';
 import createDebug from 'debug';
 import * as cachedir from 'cache-or-tmp-directory';
 import {
-	copy,
-	stat,
+	lstat,
 	mkdirp,
+	readdir,
 	remove,
 	rename,
 	readFile,
@@ -58,6 +58,26 @@ async function getRuntimeVersion(f: string): Promise<number> {
 			return null;
 		}
 		throw err;
+	}
+}
+
+// Until https://github.com/zeit/pkg/issues/639 is resolved, we have to
+// implement the `copy()` operation without relying on `fs.copyFile()`.
+async function copy(src: string, dest: string): Promise<void> {
+	debug('copy(%o, %o)', src, dest);
+	const [entries] = await Promise.all([readdir(src), mkdirp(dest)]);
+	debug('Entries: %o', entries);
+
+	for (const entry of entries) {
+		const srcPath = join(src, entry);
+		const destPath = join(dest, entry);
+		const s = await lstat(srcPath);
+		if (s.isDirectory()) {
+			await copy(srcPath, destPath);
+		} else {
+			const contents = await readFile(srcPath);
+			await writeFile(destPath, contents, { mode: s.mode });
+		}
 	}
 }
 
