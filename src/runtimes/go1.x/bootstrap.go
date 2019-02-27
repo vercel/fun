@@ -196,7 +196,7 @@ func (mc *MockLambdaContext) ProcessEvents() {
 		requestUrl := fmt.Sprintf("http://%s/2018-06-01/runtime/invocation/next", awsLambdaRuntimeApi)
 		resp, err := http.Get(requestUrl)
 		if err != nil {
-			log.Fatal(fmt.Errorf("Expected status code 200, got %d", resp.StatusCode))
+			log.Fatal(fmt.Errorf("Error getting next invocation: %v", err))
 		}
 
 		requestId := resp.Header.Get("Lambda-Runtime-Aws-Request-Id")
