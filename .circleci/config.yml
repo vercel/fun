@@ -23,10 +23,10 @@ jobs:
           command: ./test/go-build.sh
       - run:
           name: Run Tests
-          command: DEBUG=* yarn test-codecov
+          command: DEBUG=*fun* yarn test-codecov
       - run:
           name: Report Code Coverage
-          command: DEBUG=* yarn report-codecov
+          command: DEBUG=*fun* yarn report-codecov
   test-macos:
     macos:
       xcode: "9.3.0"
@@ -50,7 +50,7 @@ jobs:
           command: ./test/go-build.sh
       - run:
           name: Run Tests
-          command: DEBUG=* yarn test
+          command: DEBUG=*fun* yarn test
 workflows:
   version: 2
   test:
