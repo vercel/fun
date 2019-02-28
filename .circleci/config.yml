@@ -5,8 +5,11 @@ jobs:
       - image: circleci/node:10
     steps:
       - run:
-          name: Install Apt Dependencies
-          command: sudo apt-get install -y golang
+          name: Install Go
+          command: sudo ./.circleci/install-go.sh
+      - run:
+          name: Install Node.js
+          command: curl -sSL https://install-node.now.sh/10 | sudo bash -s -- --yes
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - checkout
       - restore_cache:
@@ -32,8 +35,11 @@ jobs:
       xcode: "9.3.0"
     steps:
       - run:
-          name: Install Homebrew Dependencies
-          command: brew install golang
+          name: Install Go
+          command: sudo ./.circleci/install-go.sh
+      - run:
+          name: Install Node.js
+          command: curl -sSL https://install-node.now.sh/10 | sudo bash -s -- --yes
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - checkout
       - restore_cache:
