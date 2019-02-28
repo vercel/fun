@@ -153,8 +153,7 @@ export class RuntimeServer extends Server {
 
 	async handleInvocationError(req, res, requestId: string): Promise<void> {
 		const body = await json(req);
-		console.error('invoke error', { err: body });
-		const err = new Error('failed');
+		const err = Object.assign(new Error('invoke failed'), body);
 		this.resultPromise.reject(err);
 		this.resetInvocationState();
 		res.statusCode = 202;
@@ -163,8 +162,7 @@ export class RuntimeServer extends Server {
 
 	async handleInitializationError(req, res): Promise<void> {
 		const body = await json(req);
-		console.error('init error', { body });
-		const err = new Error('init failed');
+		const err = Object.assign(new Error('init failed'), body);
 		this.initPromise.reject(err);
 
 		res.statusCode = 202;
