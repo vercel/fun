@@ -8,7 +8,7 @@
   "repository": "zeit/fun",
   "scripts": {
     "build": "./util/build.sh",
-    "test": "npm run build && best --include dist/test/test.js --verbose",
+    "test": "echo \"Node.js version: $(node -v)\\n\" && npm run build && best --include dist/test/test.js --verbose",
     "test-codecov": "nyc npm test",
     "report-codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint:staged": "lint-staged",
