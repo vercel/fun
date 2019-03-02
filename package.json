@@ -30,7 +30,7 @@
     "node-fetch": "2.3.0",
     "path-match": "1.2.4",
     "promisepipe": "3.0.0",
-    "stat-mode": "0.2.2",
+    "stat-mode": "0.3.0",
     "stream-to-promise": "2.2.0",
     "tar": "4.4.8",
     "uid-promise": "1.0.0",
