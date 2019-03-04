@@ -121,6 +121,17 @@ async function _initializeRuntime(runtime: Runtime): Promise<void> {
 				String(runtime.version)
 			);
 
+			if (installedVersion !== null) {
+				// An older version is already installed, remove it first
+				// otherwise the `rename()` operation will fail with EEXISTS
+				debug(
+					'Removing old cache dir %o with version %o',
+					cacheDir,
+					installedVersion
+				);
+				await remove(cacheDir);
+			}
+
 			// After `init()` is successful, the cache dir is atomically renamed
 			// to the final name, after which `init()` will not be invoked in the
 			// future.
