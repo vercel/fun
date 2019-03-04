@@ -4,6 +4,7 @@ node_modules
 /?.js
 /examples/*/*.zip
 /test/functions/*/*.zip
+/test/functions/*/*.pyc
 /.nyc_output
 /zeit-fun-*.tgz
 /pkg-invoke
