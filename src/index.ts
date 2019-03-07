@@ -16,7 +16,14 @@ import { runtimes, initializeRuntime } from './runtimes';
 
 const debug = createDebug('@zeit/fun:index');
 
-export { runtimes, providers };
+export {
+	Lambda,
+	LambdaParams,
+	InvokeParams,
+	InvokeResult,
+	runtimes,
+	providers
+};
 
 // Environment variable names that AWS Lambda does not allow to be overridden.
 // https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html#lambda-environment-variables
