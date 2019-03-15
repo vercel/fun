@@ -62,13 +62,6 @@ export default class NativeProvider implements Provider {
 			''
 		)}`;
 
-		let lambdaDevEnv;
-		if (runtime.cacheDir) {
-			lambdaDevEnv = {
-				LAMBDA_DEV_CACHE_DIR: runtime.cacheDir
-			};
-		}
-
 		// https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html
 		const env = {
 			// Non-reserved env vars (can overwrite with params)
@@ -79,7 +72,6 @@ export default class NativeProvider implements Provider {
 			...(params.Environment && params.Environment.Variables),
 
 			// Restricted env vars
-			...lambdaDevEnv,
 			_HANDLER: params.Handler,
 			AWS_REGION: region,
 			AWS_DEFAULT_REGION: region,
