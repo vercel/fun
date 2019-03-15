@@ -306,6 +306,22 @@ export const test_go1x_echo = testInvoke(
 	}
 );
 
+// `python` runtime
+export const test_python_hello = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/python-hello'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'python'
+		}),
+	async fn => {
+		const payload = await fn({ first_name: 'John', last_name: 'Smith' });
+		assert.deepEqual(payload, { message: 'Hello John Smith!' });
+	}
+);
+
 // `ZipFile` Buffer support
 export const test_lambda_zip_file_buffer = testInvoke(
 	async () => {
