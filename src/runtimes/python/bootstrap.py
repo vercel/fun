@@ -98,8 +98,10 @@ def lambda_runtime_main():
         try:
             result = fn(event, context)
         except:
-            lambda_runtime_invoke_error(sys.exc_info()[0], context)
-        if (result is not None):
+            err = str(sys.exc_info()[0])
+            print(err)
+            lambda_runtime_invoke_error({ 'error': err }, context)
+        else:
             lambda_runtime_invoke_response(result, context)
 
 if __name__ == '__main__':
