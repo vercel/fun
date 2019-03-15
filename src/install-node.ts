@@ -17,10 +17,10 @@ export function generateTarballUrl(
 }
 
 export async function installNode(
-	dest,
-	version,
-	platform = process.platform,
-	arch = process.arch
+	dest: string,
+	version: string,
+	platform: string = process.platform,
+	arch: string = process.arch
 ): Promise<void> {
 	const tarballUrl = generateTarballUrl(version, platform, arch);
 	debug('Downloading Node.js %s tarball %o', version, tarballUrl);
