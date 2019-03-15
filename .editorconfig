@@ -9,13 +9,18 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[{*.json,*.json.example,*.gyp,*.yml}]
+[{*.json,*.json.example,*.gyp,*.yml,*.yaml,*.workflow}]
 indent_style = space
 indent_size = 2
 
-[*.py]
+[{*.py,*.asm}]
 indent_style = space
+
+[*.py]
 indent_size = 4
+
+[*.asm]
+indent_size = 8
 
 [*.md]
 trim_trailing_whitespace = false
