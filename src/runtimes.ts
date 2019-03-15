@@ -46,6 +46,7 @@ function createRuntime(
 createRuntime(runtimes, 'provided');
 createRuntime(runtimes, 'go1.x', go1x);
 createRuntime(runtimes, 'nodejs');
+createRuntime(runtimes, 'python');
 createRuntime(runtimes, 'nodejs6.10', nodejs6);
 createRuntime(runtimes, 'nodejs8.10', nodejs8);
 
