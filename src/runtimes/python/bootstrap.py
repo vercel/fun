@@ -96,7 +96,7 @@ def lambda_runtime_main():
         #print(context)
         result = None
         try:
-            result = fn(None, None)
+            result = fn(event, context)
         except:
             lambda_runtime_invoke_error(sys.exc_info()[0], context)
         if (result is not None):
