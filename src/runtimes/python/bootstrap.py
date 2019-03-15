@@ -61,16 +61,11 @@ def lambda_runtime_next_invocation():
             + res.body
         )
 
-    trace_id = res.get_header('Lambda-Runtime-Trace-Id')
-    if trace_id is not None:
-        os.environ['_X_AMZN_TRACE_ID'] = trace_id
-    else:
-        try:
-            del os.environ['_X_AMZN_TRACE_ID']
-        except KeyError:
-            pass
-        except:
-            raise
+    x_amzn_trace_id = res.get_header('Lambda-Runtime-Trace-Id')
+    if x_amzn_trace_id != None:
+            os.environ['_X_AMZN_TRACE_ID'] = x_amzn_trace_id
+    elif '_X_AMZN_TRACE_ID' in os.environ:
+        del os.environ['_X_AMZN_TRACE_ID']
 
     context = {
         # TODO: fill this out
@@ -118,7 +113,10 @@ def lambda_runtime_get_handler():
 
 
 def lambda_runtime_main():
-    sys.path.insert(0, os.environ['PWD'])
+    if not is_python_3:
+        reload(sys)
+        sys.setdefaultencoding('utf-8')
+
     sys.path.insert(
         0, os.environ.get('LAMBDA_TASK_ROOT', '/var/task')
     )
