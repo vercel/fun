@@ -77,7 +77,7 @@ def lambda_runtime_invoke_response(result, context):
 
 def lambda_runtime_invoke_error(err, context):
     body = json.dumps(err, separators=(',',':')).encode(encoding='UTF-8')
-    res = LambdaRequest('invocation/' + context.aws_request_id + '/error', body)
+    res = LambdaRequest('invocation/' + context['aws_request_id'] + '/error', body)
 
 def lambda_runtime_get_handler():
     mod = importlib.import_module('handler')
