@@ -15,6 +15,9 @@ import { Runtime } from './types';
 import * as go1x from './runtimes/go1.x';
 import * as nodejs6 from './runtimes/nodejs6.10';
 import * as nodejs8 from './runtimes/nodejs8.10';
+import * as python27 from './runtimes/python2.7';
+import * as python36 from './runtimes/python3.6';
+import * as python37 from './runtimes/python3.7';
 
 const debug = createDebug('@zeit/fun:runtimes');
 const runtimesDir = join(__dirname, 'runtimes');
@@ -46,9 +49,12 @@ function createRuntime(
 createRuntime(runtimes, 'provided');
 createRuntime(runtimes, 'go1.x', go1x);
 createRuntime(runtimes, 'nodejs');
-createRuntime(runtimes, 'python');
 createRuntime(runtimes, 'nodejs6.10', nodejs6);
 createRuntime(runtimes, 'nodejs8.10', nodejs8);
+createRuntime(runtimes, 'python');
+createRuntime(runtimes, 'python2.7', python27);
+createRuntime(runtimes, 'python3.6', python36);
+createRuntime(runtimes, 'python3.7', python37);
 
 async function getRuntimeVersion(f: string): Promise<number> {
 	try {

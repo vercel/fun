@@ -4,13 +4,14 @@ import * as execa from 'execa';
 import * as assert from 'assert';
 import { mkdirp, remove, readdir, readFile } from 'fs-extra';
 import { createFunction, ValidationError } from '../src';
-import { generateTarballUrl, installNode } from '../src/install-node';
+import { generateNodeTarballUrl, installNode } from '../src/install-node';
+import { generatePythonTarballUrl, installPython } from '../src/install-python';
 
 // `install-node.ts` tests
 export function test_install_node_tarball_url() {
 	assert.equal(
 		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-darwin-x64.tar.gz',
-		generateTarballUrl('8.10.0', 'darwin', 'x64')
+		generateNodeTarballUrl('8.10.0', 'darwin', 'x64')
 	);
 }
 
@@ -33,6 +34,36 @@ export async function test_install_node() {
 	} finally {
 		// Clean up
 		await remove(dest);
+	}
+}
+
+// `install-python.ts` tests
+export function test_install_python_tarball_url() {
+	assert.equal(
+		'https://python-binaries.zeit.sh/python-2.7.12-darwin-x64.tar.gz',
+		generatePythonTarballUrl('2.7.12', 'darwin', 'x64')
+	);
+}
+
+export async function test_install_python() {
+	const version = '3.6.8';
+	const dest = join(
+		tmpdir(),
+		`install-python-${Math.random()
+			.toString(16)
+			.substring(2)}`
+	);
+	await mkdirp(dest);
+	try {
+		await installPython(dest, version);
+		const res = await execa(join(dest, 'bin/python'), [
+			'-c',
+			'import platform; print(platform.python_version())'
+		]);
+		assert.equal(res.stdout.trim(), version);
+	} finally {
+		// Clean up
+		//await remove(dest);
 	}
 }
 
@@ -319,6 +350,54 @@ export const test_python_hello = testInvoke(
 	async fn => {
 		const payload = await fn({ first_name: 'John', last_name: 'Smith' });
 		assert.deepEqual(payload, { message: 'Hello John Smith!' });
+	}
+);
+
+// `python2.7` runtime
+export const test_python27_version = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/python-version'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'python2.7'
+		}),
+	async fn => {
+		const payload = await fn();
+		assert.equal(payload['platform.python_version'], '2.7.12');
+	}
+);
+
+// `python3.6` runtime
+export const test_python36_version = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/python-version'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'python3.6'
+		}),
+	async fn => {
+		const payload = await fn();
+		assert.equal(payload['platform.python_version'], '3.6.8');
+	}
+);
+
+// `python3.7` runtime
+export const test_python37_version = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/python-version'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'python3.7'
+		}),
+	async fn => {
+		const payload = await fn();
+		assert.equal(payload['platform.python_version'], '3.7.2');
 	}
 );
 

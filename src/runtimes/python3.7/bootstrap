@@ -1,0 +1,9 @@
+#!/bin/bash
+set -euo pipefail
+
+# Ensure the downloaded Python version is used
+export PATH="$LAMBDA_RUNTIME_DIR/bin:$PATH"
+
+# Execute the "python" runtime bootstrap
+export LAMBDA_RUNTIME_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}")"/../python >/dev/null 2>&1 && pwd )"
+exec "$LAMBDA_RUNTIME_DIR/bootstrap" "$@"
