@@ -1,4 +1,4 @@
-def handler(event, context):
+def hello_handler(event, context):
     message = 'Hello {} {}!'.format(event['first_name'], event['last_name'])
     return {
       'message' : message

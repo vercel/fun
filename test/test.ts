@@ -344,7 +344,7 @@ export const test_python_hello = testInvoke(
 			Code: {
 				Directory: __dirname + '/functions/python-hello'
 			},
-			Handler: 'handler.handler',
+			Handler: 'hello.hello_handler',
 			Runtime: 'python'
 		}),
 	async fn => {

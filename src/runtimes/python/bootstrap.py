@@ -74,7 +74,7 @@ def lambda_runtime_next_invocation():
 
     event = res.get_json_body()
 
-    return (res.get_json_body(), context)
+    return (event, context)
 
 
 def lambda_runtime_invoke_response(result, context):
@@ -107,9 +107,10 @@ def lambda_runtime_invoke_error(err, context):
 
 
 def lambda_runtime_get_handler():
-    mod = importlib.import_module('handler')
+    (module_name, handler_name) = os.environ['_HANDLER'].split('.')
+    mod = importlib.import_module(module_name)
     # TODO: invoke `__init__`?
-    return getattr(mod, 'handler')
+    return getattr(mod, handler_name)
 
 
 def lambda_runtime_main():
