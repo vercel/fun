@@ -12,7 +12,7 @@ import * as listen from 'async-listen';
 import { unzipToTemp } from './unzip';
 import * as providers from './providers';
 import { RuntimeServer } from './runtime-server';
-import { runtimes, initializeRuntime } from './runtimes';
+import { funCacheDir, runtimes, initializeRuntime } from './runtimes';
 
 const debug = createDebug('@zeit/fun:index');
 
@@ -22,7 +22,8 @@ export {
 	InvokeParams,
 	InvokeResult,
 	runtimes,
-	providers
+	providers,
+	funCacheDir
 };
 
 // Environment variable names that AWS Lambda does not allow to be overridden.

@@ -3,9 +3,13 @@ import { tmpdir } from 'os';
 import * as execa from 'execa';
 import * as assert from 'assert';
 import { mkdirp, remove, readdir, readFile } from 'fs-extra';
-import { createFunction, ValidationError } from '../src';
+import { funCacheDir, createFunction, ValidationError } from '../src';
 import { generateNodeTarballUrl, installNode } from '../src/install-node';
 import { generatePythonTarballUrl, installPython } from '../src/install-python';
+
+export function test_funCacheDir() {
+	assert(typeof funCacheDir === 'string');
+}
 
 // `install-node.ts` tests
 export function test_install_node_tarball_url() {

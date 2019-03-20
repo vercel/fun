@@ -32,6 +32,8 @@ interface RuntimeImpl {
 
 export const runtimes: Runtimes = {};
 
+export const funCacheDir = cachedir('co.zeit.fun');
+
 function createRuntime(
 	runtimes: Runtimes,
 	name: string,
@@ -92,7 +94,7 @@ async function copy(src: string, dest: string): Promise<void> {
 const initPromises: Map<Runtime, Promise<void>> = new Map();
 
 async function _initializeRuntime(runtime: Runtime): Promise<void> {
-	const cacheDir = join(cachedir('co.zeit.fun'), 'runtimes', runtime.name);
+	const cacheDir = join(funCacheDir, 'runtimes', runtime.name);
 	const versionFile = join(cacheDir, '.version');
 	const installedVersion = await getRuntimeVersion(versionFile);
 	if (installedVersion === runtime.version) {
