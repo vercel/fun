@@ -67,9 +67,11 @@ def lambda_runtime_next_invocation():
     elif '_X_AMZN_TRACE_ID' in os.environ:
         del os.environ['_X_AMZN_TRACE_ID']
 
+    aws_request_id = res.get_header('Lambda-Runtime-Aws-Request-Id')
+
     context = {
         # TODO: fill this out
-        'aws_request_id': 'foo'
+        'aws_request_id': aws_request_id
     }
 
     event = res.get_json_body()
