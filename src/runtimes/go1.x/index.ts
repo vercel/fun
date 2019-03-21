@@ -13,8 +13,6 @@ function _go(opts) {
 	};
 }
 
-export const version = 1;
-
 export async function init({ cacheDir }: Runtime): Promise<void> {
 	const source = join(cacheDir, 'bootstrap.go');
 

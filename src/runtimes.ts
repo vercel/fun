@@ -1,5 +1,6 @@
 import { join } from 'path';
 import createDebug from 'debug';
+import { createHash, Hash } from 'crypto';
 import * as cachedir from 'cache-or-tmp-directory';
 import {
 	lstat,
@@ -58,10 +59,13 @@ createRuntime(runtimes, 'python2.7', python27);
 createRuntime(runtimes, 'python3.6', python36);
 createRuntime(runtimes, 'python3.7', python37);
 
-async function getRuntimeVersion(f: string): Promise<number> {
+/**
+ * Reads the file path `f` as an ascii string.
+ * Returns `null` if the file does not exist.
+ */
+async function getCachedRuntimeSha(f: string): Promise<string> {
 	try {
-		const contents = await readFile(f, 'ascii');
-		return parseInt(contents, 10);
+		return await readFile(f, 'ascii');
 	} catch (err) {
 		if (err.code === 'ENOENT') {
 			return null;
@@ -70,8 +74,49 @@ async function getRuntimeVersion(f: string): Promise<number> {
 	}
 }
 
-// Until https://github.com/zeit/pkg/issues/639 is resolved, we have to
-// implement the `copy()` operation without relying on `fs.copyFile()`.
+const runtimeShaPromises: Map<string, Promise<string>> = new Map();
+
+/**
+ * Calculates a sha256 of the files provided for a runtime. If any of the
+ * `bootstrap` or other dependent files change then the shasum will be
+ * different and the user's existing runtime cache will be invalidated.
+ */
+async function _calculateRuntimeSha(src: string): Promise<string> {
+	debug('calculateRuntimeSha(%o)', src);
+	const hash = createHash('sha256');
+	await calculateRuntimeShaDir(src, hash);
+	const sha = hash.digest('hex');
+	debug('Calculated runtime sha for %o: %o', src, sha);
+	return sha;
+}
+async function calculateRuntimeShaDir(src: string, hash: Hash): Promise<void> {
+	const entries = await readdir(src);
+	for (const entry of entries) {
+		const srcPath = join(src, entry);
+		const s = await lstat(srcPath);
+		if (s.isDirectory()) {
+			await calculateRuntimeShaDir(srcPath, hash);
+		} else {
+			const contents = await readFile(srcPath);
+			hash.update(contents);
+		}
+	}
+}
+function calculateRuntimeSha(src: string): Promise<string> {
+	// The sha calculation promise gets memoized because the runtime code
+	// won't be changing (it's within a published npm module, after all)
+	let p = runtimeShaPromises.get(src);
+	if (!p) {
+		p = _calculateRuntimeSha(src);
+		runtimeShaPromises.set(src, p);
+	}
+	return p;
+}
+
+/**
+ * Until https://github.com/zeit/pkg/issues/639 is resolved, we have to
+ * implement the `copy()` operation without relying on `fs.copyFile()`.
+ */
 async function copy(src: string, dest: string): Promise<void> {
 	debug('copy(%o, %o)', src, dest);
 	const [entries] = await Promise.all([readdir(src), mkdirp(dest)]);
@@ -95,9 +140,12 @@ const initPromises: Map<Runtime, Promise<void>> = new Map();
 
 async function _initializeRuntime(runtime: Runtime): Promise<void> {
 	const cacheDir = join(funCacheDir, 'runtimes', runtime.name);
-	const versionFile = join(cacheDir, '.version');
-	const installedVersion = await getRuntimeVersion(versionFile);
-	if (installedVersion === runtime.version) {
+	const cacheShaFile = join(cacheDir, '.cache-sha');
+	const [cachedRuntimeSha, runtimeSha] = await Promise.all([
+		getCachedRuntimeSha(cacheShaFile),
+		calculateRuntimeSha(runtime.runtimeDir)
+	]);
+	if (cachedRuntimeSha === runtimeSha) {
 		debug(
 			'Runtime %o is already initialized at %o',
 			runtime.name,
@@ -126,25 +174,30 @@ async function _initializeRuntime(runtime: Runtime): Promise<void> {
 			}
 
 			await writeFile(
-				join(cacheDirTemp, '.version'),
-				String(runtime.version)
+				join(cacheDirTemp, '.cache-sha'),
+				String(runtimeSha)
 			);
-
-			if (installedVersion !== null) {
-				// An older version is already installed, remove it first
-				// otherwise the `rename()` operation will fail with EEXISTS
-				debug(
-					'Removing old cache dir %o with version %o',
-					cacheDir,
-					installedVersion
-				);
-				await remove(cacheDir);
-			}
 
 			// After `init()` is successful, the cache dir is atomically renamed
 			// to the final name, after which `init()` will not be invoked in the
 			// future.
-			await rename(cacheDirTemp, cacheDir);
+			try {
+				await rename(cacheDirTemp, cacheDir);
+			} catch (err) {
+				if (err.code === 'ENOTEMPTY') {
+					// An older version is already installed, remove it first
+					// and then try again
+					debug(
+						'Removing old cache dir %o with sha %o',
+						cacheDir,
+						cachedRuntimeSha
+					);
+					await remove(cacheDir);
+					await rename(cacheDirTemp, cacheDir);
+				} else {
+					throw err;
+				}
+			}
 			runtime.cacheDir = cacheDir;
 		} catch (err) {
 			debug(
