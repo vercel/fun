@@ -6,7 +6,7 @@ import { mkdirp, remove, readdir, readFile } from 'fs-extra';
 import { funCacheDir, createFunction, ValidationError } from '../src';
 import { generateNodeTarballUrl, installNode } from '../src/install-node';
 import { generatePythonTarballUrl, installPython } from '../src/install-python';
-import { LambdaInitializationError, LambdaInvokeError } from '../src/errors';
+import { LambdaInitializationError } from '../src/errors';
 
 export function test_funCacheDir() {
 	assert.equal('string', typeof funCacheDir);
