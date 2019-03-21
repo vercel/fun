@@ -86,12 +86,21 @@ export default class NativeProvider implements Provider {
 			LAMBDA_TASK_ROOT: taskDir,
 			TZ: ':UTC'
 		};
-		//console.error({ env });
 
 		const proc = spawn(bootstrap, [], {
 			env,
 			cwd: taskDir,
 			stdio: ['ignore', 'inherit', 'inherit']
+		});
+
+		proc.on('exit', async (code, signal) => {
+			debug(
+				'Process (pid=%o) exited with code %o, signal %o',
+				proc.pid,
+				code,
+				signal
+			);
+			await this.shutdownRuntimeApiServer(proc);
 		});
 
 		debug('Waiting for init on process %o', proc.pid);
@@ -104,25 +113,28 @@ export default class NativeProvider implements Provider {
 		return proc;
 	}
 
+	async shutdownRuntimeApiServer(proc: ChildProcess): Promise<void> {
+		debug('Shutting down Runtime API for %o', proc.pid);
+		const server = this.runtimeApis.get(proc);
+		server.close();
+		this.runtimeApis.delete(proc);
+	}
+
 	async destroyProcess(proc: ChildProcess): Promise<void> {
-		// Unfreeze the process first so that any cleanup logic
-		// by the runtime may be executed
+		// Unfreeze the process first so it is able to process the `SIGTERM`
+		// signal and exit cleanly (clean up child processes, etc.)
 		this.unfreezeProcess(proc);
 
 		debug('Stopping process %o', proc.pid);
-		const server = this.runtimeApis.get(proc);
-		server.close();
-
-		this.runtimeApis.delete(proc);
 		process.kill(proc.pid, 'SIGTERM');
 	}
 
-	async freezeProcess(proc: ChildProcess): Promise<void> {
+	freezeProcess(proc: ChildProcess) {
 		debug('Freezing process %o', proc.pid);
 		process.kill(proc.pid, 'SIGSTOP');
 	}
 
-	async unfreezeProcess(proc: ChildProcess): Promise<void> {
+	unfreezeProcess(proc: ChildProcess) {
 		debug('Unfreezing process %o', proc.pid);
 		process.kill(proc.pid, 'SIGCONT');
 	}
@@ -131,7 +143,7 @@ export default class NativeProvider implements Provider {
 		let errorOccurred = false;
 		const proc = await this.pool.acquire();
 		const server = this.runtimeApis.get(proc);
-		await this.unfreezeProcess(proc);
+		this.unfreezeProcess(proc);
 		try {
 			return await server.invoke(params);
 		} catch (err) {
@@ -140,7 +152,7 @@ export default class NativeProvider implements Provider {
 			throw err;
 		} finally {
 			if (!errorOccurred) {
-				await this.freezeProcess(proc);
+				this.freezeProcess(proc);
 				await this.pool.release(proc);
 			}
 		}
