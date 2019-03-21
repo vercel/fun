@@ -42,7 +42,6 @@ function createRuntime(
 ): void {
 	const runtime: Runtime = {
 		name,
-		version: 0,
 		runtimeDir: join(runtimesDir, name),
 		...mod
 	};
