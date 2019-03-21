@@ -6,9 +6,32 @@ import { mkdirp, remove, readdir, readFile } from 'fs-extra';
 import { funCacheDir, createFunction, ValidationError } from '../src';
 import { generateNodeTarballUrl, installNode } from '../src/install-node';
 import { generatePythonTarballUrl, installPython } from '../src/install-python';
+import { LambdaInitializationError, LambdaInvokeError } from '../src/errors';
 
 export function test_funCacheDir() {
-	assert(typeof funCacheDir === 'string');
+	assert.equal('string', typeof funCacheDir);
+}
+
+export function test_LambdaInitializationError() {
+	const err = new LambdaInitializationError({
+		errorType: 'InitError',
+		errorMessage: 'I crashed!',
+		stackTrace: [
+			'    at Object.<anonymous> (/Code/zeit/fun/test/functions/nodejs-init-error/handler.js:2:7)',
+			'    at Module._compile (module.js:652:30)',
+			'    at Object.Module._extensions..js (module.js:663:10)',
+			'    at Module.load (module.js:565:32)',
+			'    at tryModuleLoad (module.js:505:12)',
+			'    at Function.Module._load (module.js:497:3)',
+			'    at Module.require (module.js:596:17)',
+			'    at require (internal/module.js:11:18)',
+			'    at getHandler (/Library/Caches/co.zeit.fun/runtimes/nodejs/bootstrap.js:151:15)',
+			'    at /Library/Caches/co.zeit.fun/runtimes/nodejs/bootstrap.js:37:23'
+		]
+	});
+	assert.equal('InitError', err.name);
+	assert.equal('I crashed!', err.message);
+	assert(err.stack.includes('nodejs-init-error/handler.js'));
 }
 
 // `install-node.ts` tests
