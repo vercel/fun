@@ -1,5 +1,6 @@
 handler
 node_modules
+__pycache__
 /dist
 /?.js
 /examples/*/*.zip
