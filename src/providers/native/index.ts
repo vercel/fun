@@ -130,12 +130,20 @@ export default class NativeProvider implements Provider {
 	}
 
 	async destroyProcess(proc: ChildProcess): Promise<void> {
-		// Unfreeze the process first so it is able to process the `SIGTERM`
-		// signal and exit cleanly (clean up child processes, etc.)
-		this.unfreezeProcess(proc);
+		try {
+			// Unfreeze the process first so it is able to process the `SIGTERM`
+			// signal and exit cleanly (clean up child processes, etc.)
+			this.unfreezeProcess(proc);
 
-		debug('Stopping process %o', proc.pid);
-		process.kill(proc.pid, 'SIGTERM');
+			debug('Stopping process %o', proc.pid);
+			process.kill(proc.pid, 'SIGTERM');
+		} catch (err) {
+			// ESRCH means that the process ID no longer exists, which is fine
+			// in this case since we're shutting down the process anyways
+			if (err.code !== 'ESRCH') {
+				throw err;
+			}
+		}
 	}
 
 	freezeProcess(proc: ChildProcess) {
