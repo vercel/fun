@@ -6,6 +6,7 @@ __pycache__
 /examples/*/*.zip
 /test/functions/*/*.zip
 /test/functions/*/*.pyc
+/test/functions/*/out
 /.nyc_output
 /zeit-fun-*.tgz
 /pkg-invoke
