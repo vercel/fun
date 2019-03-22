@@ -1,7 +1,5 @@
 import { ChildProcess } from 'child_process';
 
-export type InvokePayload = Buffer | Blob | string;
-
 export interface LambdaParams {
 	FunctionName?: string;
 	Code: { ZipFile?: Buffer | string; Directory?: string };
@@ -14,14 +12,18 @@ export interface LambdaParams {
 	Timeout?: number; // The amount of time that Lambda allows a function to run before terminating it. The default is 3 seconds. The maximum allowed value is 900 seconds.
 }
 
+export type InvokePayload = Buffer | Blob | string;
+
+// https://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html#API_Invoke_RequestSyntax
 export interface InvokeParams {
-	InvocationType?: string;
+	InvocationType: 'RequestResponse' | 'Event' | 'DryRun';
 	Payload?: InvokePayload;
 }
 
+// https://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html#API_Invoke_ResponseSyntax
 export interface InvokeResult {
 	StatusCode: number;
-	FunctionError?: string;
+	FunctionError?: 'Handled' | 'Unhandled';
 	LogResult?: string;
 	Payload: InvokePayload;
 	ExecutedVersion?: string;
