@@ -45,14 +45,14 @@ export default class NativeProvider implements Provider {
 		};
 		this.lambda = fn;
 		this.params = params;
+		this.runtimeApis = new WeakMap();
 		this.pool = createPool(factory, opts);
-		this.pool.on('factoryCreateError', function(err) {
+		this.pool.on('factoryCreateError', err => {
 			console.error('factoryCreateError', { err });
 		});
-		this.pool.on('factoryDestroyError', function(err) {
+		this.pool.on('factoryDestroyError', err => {
 			console.error('factoryDestroyError', { err });
 		});
-		this.runtimeApis = new WeakMap();
 	}
 
 	async createProcess(): Promise<ChildProcess> {
@@ -116,12 +116,6 @@ export default class NativeProvider implements Provider {
 			await this.shutdownRuntimeApiServer(proc);
 		});
 
-		debug('Waiting for init on process %o', proc.pid);
-		await server.initDeferred.promise;
-		debug('Lambda is initialized for process %o', proc.pid);
-
-		this.freezeProcess(proc);
-
 		return proc;
 	}
 
@@ -162,7 +156,29 @@ export default class NativeProvider implements Provider {
 		let errorOccurred = false;
 		const proc = await this.pool.acquire();
 		const server = this.runtimeApis.get(proc);
-		this.unfreezeProcess(proc);
+
+		if (server.initDeferred) {
+			// The lambda process has just booted up, so wait for the
+			// initialization API call to come in before proceeding
+			debug('Waiting for init on process %o', proc.pid);
+			const initError = await server.initDeferred.promise;
+			if (initError) {
+				debug(
+					'Lambda got initialization error on process %o',
+					proc.pid
+				);
+				// An error happend during initialization, so remove the
+				// process from the pool and return the error to the caller
+				await this.pool.destroy(proc);
+				return initError;
+			}
+			debug('Lambda is initialized for process %o', proc.pid);
+		} else {
+			// The lambda process is being re-used for a subsequent
+			// invocation, so unfreeze the process first
+			this.unfreezeProcess(proc);
+		}
+
 		try {
 			return await server.invoke(params);
 		} catch (err) {

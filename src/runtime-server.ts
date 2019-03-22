@@ -19,7 +19,7 @@ function send404(res) {
 
 export class RuntimeServer extends Server {
 	public version: string;
-	public initDeferred: Deferred<void>;
+	public initDeferred: Deferred<InvokeResult | void>;
 	private nextDeferred: Deferred<void>;
 	private invokeDeferred: Deferred<InvokeParams>;
 	private resultDeferred: Deferred<InvokeResult>;
@@ -89,10 +89,11 @@ export class RuntimeServer extends Server {
 	}
 
 	async handleNextInvocation(req, res): Promise<void> {
-		if (this.initDeferred) {
+		const { initDeferred } = this;
+		if (initDeferred) {
 			debug('Runtime successfully initialized');
-			this.initDeferred.resolve();
 			this.initDeferred = null;
+			initDeferred.resolve();
 		}
 
 		this.invokeDeferred = createDeferred<InvokeParams>();
@@ -140,9 +141,13 @@ export class RuntimeServer extends Server {
 	}
 
 	async handleInitializationError(req, res): Promise<void> {
-		const body = await json(req);
-		const err = Object.assign(new Error('init failed'), body);
-		this.initDeferred.reject(err);
+		const statusCode = 200;
+		this.initDeferred.resolve({
+			StatusCode: statusCode,
+			FunctionError: 'Unhandled',
+			ExecutedVersion: '$LATEST',
+			Payload: await text(req)
+		});
 
 		res.statusCode = 202;
 		res.end();
