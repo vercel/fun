@@ -92,6 +92,7 @@ export default class NativeProvider implements Provider {
 			cwd: taskDir,
 			stdio: ['ignore', 'inherit', 'inherit']
 		});
+		this.runtimeApis.set(proc, server);
 
 		proc.on('exit', async (code, signal) => {
 			debug(
@@ -107,8 +108,7 @@ export default class NativeProvider implements Provider {
 		await server.initPromise;
 		debug('Lambda is initialized for process %o', proc.pid);
 
-		this.runtimeApis.set(proc, server);
-		await this.freezeProcess(proc);
+		this.freezeProcess(proc);
 
 		return proc;
 	}
@@ -116,8 +116,15 @@ export default class NativeProvider implements Provider {
 	async shutdownRuntimeApiServer(proc: ChildProcess): Promise<void> {
 		debug('Shutting down Runtime API for %o', proc.pid);
 		const server = this.runtimeApis.get(proc);
-		server.close();
-		this.runtimeApis.delete(proc);
+		if (server) {
+			server.close();
+			this.runtimeApis.delete(proc);
+		} else {
+			debug(
+				'No Runtime API server associated with process %o. This SHOULD NOT happen!',
+				proc.pid
+			);
+		}
 	}
 
 	async destroyProcess(proc: ChildProcess): Promise<void> {
