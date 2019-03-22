@@ -146,3 +146,8 @@ export async function destroy(fn: Lambda): Promise<void> {
 	}
 	await Promise.all(ops);
 }
+
+export async function cleanCacheDir(): Promise<void> {
+	debug('Deleting fun cache directory %o', funCacheDir);
+	await remove(funCacheDir);
+}

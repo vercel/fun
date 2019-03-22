@@ -3,7 +3,12 @@ import { tmpdir } from 'os';
 import * as execa from 'execa';
 import * as assert from 'assert';
 import { mkdirp, remove, readdir, readFile } from 'fs-extra';
-import { funCacheDir, createFunction, ValidationError } from '../src';
+import {
+	funCacheDir,
+	cleanCacheDir,
+	createFunction,
+	ValidationError
+} from '../src';
 import { generateNodeTarballUrl, installNode } from '../src/install-node';
 import { generatePythonTarballUrl, installPython } from '../src/install-python';
 import { LambdaInitializationError } from '../src/errors';
@@ -299,6 +304,32 @@ export const test_lambda_invoke = testInvoke(
 		assert.deepEqual(payload.event, { hello: 'world' });
 	}
 );
+
+// `fun` should be resilient to its runtime cache being wiped away during
+// runtime. At least, in between function creations. Consider a user running
+// `now dev cache clean` while a `now dev` server is running, and then the
+// user does a hard refresh to re-create the Lambda functions.
+interface Hello {
+	event: {
+		hello: string;
+	};
+}
+export const test_clean_cache_dir_recovery = async () => {
+	await cleanCacheDir();
+	const fn = await createFunction({
+		Code: {
+			Directory: __dirname + '/functions/nodejs-echo'
+		},
+		Handler: 'handler.handler',
+		Runtime: 'nodejs'
+	});
+	try {
+		const payload = await fn<Hello>({ hello: 'world' });
+		assert.deepEqual(payload.event, { hello: 'world' });
+	} finally {
+		await fn.destroy();
+	}
+};
 
 // `provided` runtime
 export const test_provided_bash_echo = testInvoke(
