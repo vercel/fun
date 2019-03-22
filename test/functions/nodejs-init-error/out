@@ -1,0 +1,1 @@
+{"errorMessage":"I crashed!","errorType":"Error","stackTrace":["Module._compile (module.js:652:30)","Object.Module._extensions..js (module.js:663:10)","Module.load (module.js:565:32)","tryModuleLoad (module.js:505:12)","Function.Module._load (module.js:497:3)","Module.require (module.js:596:17)","require (internal/module.js:11:18)"]}
