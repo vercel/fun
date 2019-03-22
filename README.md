@@ -80,8 +80,8 @@ real Lambda environment, with some key differences that are documented here:
  * Processes are frozen by sending the `SIGSTOP` signal to the lambda process,
    and unfrozen by sending the `SIGCONT` signal, not using the [cgroup freezer][].
  * Lambdas that compile to native executables (i.e. Go) will need to be compiled
-   for your operating system. So if you are on MacOS, then the binary needs to be
-   executable on MacOS.
+   for your operating system. So if you are on macOS, then the binary needs to be
+   executable on macOS.
 
 ### `docker`
 
