@@ -113,24 +113,20 @@ export default class NativeProvider implements Provider {
 				code,
 				signal
 			);
-			await this.shutdownRuntimeApiServer(proc);
+			const server = this.runtimeApis.get(proc);
+			if (server) {
+				debug('Shutting down Runtime API for %o', proc.pid);
+				server.close();
+				this.runtimeApis.delete(proc);
+			} else {
+				debug(
+					'No Runtime API server associated with process %o. This SHOULD NOT happen!',
+					proc.pid
+				);
+			}
 		});
 
 		return proc;
-	}
-
-	async shutdownRuntimeApiServer(proc: ChildProcess): Promise<void> {
-		debug('Shutting down Runtime API for %o', proc.pid);
-		const server = this.runtimeApis.get(proc);
-		if (server) {
-			server.close();
-			this.runtimeApis.delete(proc);
-		} else {
-			debug(
-				'No Runtime API server associated with process %o. This SHOULD NOT happen!',
-				proc.pid
-			);
-		}
 	}
 
 	async destroyProcess(proc: ChildProcess): Promise<void> {
