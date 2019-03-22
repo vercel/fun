@@ -10,6 +10,7 @@ import { remove } from 'fs-extra';
 import { basename } from 'path';
 import * as listen from 'async-listen';
 import { unzipToTemp } from './unzip';
+import { LambdaError } from './errors';
 import * as providers from './providers';
 import { RuntimeServer } from './runtime-server';
 import { funCacheDir, runtimes, initializeRuntime } from './runtimes';
@@ -99,7 +100,12 @@ export async function createFunction(params: LambdaParams): Promise<Lambda> {
 			// For Buffer / Blob
 			resultPayload = String(resultPayload);
 		}
-		return JSON.parse(resultPayload);
+		const parsedPayload = JSON.parse(resultPayload);
+		if (result.FunctionError) {
+			throw new LambdaError(parsedPayload);
+		} else {
+			return parsedPayload;
+		}
 	};
 
 	fn.params = params;

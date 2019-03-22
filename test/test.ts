@@ -11,14 +11,14 @@ import {
 } from '../src';
 import { generateNodeTarballUrl, installNode } from '../src/install-node';
 import { generatePythonTarballUrl, installPython } from '../src/install-python';
-import { LambdaInitializationError } from '../src/errors';
+import { LambdaError } from '../src/errors';
 
 export function test_funCacheDir() {
 	assert.equal('string', typeof funCacheDir);
 }
 
-export function test_LambdaInitializationError() {
-	const err = new LambdaInitializationError({
+export function test_LambdaError() {
+	const err = new LambdaError({
 		errorType: 'InitError',
 		errorMessage: 'I crashed!',
 		stackTrace: [

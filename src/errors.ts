@@ -3,14 +3,14 @@
  * https://stackoverflow.com/a/41102306/376773
  */
 
-interface LambdaRuntimeError {
+interface LambdaErrorPayload {
 	errorMessage?: string;
 	errorType?: string;
 	stackTrace?: string | string[];
 }
 
-export class LambdaInitializationError extends Error {
-	constructor(data: LambdaRuntimeError = {}) {
+export class LambdaError extends Error {
+	constructor(data: LambdaErrorPayload = {}) {
 		super(data.errorMessage || 'Unspecified runtime initialization error');
 		Object.setPrototypeOf(this, new.target.prototype);
 
