@@ -27,6 +27,7 @@
     "fs-extra": "7.0.1",
     "generic-pool": "3.4.2",
     "micro": "9.3.3",
+    "ms": "2.1.1",
     "node-fetch": "2.3.0",
     "path-match": "1.2.4",
     "promisepipe": "3.0.0",

@@ -1,3 +1,4 @@
+import * as ms from 'ms';
 import * as uuid from 'uuid/v4';
 import createDebug from 'debug';
 import { AddressInfo } from 'net';
@@ -29,7 +30,18 @@ export default class NativeProvider implements Provider {
 		};
 		const opts = {
 			min: 0,
-			max: 10
+			max: 10,
+			acquireTimeoutMillis: ms('5s')
+
+			// XXX: These 3 options are commented out because they cause
+			// the tests to never complete (doesn't exit cleanly).
+
+			// How often to check if a process needs to be shut down due to not
+			// being invoked
+			//evictionRunIntervalMillis: ms('10s'),
+
+			// How long a process is allowed to stay alive without being invoked
+			//idleTimeoutMillis: ms('15s')
 		};
 		this.lambda = fn;
 		this.params = params;
