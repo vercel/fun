@@ -78,7 +78,7 @@ real Lambda environment, with some key differences that are documented here:
    function code should use the environment variables that represent these
    locations (namely `LAMBDA_TASK_ROOT` and `LAMBDA_RUNTIME_DIR`).
  * Processes are frozen by sending the `SIGSTOP` signal to the lambda process,
-   and unfrozen by sending the `SIGCONT` signal, not using the cgroup freezer.
+   and unfrozen by sending the `SIGCONT` signal, not using the [cgroup freezer][].
  * Lambdas that compile to native executables (i.e. Go) will need to be compiled
    for your operating system. So if you are on MacOS, then the binary needs to be
    executable on MacOS.
@@ -99,4 +99,7 @@ implemented are:
  * `nodejs6.10` for Node.js Lambda functions using a downloaded Node v6.10.0 binary
  * `nodejs8.10` for Node.js Lambda functions using a downloaded Node v8.10.0 binary
  * `go1.x` for Lambda functions written in Go - binary must be compiled for your platform
- * `provided` for [custom runtimes](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html)
+ * `provided` for [custom runtimes][]
+
+[cgroup freezer]: https://www.kernel.org/doc/Documentation/cgroup-v1/freezer-subsystem.txt
+[custom runtimes]: https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html
