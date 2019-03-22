@@ -98,6 +98,10 @@ implemented are:
  * `nodejs` for Node.js Lambda functions using the system `node` binary
  * `nodejs6.10` for Node.js Lambda functions using a downloaded Node v6.10.0 binary
  * `nodejs8.10` for Node.js Lambda functions using a downloaded Node v8.10.0 binary
+ * `python` for Python Lambda functions using the system `python` binary
+ * `python2.7` for Python Lambda functions using a downloaded Python v2.7.12 binary
+ * `python3.6` for Python Lambda functions using a downloaded Python v3.6.8 binary
+ * `python3.7` for Python Lambda functions using a downloaded Python v3.7.2 binary
  * `go1.x` for Lambda functions written in Go - binary must be compiled for your platform
  * `provided` for [custom runtimes][]
 
