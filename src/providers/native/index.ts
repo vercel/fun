@@ -105,7 +105,7 @@ export default class NativeProvider implements Provider {
 		});
 
 		debug('Waiting for init on process %o', proc.pid);
-		await server.initPromise;
+		await server.initDeferred.promise;
 		debug('Lambda is initialized for process %o', proc.pid);
 
 		this.freezeProcess(proc);

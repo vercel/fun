@@ -4,6 +4,8 @@ import { Server } from 'http';
 import createDebug from 'debug';
 import { run, json, text } from 'micro';
 import * as createPathMatch from 'path-match';
+
+import { createDeferred, Deferred } from './deferred';
 import { Lambda, InvokeParams, InvokeResult } from './types';
 
 const pathMatch = createPathMatch();
@@ -15,34 +17,12 @@ function send404(res) {
 	res.end();
 }
 
-interface DeferredPromise<T> extends Promise<T> {
-	resolve: (value?: T | PromiseLike<T>) => void;
-	reject: (reason?: any) => void;
-}
-
-function createDeferred<T>(): DeferredPromise<T> {
-	let r;
-	let j;
-	const p = new Promise(
-		(
-			resolve: (value?: T | PromiseLike<T>) => void,
-			reject: (reason?: any) => void
-		): void => {
-			r = resolve;
-			j = reject;
-		}
-	) as DeferredPromise<T>;
-	p.resolve = r;
-	p.reject = j;
-	return p;
-}
-
 export class RuntimeServer extends Server {
 	public version: string;
-	public initPromise: DeferredPromise<void>;
-	private nextPromise: DeferredPromise<void>;
-	private invokePromise: DeferredPromise<InvokeParams>;
-	private resultPromise: DeferredPromise<InvokeResult>;
+	public initDeferred: Deferred<void>;
+	private nextDeferred: Deferred<void>;
+	private invokeDeferred: Deferred<InvokeParams>;
+	private resultDeferred: Deferred<InvokeResult>;
 	private lambda: Lambda;
 
 	constructor(fn: Lambda) {
@@ -53,14 +33,14 @@ export class RuntimeServer extends Server {
 		this.on('request', (req, res) => run(req, res, serve));
 
 		this.lambda = fn;
-		this.initPromise = createDeferred<void>();
+		this.initDeferred = createDeferred<void>();
 		this.resetInvocationState();
 	}
 
 	resetInvocationState() {
-		this.nextPromise = createDeferred<void>();
-		this.invokePromise = null;
-		this.resultPromise = null;
+		this.nextDeferred = createDeferred<void>();
+		this.invokeDeferred = null;
+		this.resultDeferred = null;
 	}
 
 	async serve(req, res): Promise<any> {
@@ -109,21 +89,20 @@ export class RuntimeServer extends Server {
 	}
 
 	async handleNextInvocation(req, res): Promise<void> {
-		if (this.initPromise) {
+		if (this.initDeferred) {
 			debug('Runtime successfully initialized');
-			this.initPromise.resolve();
-			this.initPromise = null;
+			this.initDeferred.resolve();
+			this.initDeferred = null;
 		}
 
-		this.invokePromise = createDeferred<InvokeParams>();
-		this.resultPromise = createDeferred<InvokeResult>();
-		this.nextPromise.resolve();
-		this.nextPromise = null;
+		this.invokeDeferred = createDeferred<InvokeParams>();
+		this.resultDeferred = createDeferred<InvokeResult>();
+		this.nextDeferred.resolve();
+		this.nextDeferred = null;
 
 		debug('Waiting for the `invoke()` function to be called');
 		req.setTimeout(0); // disable default 2 minute socket timeout
-		const params = await this.invokePromise;
-		//console.error({ params });
+		const params = await this.invokeDeferred.promise;
 		const requestId = uuid();
 
 		// TODO: use dynamic values from lambda params
@@ -141,7 +120,7 @@ export class RuntimeServer extends Server {
 		// `Event` = 202
 		// `DryRun` = 204
 		const statusCode = 200;
-		this.resultPromise.resolve({
+		this.resultDeferred.resolve({
 			StatusCode: statusCode,
 			ExecutedVersion: '$LATEST',
 			Payload: await text(req)
@@ -154,7 +133,7 @@ export class RuntimeServer extends Server {
 	async handleInvocationError(req, res, requestId: string): Promise<void> {
 		const body = await json(req);
 		const err = Object.assign(new Error('invoke failed'), body);
-		this.resultPromise.reject(err);
+		this.resultDeferred.reject(err);
 		this.resetInvocationState();
 		res.statusCode = 202;
 		res.end();
@@ -163,22 +142,24 @@ export class RuntimeServer extends Server {
 	async handleInitializationError(req, res): Promise<void> {
 		const body = await json(req);
 		const err = Object.assign(new Error('init failed'), body);
-		this.initPromise.reject(err);
+		this.initDeferred.reject(err);
 
 		res.statusCode = 202;
 		res.end();
 	}
 
-	async invoke(params: InvokeParams = {}): Promise<InvokeResult> {
-		if (this.nextPromise) {
+	async invoke(
+		params: InvokeParams = { InvocationType: 'RequestResponse' }
+	): Promise<InvokeResult> {
+		if (this.nextDeferred) {
 			debug('Waiting for `next` invocation request from runtime');
-			await this.nextPromise;
+			await this.nextDeferred.promise;
 		}
 		if (!params.Payload) {
 			params.Payload = '{}';
 		}
-		this.invokePromise.resolve(params);
-		const result = await this.resultPromise;
+		this.invokeDeferred.resolve(params);
+		const result = await this.resultDeferred.promise;
 		return result;
 	}
 }
