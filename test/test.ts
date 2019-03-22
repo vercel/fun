@@ -404,6 +404,29 @@ export const test_nodejs810_handled_error = testInvoke(
 	}
 );
 
+export const test_nodejs810_exit_in_handler = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/nodejs-eval'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'nodejs8.10'
+		}),
+	async fn => {
+		let err;
+		try {
+			await fn({ code: 'process.exit(5)' });
+		} catch (_err) {
+			err = _err;
+		}
+		assert(err);
+		assert(
+			err.message.includes('Process exited before completing request')
+		);
+	}
+);
+
 // `go1.x` runtime
 export const test_go1x_echo = testInvoke(
 	() =>

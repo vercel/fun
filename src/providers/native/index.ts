@@ -157,7 +157,7 @@ export default class NativeProvider implements Provider {
 	}
 
 	async invoke(params: InvokeParams): Promise<InvokeResult> {
-		let errorOccurred = false;
+		let result: InvokeResult;
 		const proc = await this.pool.acquire();
 		const server = this.runtimeApis.get(proc);
 
@@ -184,17 +184,32 @@ export default class NativeProvider implements Provider {
 		}
 
 		try {
-			return await server.invoke(params);
+			result = await server.invoke(params);
 		} catch (err) {
-			errorOccurred = true;
-			await this.pool.destroy(proc);
-			throw err;
-		} finally {
-			if (!errorOccurred) {
-				this.freezeProcess(proc);
-				await this.pool.release(proc);
-			}
+			result = {
+				StatusCode: 200,
+				FunctionError: 'Unhandled',
+				ExecutedVersion: '$LATEST',
+				// TODO: make this into a `server.createError()` function
+				Payload: JSON.stringify({
+					errorMessage: err.message
+				})
+			};
 		}
+
+		if (result.FunctionError === 'Unhandled') {
+			// An "Unhandled" error means either init error or the process
+			// exited before sending the response. In either case, the process
+			// is unhealthy and needs to be removed from the pool
+			await this.pool.destroy(proc);
+		} else {
+			// Either a successful response, or a "Handled" error.
+			// The process may be re-used for the next invocation.
+			this.freezeProcess(proc);
+			await this.pool.release(proc);
+		}
+
+		return result;
 	}
 
 	async destroy(): Promise<void> {

@@ -20,10 +20,11 @@ function send404(res) {
 export class RuntimeServer extends Server {
 	public version: string;
 	public initDeferred: Deferred<InvokeResult | void>;
+	public resultDeferred: Deferred<InvokeResult>;
 	private nextDeferred: Deferred<void>;
 	private invokeDeferred: Deferred<InvokeParams>;
-	private resultDeferred: Deferred<InvokeResult>;
 	private lambda: Lambda;
+	private currentRequestId: string;
 
 	constructor(fn: Lambda) {
 		super();
@@ -41,6 +42,7 @@ export class RuntimeServer extends Server {
 		this.nextDeferred = createDeferred<void>();
 		this.invokeDeferred = null;
 		this.resultDeferred = null;
+		this.currentRequestId = null;
 	}
 
 	async serve(req, res): Promise<any> {
@@ -105,6 +107,7 @@ export class RuntimeServer extends Server {
 		req.setTimeout(0); // disable default 2 minute socket timeout
 		const params = await this.invokeDeferred.promise;
 		const requestId = uuid();
+		this.currentRequestId = requestId;
 
 		// TODO: use dynamic values from lambda params
 		const deadline = 5000;
@@ -169,5 +172,23 @@ export class RuntimeServer extends Server {
 		this.invokeDeferred.resolve(params);
 		const result = await this.resultDeferred.promise;
 		return result;
+	}
+
+	close(callback?: Function): this {
+		if (this.resultDeferred) {
+			const statusCode = 200;
+			this.resultDeferred.resolve({
+				StatusCode: statusCode,
+				FunctionError: 'Unhandled',
+				ExecutedVersion: '$LATEST',
+				Payload: JSON.stringify({
+					errorMessage: `RequestId: ${
+						this.currentRequestId
+					} Process exited before completing request`
+				})
+			});
+		}
+		super.close(callback);
+		return this;
 	}
 }
