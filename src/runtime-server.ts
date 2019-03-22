@@ -2,7 +2,7 @@ import * as uuid from 'uuid/v4';
 import { parse } from 'url';
 import { Server } from 'http';
 import createDebug from 'debug';
-import { run, json, text } from 'micro';
+import { run, text } from 'micro';
 import * as createPathMatch from 'path-match';
 
 import { createDeferred, Deferred } from './deferred';
@@ -132,9 +132,13 @@ export class RuntimeServer extends Server {
 	}
 
 	async handleInvocationError(req, res, requestId: string): Promise<void> {
-		const body = await json(req);
-		const err = Object.assign(new Error('invoke failed'), body);
-		this.resultDeferred.reject(err);
+		const statusCode = 200;
+		this.resultDeferred.resolve({
+			StatusCode: statusCode,
+			FunctionError: 'Handled',
+			ExecutedVersion: '$LATEST',
+			Payload: await text(req)
+		});
 		this.resetInvocationState();
 		res.statusCode = 202;
 		res.end();
@@ -148,7 +152,6 @@ export class RuntimeServer extends Server {
 			ExecutedVersion: '$LATEST',
 			Payload: await text(req)
 		});
-
 		res.statusCode = 202;
 		res.end();
 	}

@@ -379,6 +379,31 @@ export const test_nodejs810_version = testInvoke(
 	}
 );
 
+export const test_nodejs810_handled_error = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/nodejs-eval'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'nodejs8.10'
+		}),
+	async fn => {
+		let err;
+		const error = 'this is a handled error';
+		try {
+			await fn({ error });
+		} catch (_err) {
+			err = _err;
+		}
+		assert(err);
+		assert.equal(err.message, error);
+
+		const { result } = await fn({ code: '1 + 1' });
+		assert.equal(result, 2);
+	}
+);
+
 // `go1.x` runtime
 export const test_go1x_echo = testInvoke(
 	() =>
