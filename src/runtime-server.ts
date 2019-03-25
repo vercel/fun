@@ -5,6 +5,7 @@ import createDebug from 'debug';
 import { run, text } from 'micro';
 import * as createPathMatch from 'path-match';
 
+import { once } from './once';
 import { createDeferred, Deferred } from './deferred';
 import { Lambda, InvokeParams, InvokeResult } from './types';
 
@@ -116,7 +117,9 @@ export class RuntimeServer extends Server {
 		res.setHeader('Lambda-Runtime-Aws-Request-Id', requestId);
 		res.setHeader('Lambda-Runtime-Invoked-Function-Arn', functionArn);
 		res.setHeader('Lambda-Runtime-Deadline-Ms', String(deadline));
+		const finish = once(res, 'finish');
 		res.end(params.Payload);
+		await finish;
 	}
 
 	async handleInvocationResponse(req, res, requestId: string): Promise<void> {
@@ -124,39 +127,54 @@ export class RuntimeServer extends Server {
 		// `Event` = 202
 		// `DryRun` = 204
 		const statusCode = 200;
-		this.resultDeferred.resolve({
+		const payload: InvokeResult = {
 			StatusCode: statusCode,
 			ExecutedVersion: '$LATEST',
 			Payload: await text(req)
-		});
-		this.resetInvocationState();
+		};
+
 		res.statusCode = 202;
+		const finish = once(res, 'finish');
 		res.end();
+		await finish;
+
+		this.resultDeferred.resolve(payload);
+		this.resetInvocationState();
 	}
 
 	async handleInvocationError(req, res, requestId: string): Promise<void> {
 		const statusCode = 200;
-		this.resultDeferred.resolve({
+		const payload: InvokeResult = {
 			StatusCode: statusCode,
 			FunctionError: 'Handled',
 			ExecutedVersion: '$LATEST',
 			Payload: await text(req)
-		});
-		this.resetInvocationState();
+		};
+
 		res.statusCode = 202;
+		const finish = once(res, 'finish');
 		res.end();
+		await finish;
+
+		this.resultDeferred.resolve(payload);
+		this.resetInvocationState();
 	}
 
 	async handleInitializationError(req, res): Promise<void> {
 		const statusCode = 200;
-		this.initDeferred.resolve({
+		const payload: InvokeResult = {
 			StatusCode: statusCode,
 			FunctionError: 'Unhandled',
 			ExecutedVersion: '$LATEST',
 			Payload: await text(req)
-		});
+		};
+
 		res.statusCode = 202;
+		const finish = once(res, 'finish');
 		res.end();
+		await finish;
+
+		this.initDeferred.resolve(payload);
 	}
 
 	async invoke(
