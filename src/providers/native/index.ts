@@ -18,7 +18,7 @@ import {
 const debug = createDebug('@zeit/fun:providers/native');
 
 export default class NativeProvider implements Provider {
-	pool: Pool;
+	pool: Pool<ChildProcess>;
 	lambda: Lambda;
 	params: LambdaParams;
 	runtimeApis: WeakMap<ChildProcess, RuntimeServer>;
