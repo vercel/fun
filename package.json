@@ -22,6 +22,7 @@
     "@types/yauzl-promise": "2.1.0",
     "async-listen": "1.0.0",
     "cache-or-tmp-directory": "1.0.0",
+    "cpy": "7.2.0",
     "debug": "4.1.1",
     "execa": "1.0.0",
     "fs-extra": "7.0.1",

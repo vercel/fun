@@ -45,6 +45,10 @@ export function test_install_node_tarball_url() {
 		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-darwin-x64.tar.gz',
 		generateNodeTarballUrl('8.10.0', 'darwin', 'x64')
 	);
+	assert.equal(
+		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-win-x86.zip',
+		generateNodeTarballUrl('8.10.0', 'win32', 'x86')
+	);
 }
 
 export async function test_install_node() {
