@@ -77,7 +77,7 @@ export default class NativeProvider implements Provider {
 		// https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html
 		const env = {
 			// Non-reserved env vars (can overwrite with params)
-			PATH: '/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/sbin:/opt/bin',
+			PATH: process.env.PATH,
 			LANG: 'en_US.UTF-8',
 
 			// User env vars
