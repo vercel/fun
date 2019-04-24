@@ -211,21 +211,36 @@ async function _initializeRuntime(runtime: Runtime): Promise<void> {
 	}
 }
 
-export async function initializeRuntime(runtime: Runtime): Promise<void> {
+export async function initializeRuntime(
+	target: string | Runtime
+): Promise<Runtime> {
+	let runtime: Runtime;
+	if (typeof target === 'string') {
+		runtime = runtimes[target];
+		if (!runtime) {
+			throw new Error(`Could not find runtime with name "${target}"`);
+		}
+	} else {
+		runtime = target;
+	}
+
 	let p = initPromises.get(runtime);
 	if (p) {
-		return p;
-	}
-	p = _initializeRuntime(runtime);
-	initPromises.set(runtime, p);
-
-	try {
 		await p;
-	} finally {
-		// Once the initialization is complete, remove the Promise. This is so that
-		// in case the cache is deleted during runtime, and then another Lambda
-		// function is created, the in-memory cache doesn't think the runtime is
-		// already initialized and will check the filesystem cache again.
-		initPromises.delete(runtime);
+	} else {
+		p = _initializeRuntime(runtime);
+		initPromises.set(runtime, p);
+
+		try {
+			await p;
+		} finally {
+			// Once the initialization is complete, remove the Promise. This is so that
+			// in case the cache is deleted during runtime, and then another Lambda
+			// function is created, the in-memory cache doesn't think the runtime is
+			// already initialized and will check the filesystem cache again.
+			initPromises.delete(runtime);
+		}
 	}
+
+	return runtime;
 }

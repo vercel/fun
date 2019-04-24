@@ -2,9 +2,10 @@ import { basename, join } from 'path';
 import { tmpdir } from 'os';
 import * as execa from 'execa';
 import * as assert from 'assert';
-import { mkdirp, remove, readdir, readFile } from 'fs-extra';
+import { mkdirp, remove, readdir, readFile, stat } from 'fs-extra';
 import {
 	funCacheDir,
+	initializeRuntime,
 	cleanCacheDir,
 	createFunction,
 	ValidationError
@@ -144,6 +145,25 @@ export const test_reserved_env = async () => {
 		err.toString(),
 		'ValidationError: The following environment variables can not be configured: AWS_REGION, TZ'
 	);
+};
+
+// Initialization
+export const test_initialize_runtime_with_string = async () => {
+	const runtime = await initializeRuntime('nodejs8.10');
+	assert.equal(typeof runtime.cacheDir, 'string');
+	const nodeStat = await stat(join(runtime.cacheDir, 'bin/node'));
+	assert(nodeStat.isFile());
+};
+
+export const test_initialize_runtime_with_invalid_name = async () => {
+	let err: Error;
+	try {
+		await initializeRuntime('node8.10');
+	} catch (_err) {
+		err = _err;
+	}
+	assert(err);
+	assert.equal('Could not find runtime with name "node8.10"', err.message);
 };
 
 // Invocation

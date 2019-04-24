@@ -57,6 +57,7 @@ export default class NativeProvider implements Provider {
 
 	async createProcess(): Promise<ChildProcess> {
 		const { runtime, params, region, version, extractedDir } = this.lambda;
+		const binDir = join(runtime.cacheDir, 'bin');
 		const bootstrap = join(runtime.cacheDir, 'bootstrap');
 
 		const server = new RuntimeServer(this.lambda);
@@ -77,7 +78,7 @@ export default class NativeProvider implements Provider {
 		// https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html
 		const env = {
 			// Non-reserved env vars (can overwrite with params)
-			PATH: process.env.PATH,
+			PATH: `${binDir}:${process.env.PATH}`,
 			LANG: 'en_US.UTF-8',
 
 			// User env vars
