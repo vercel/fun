@@ -1,6 +1,6 @@
 {
   "name": "@zeit/fun",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Local Lambda development environment",
   "main": "dist/src/index",
   "typings": "dist/src/index",
