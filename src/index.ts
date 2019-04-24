@@ -24,7 +24,8 @@ export {
 	InvokeResult,
 	runtimes,
 	providers,
-	funCacheDir
+	funCacheDir,
+	initializeRuntime
 };
 
 // Environment variable names that AWS Lambda does not allow to be overridden.
