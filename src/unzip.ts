@@ -12,6 +12,8 @@ import {
 	fromBuffer as zipFromBuffer
 } from 'yauzl-promise';
 
+export { zipFromFile, zipFromBuffer, ZipFile };
+
 const debug = createDebug('@zeit/fun:unzip');
 
 export async function unzipToTemp(

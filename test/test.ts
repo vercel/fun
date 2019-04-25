@@ -41,10 +41,17 @@ export function test_LambdaError() {
 }
 
 // `install-node.ts` tests
-export function test_install_node_tarball_url() {
+export function test_install_node_tarball_url_darwin() {
 	assert.equal(
 		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-darwin-x64.tar.gz',
 		generateNodeTarballUrl('8.10.0', 'darwin', 'x64')
+	);
+}
+
+export function test_install_node_tarball_url_windows() {
+	assert.equal(
+		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-win-x64.zip',
+		generateNodeTarballUrl('8.10.0', 'win32', 'x64')
 	);
 }
 
