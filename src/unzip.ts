@@ -3,7 +3,7 @@ import * as Mode from 'stat-mode';
 import pipe from 'promisepipe';
 import createDebug from 'debug';
 import { dirname, basename, join } from 'path';
-import { createWriteStream, mkdirp, symlink } from 'fs-extra';
+import { createWriteStream, mkdirp, symlink, unlink } from 'fs-extra';
 import * as streamToPromise from 'stream-to-promise';
 import {
 	Entry,
@@ -79,6 +79,13 @@ export async function unzip(zipFile: ZipFile, dir: string, opts: UnzipOptions = 
 						modeOctal,
 						String(mode)
 					);
+				}
+				try {
+					await unlink(destPath);
+				} catch (err) {
+					if (err.code !== 'ENOENT') {
+						throw err;
+					}
 				}
 				const destStream = createWriteStream(destPath, {
 					mode: modeVal
