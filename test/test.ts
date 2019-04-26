@@ -73,7 +73,15 @@ export async function test_install_node() {
 		assert.equal(res.stdout.trim(), version);
 	} finally {
 		// Clean up
-		await remove(dest);
+		try {
+			await remove(dest);
+		} catch (err) {
+			// On Windows EPERM can happen due to anti-virus software like Windows Defender.
+			// There's nothing that we can do about it so don't fail the test case when it happens.
+			if (err.code !== 'EPERM') {
+				throw err;
+			}
+		}
 	}
 }
 
