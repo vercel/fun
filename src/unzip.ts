@@ -43,10 +43,16 @@ export async function unzipToTemp(
 const getMode = (entry: Entry) =>
 	new Mode({ mode: entry.externalFileAttributes >>> 16 });
 
-export async function unzip(zipFile: ZipFile, dir: string): Promise<void> {
+interface UnzipOptions {
+	strip?: number;
+};
+
+export async function unzip(zipFile: ZipFile, dir: string, opts: UnzipOptions = {}): Promise<void> {
 	let entry: Entry;
+	const strip = opts.strip || 0;
 	while ((entry = await zipFile.readEntry()) !== null) {
-		const destPath = join(dir, entry.fileName);
+		const fileName = strip === 0 ? entry.fileName : entry.fileName.split('/').slice(strip).join('/');
+		const destPath = join(dir, fileName);
 		if (/\/$/.test(entry.fileName)) {
 			debug('Creating directory %o', destPath);
 			await mkdirp(destPath);
@@ -63,14 +69,19 @@ export async function unzip(zipFile: ZipFile, dir: string): Promise<void> {
 				await symlink(linkDest, destPath);
 			} else {
 				const modeOctal = mode.toOctal();
-				debug(
-					'Unzipping file to %o with mode %s (%s)',
-					destPath,
-					modeOctal,
-					String(mode)
-				);
+				const modeVal = parseInt(modeOctal, 8);
+				if (modeVal === 0) {
+					debug('Unzipping file to %o', destPath);
+				} else {
+					debug(
+						'Unzipping file to %o with mode %s (%s)',
+						destPath,
+						modeOctal,
+						String(mode)
+					);
+				}
 				const destStream = createWriteStream(destPath, {
-					mode: parseInt(modeOctal, 8)
+					mode: modeVal
 				});
 				await pipe(
 					entryStream,

@@ -54,7 +54,7 @@ export async function installNode(
 
 		debug('Extracting Node.js %s zip file to %o', version, finalDest);
 		const zipFile = await zipFromFile(zipPath);
-		await unzip(zipFile, finalDest);
+		await unzip(zipFile, finalDest, { strip: 1 });
 	} else {
 		debug('Extracting Node.js %s tarball to %o', version, dest);
 		await pipe(
