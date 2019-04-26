@@ -1,6 +1,7 @@
 handler
 node_modules
 __pycache__
+*.swp
 /dist
 /?.js
 /examples/*/*.zip
