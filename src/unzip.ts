@@ -76,7 +76,6 @@ export async function unzip(zipFile: ZipFile, dir: string): Promise<void> {
 					entryStream,
 					destStream
 				);
-				//debug('Finished unzipping file to %o', destPath);
 			}
 		}
 	}

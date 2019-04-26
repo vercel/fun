@@ -1,8 +1,11 @@
 import { extract } from 'tar';
+import pipe from 'promisepipe';
 import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'zlib';
-import { unzip, zipFromBuffer } from './unzip';
+import { basename, join } from 'path';
+import { createWriteStream, mkdirp } from 'fs-extra';
+import { unzip, zipFromFile } from './unzip';
 
 const debug = createDebug('@zeit/fun:install-node');
 
@@ -37,18 +40,27 @@ export async function installNode(
 	if (!res.ok) {
 		throw new Error(`HTTP request failed: ${res.status}`);
 	}
-	console.log({ status: res.status });
 	if (platform === 'win32') {
-		debug('Extracting Node.js %s zip file to %o', version, dest);
-		//await unzip(zipFile, dest);
+		// Put it in the `bin` dir for consistency with the tarballs
+		const finalDest = join(dest, 'bin');
+		const zipName = basename(tarballUrl);
+		const zipPath = join(dest, zipName);
+
+		debug('Saving Node.js %s zip file to %o', version, zipPath);
+		await pipe(
+			res.body,
+			createWriteStream(zipPath)
+		);
+
+		debug('Extracting Node.js %s zip file to %o', version, finalDest);
+		const zipFile = await zipFromFile(zipPath);
+		await unzip(zipFile, finalDest);
 	} else {
-		return new Promise((resolve, reject) => {
-			debug('Extracting Node.js %s tarball to %o', version, dest);
-			res.body
-				.pipe(createGunzip())
-				.pipe(extract({ strip: 1, C: dest }))
-				.on('error', reject)
-				.on('end', resolve);
-		});
+		debug('Extracting Node.js %s tarball to %o', version, dest);
+		await pipe(
+			res.body,
+			createGunzip(),
+			extract({ strip: 1, C: dest })
+		);
 	}
 }
