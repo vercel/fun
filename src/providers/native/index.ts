@@ -2,9 +2,9 @@ import * as ms from 'ms';
 import * as uuid from 'uuid/v4';
 import createDebug from 'debug';
 import { AddressInfo } from 'net';
-import { basename, join, resolve } from 'path';
 import * as listen from 'async-listen';
 import { Pool, createPool } from 'generic-pool';
+import { delimiter, basename, join, resolve } from 'path';
 import { ChildProcess, fork } from 'child_process';
 import { RuntimeServer } from '../../runtime-server';
 import {
@@ -78,7 +78,7 @@ export default class NativeProvider implements Provider {
 		// https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html
 		const env = {
 			// Non-reserved env vars (can overwrite with params)
-			PATH: `${binDir}:${process.env.PATH}`,
+			PATH: `${binDir}${delimiter}${process.env.PATH}`,
 			LANG: 'en_US.UTF-8',
 
 			// User env vars
