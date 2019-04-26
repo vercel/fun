@@ -5,7 +5,7 @@ import { AddressInfo } from 'net';
 import { basename, join, resolve } from 'path';
 import * as listen from 'async-listen';
 import { Pool, createPool } from 'generic-pool';
-import { ChildProcess, spawn } from 'child_process';
+import { ChildProcess, fork } from 'child_process';
 import { RuntimeServer } from '../../runtime-server';
 import {
 	LambdaParams,
@@ -58,7 +58,7 @@ export default class NativeProvider implements Provider {
 	async createProcess(): Promise<ChildProcess> {
 		const { runtime, params, region, version, extractedDir } = this.lambda;
 		const binDir = join(runtime.cacheDir, 'bin');
-		const bootstrap = join(runtime.cacheDir, 'bootstrap');
+		const bootstrap = join(runtime.cacheDir, 'bootstrap.js');
 
 		const server = new RuntimeServer(this.lambda);
 		await listen(server, 0, '127.0.0.1');
@@ -100,10 +100,11 @@ export default class NativeProvider implements Provider {
 			TZ: ':UTC'
 		};
 
-		const proc = spawn(bootstrap, [], {
+		const proc = fork(bootstrap, [], {
 			env,
 			cwd: taskDir,
-			stdio: ['ignore', 'inherit', 'inherit']
+			execArgv: [],
+			stdio: ['ignore', 'inherit', 'inherit', 'ipc']
 		});
 		this.runtimeApis.set(proc, server);
 
