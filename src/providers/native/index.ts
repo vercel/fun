@@ -149,13 +149,19 @@ export default class NativeProvider implements Provider {
 	}
 
 	freezeProcess(proc: ChildProcess) {
-		debug('Freezing process %o', proc.pid);
-		process.kill(proc.pid, 'SIGSTOP');
+		// `SIGSTOP` is not supported on Windows
+		if (process.platform !== 'win32') {
+			debug('Freezing process %o', proc.pid);
+			process.kill(proc.pid, 'SIGSTOP');
+		}
 	}
 
 	unfreezeProcess(proc: ChildProcess) {
-		debug('Unfreezing process %o', proc.pid);
-		process.kill(proc.pid, 'SIGCONT');
+		// `SIGCONT` is not supported on Windows
+		if (process.platform !== 'win32') {
+			debug('Unfreezing process %o', proc.pid);
+			process.kill(proc.pid, 'SIGCONT');
+		}
 	}
 
 	async invoke(params: InvokeParams): Promise<InvokeResult> {
