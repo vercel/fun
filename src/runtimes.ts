@@ -2,15 +2,7 @@ import { join } from 'path';
 import createDebug from 'debug';
 import { createHash, Hash } from 'crypto';
 import * as cachedir from 'cache-or-tmp-directory';
-import {
-	lstat,
-	mkdirp,
-	readdir,
-	remove,
-	rename,
-	readFile,
-	writeFile
-} from 'fs-extra';
+import { lstat, mkdirp, readdir, remove, readFile, writeFile } from 'fs-extra';
 
 import { Runtime } from './types';
 import * as go1x from './runtimes/go1.x';
