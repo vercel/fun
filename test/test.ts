@@ -41,10 +41,17 @@ export function test_LambdaError() {
 }
 
 // `install-node.ts` tests
-export function test_install_node_tarball_url() {
+export function test_install_node_tarball_url_darwin() {
 	assert.equal(
 		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-darwin-x64.tar.gz',
 		generateNodeTarballUrl('8.10.0', 'darwin', 'x64')
+	);
+}
+
+export function test_install_node_tarball_url_windows() {
+	assert.equal(
+		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-win-x64.zip',
+		generateNodeTarballUrl('8.10.0', 'win32', 'x64')
 	);
 }
 
@@ -66,7 +73,15 @@ export async function test_install_node() {
 		assert.equal(res.stdout.trim(), version);
 	} finally {
 		// Clean up
-		await remove(dest);
+		try {
+			await remove(dest);
+		} catch (err) {
+			// On Windows EPERM can happen due to anti-virus software like Windows Defender.
+			// There's nothing that we can do about it so don't fail the test case when it happens.
+			if (err.code !== 'EPERM') {
+				throw err;
+			}
+		}
 	}
 }
 

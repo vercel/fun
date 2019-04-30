@@ -3,7 +3,7 @@ import * as Mode from 'stat-mode';
 import pipe from 'promisepipe';
 import createDebug from 'debug';
 import { dirname, basename, join } from 'path';
-import { createWriteStream, mkdirp, symlink } from 'fs-extra';
+import { createWriteStream, mkdirp, symlink, unlink } from 'fs-extra';
 import * as streamToPromise from 'stream-to-promise';
 import {
 	Entry,
@@ -11,6 +11,8 @@ import {
 	open as zipFromFile,
 	fromBuffer as zipFromBuffer
 } from 'yauzl-promise';
+
+export { zipFromFile, zipFromBuffer, ZipFile };
 
 const debug = createDebug('@zeit/fun:unzip');
 
@@ -41,10 +43,16 @@ export async function unzipToTemp(
 const getMode = (entry: Entry) =>
 	new Mode({ mode: entry.externalFileAttributes >>> 16 });
 
-export async function unzip(zipFile: ZipFile, dir: string): Promise<void> {
+interface UnzipOptions {
+	strip?: number;
+};
+
+export async function unzip(zipFile: ZipFile, dir: string, opts: UnzipOptions = {}): Promise<void> {
 	let entry: Entry;
+	const strip = opts.strip || 0;
 	while ((entry = await zipFile.readEntry()) !== null) {
-		const destPath = join(dir, entry.fileName);
+		const fileName = strip === 0 ? entry.fileName : entry.fileName.split('/').slice(strip).join('/');
+		const destPath = join(dir, fileName);
 		if (/\/$/.test(entry.fileName)) {
 			debug('Creating directory %o', destPath);
 			await mkdirp(destPath);
@@ -61,20 +69,31 @@ export async function unzip(zipFile: ZipFile, dir: string): Promise<void> {
 				await symlink(linkDest, destPath);
 			} else {
 				const modeOctal = mode.toOctal();
-				debug(
-					'Unzipping file to %o with mode %s (%s)',
-					destPath,
-					modeOctal,
-					String(mode)
-				);
+				const modeVal = parseInt(modeOctal, 8);
+				if (modeVal === 0) {
+					debug('Unzipping file to %o', destPath);
+				} else {
+					debug(
+						'Unzipping file to %o with mode %s (%s)',
+						destPath,
+						modeOctal,
+						String(mode)
+					);
+				}
+				try {
+					await unlink(destPath);
+				} catch (err) {
+					if (err.code !== 'ENOENT') {
+						throw err;
+					}
+				}
 				const destStream = createWriteStream(destPath, {
-					mode: parseInt(modeOctal, 8)
+					mode: modeVal
 				});
 				await pipe(
 					entryStream,
 					destStream
 				);
-				//debug('Finished unzipping file to %o', destPath);
 			}
 		}
 	}

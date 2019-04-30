@@ -2,15 +2,7 @@ import { join } from 'path';
 import createDebug from 'debug';
 import { createHash, Hash } from 'crypto';
 import * as cachedir from 'cache-or-tmp-directory';
-import {
-	lstat,
-	mkdirp,
-	readdir,
-	remove,
-	rename,
-	readFile,
-	writeFile
-} from 'fs-extra';
+import { lstat, mkdirp, readdir, remove, readFile, writeFile } from 'fs-extra';
 
 import { Runtime } from './types';
 import * as go1x from './runtimes/go1.x';
@@ -144,68 +136,42 @@ async function _initializeRuntime(runtime: Runtime): Promise<void> {
 		getCachedRuntimeSha(cacheShaFile),
 		calculateRuntimeSha(runtime.runtimeDir)
 	]);
+	runtime.cacheDir = cacheDir;
 	if (cachedRuntimeSha === runtimeSha) {
 		debug(
 			'Runtime %o is already initialized at %o',
 			runtime.name,
 			cacheDir
 		);
-		runtime.cacheDir = cacheDir;
 	} else {
 		debug('Initializing %o runtime at %o', runtime.name, cacheDir);
-		const cacheDirTemp = `${cacheDir}.temp${Math.random()
-			.toString(16)
-			.substring(2)}`;
 		try {
-			// During initialization, the cache dir is a temporary name.
-			runtime.cacheDir = cacheDirTemp;
-			await mkdirp(cacheDirTemp);
+			await mkdirp(cacheDir);
 
 			// The runtime directory is copied from the module dir to the cache
 			// dir. This is so that when compiled through `pkg`, then the
 			// bootstrap files exist on a real file system so that `execve()`
 			// works as expected.
-			await copy(runtime.runtimeDir, cacheDirTemp);
+			await copy(runtime.runtimeDir, cacheDir);
 
 			// Perform any runtime-specific initialization logic
 			if (typeof runtime.init === 'function') {
 				await runtime.init(runtime);
 			}
 
-			await writeFile(
-				join(cacheDirTemp, '.cache-sha'),
-				String(runtimeSha)
-			);
-
-			// After `init()` is successful, the cache dir is atomically renamed
-			// to the final name, after which `init()` will not be invoked in the
-			// future.
-			try {
-				await rename(cacheDirTemp, cacheDir);
-			} catch (err) {
-				if (err.code === 'ENOTEMPTY') {
-					// An older version is already installed, remove it first
-					// and then try again
-					debug(
-						'Removing old cache dir %o with sha %o',
-						cacheDir,
-						cachedRuntimeSha
-					);
-					await remove(cacheDir);
-					await rename(cacheDirTemp, cacheDir);
-				} else {
-					throw err;
-				}
-			}
-			runtime.cacheDir = cacheDir;
+			await writeFile(join(cacheDir, '.cache-sha'), runtimeSha);
 		} catch (err) {
 			debug(
-				'Runtime %o `init()` failed %o. Cleaning up temp cache dir %o',
+				'Runtime %o `init()` failed %o. Cleaning up cache dir %o',
 				runtime.name,
 				err,
-				cacheDirTemp
+				cacheDir
 			);
-			await remove(cacheDirTemp);
+			try {
+				await remove(cacheDir);
+			} catch (err2) {
+				debug('Cleaning up cache dir failed: %o', err2);
+			}
 			throw err;
 		}
 	}

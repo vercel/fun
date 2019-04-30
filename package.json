@@ -9,7 +9,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "postbuild": "cpy --parents src test '!**/*.ts' 'dist'",
+    "postbuild": "cpy --parents src test '!**/*.ts' dist",
     "test": "echo \"Node.js version: $(node -v)\\n\" && npm run build && best --include dist/test/test.js --verbose",
     "test-codecov": "nyc npm test",
     "report-codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
