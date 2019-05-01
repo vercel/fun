@@ -160,7 +160,7 @@ export default class NativeProvider implements Provider {
 
 	freezeProcess(proc: ChildProcess) {
 		// `SIGSTOP` is not supported on Windows
-		if (process.platform !== 'win32') {
+		if (!isWin) {
 			debug('Freezing process %o', proc.pid);
 			process.kill(proc.pid, 'SIGSTOP');
 		}
@@ -168,7 +168,7 @@ export default class NativeProvider implements Provider {
 
 	unfreezeProcess(proc: ChildProcess) {
 		// `SIGCONT` is not supported on Windows
-		if (process.platform !== 'win32') {
+		if (!isWin) {
 			debug('Unfreezing process %o', proc.pid);
 			process.kill(proc.pid, 'SIGCONT');
 		}
