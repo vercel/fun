@@ -14,6 +14,8 @@ import { generateNodeTarballUrl, installNode } from '../src/install-node';
 import { generatePythonTarballUrl, installPython } from '../src/install-python';
 import { LambdaError } from '../src/errors';
 
+const isWin = process.platform === 'win32';
+
 export function test_funCacheDir() {
 	assert.equal('string', typeof funCacheDir);
 }
@@ -166,7 +168,8 @@ export const test_reserved_env = async () => {
 export const test_initialize_runtime_with_string = async () => {
 	const runtime = await initializeRuntime('nodejs8.10');
 	assert.equal(typeof runtime.cacheDir, 'string');
-	const nodeStat = await stat(join(runtime.cacheDir, 'bin/node'));
+	const nodeName = isWin ? 'node.exe' : 'node';
+	const nodeStat = await stat(join(runtime.cacheDir, 'bin', nodeName));
 	assert(nodeStat.isFile());
 };
 
