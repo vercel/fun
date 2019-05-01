@@ -5,7 +5,7 @@ import { AddressInfo } from 'net';
 import * as listen from 'async-listen';
 import { Pool, createPool } from 'generic-pool';
 import { delimiter, basename, join, resolve } from 'path';
-import { ChildProcess, fork } from 'child_process';
+import { ChildProcess, spawn } from 'child_process';
 import { RuntimeServer } from '../../runtime-server';
 import {
 	LambdaParams,
@@ -15,6 +15,7 @@ import {
 	Provider
 } from '../../types';
 
+const isWin = process.platform === 'win32';
 const debug = createDebug('@zeit/fun:providers/native');
 
 export default class NativeProvider implements Provider {
@@ -58,7 +59,10 @@ export default class NativeProvider implements Provider {
 	async createProcess(): Promise<ChildProcess> {
 		const { runtime, params, region, version, extractedDir } = this.lambda;
 		const binDir = join(runtime.cacheDir, 'bin');
-		const bootstrap = join(runtime.cacheDir, 'bootstrap.js');
+		const bootstrap = join(
+			runtime.cacheDir,
+			isWin ? 'bootstrap.js' : 'bootstrap'
+		);
 
 		const server = new RuntimeServer(this.lambda);
 		await listen(server, 0, '127.0.0.1');
@@ -100,11 +104,17 @@ export default class NativeProvider implements Provider {
 			TZ: ':UTC'
 		};
 
-		const proc = fork(bootstrap, [], {
+		let bin: string = bootstrap;
+		const args: string[] = [];
+		if (isWin) {
+			args.push(bootstrap);
+			bin = process.execPath;
+		}
+
+		const proc = spawn(bin, args, {
 			env,
 			cwd: taskDir,
-			execArgv: [],
-			stdio: ['ignore', 'inherit', 'inherit', 'ipc']
+			stdio: ['ignore', 'inherit', 'inherit']
 		});
 		this.runtimeApis.set(proc, server);
 
