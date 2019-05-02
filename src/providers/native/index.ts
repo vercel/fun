@@ -2,9 +2,9 @@ import * as ms from 'ms';
 import * as uuid from 'uuid/v4';
 import createDebug from 'debug';
 import { AddressInfo } from 'net';
-import { basename, join, resolve } from 'path';
 import * as listen from 'async-listen';
 import { Pool, createPool } from 'generic-pool';
+import { delimiter, basename, join, resolve } from 'path';
 import { ChildProcess, spawn } from 'child_process';
 import { RuntimeServer } from '../../runtime-server';
 import {
@@ -15,6 +15,7 @@ import {
 	Provider
 } from '../../types';
 
+const isWin = process.platform === 'win32';
 const debug = createDebug('@zeit/fun:providers/native');
 
 export default class NativeProvider implements Provider {
@@ -58,7 +59,10 @@ export default class NativeProvider implements Provider {
 	async createProcess(): Promise<ChildProcess> {
 		const { runtime, params, region, version, extractedDir } = this.lambda;
 		const binDir = join(runtime.cacheDir, 'bin');
-		const bootstrap = join(runtime.cacheDir, 'bootstrap');
+		const bootstrap = join(
+			runtime.cacheDir,
+			isWin ? 'bootstrap.js' : 'bootstrap'
+		);
 
 		const server = new RuntimeServer(this.lambda);
 		await listen(server, 0, '127.0.0.1');
@@ -78,7 +82,7 @@ export default class NativeProvider implements Provider {
 		// https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html
 		const env = {
 			// Non-reserved env vars (can overwrite with params)
-			PATH: `${binDir}:${process.env.PATH}`,
+			PATH: `${binDir}${delimiter}${process.env.PATH}`,
 			LANG: 'en_US.UTF-8',
 
 			// User env vars
@@ -100,7 +104,14 @@ export default class NativeProvider implements Provider {
 			TZ: ':UTC'
 		};
 
-		const proc = spawn(bootstrap, [], {
+		let bin: string = bootstrap;
+		const args: string[] = [];
+		if (isWin) {
+			args.push(bootstrap);
+			bin = process.execPath;
+		}
+
+		const proc = spawn(bin, args, {
 			env,
 			cwd: taskDir,
 			stdio: ['ignore', 'inherit', 'inherit']
@@ -148,13 +159,19 @@ export default class NativeProvider implements Provider {
 	}
 
 	freezeProcess(proc: ChildProcess) {
-		debug('Freezing process %o', proc.pid);
-		process.kill(proc.pid, 'SIGSTOP');
+		// `SIGSTOP` is not supported on Windows
+		if (!isWin) {
+			debug('Freezing process %o', proc.pid);
+			process.kill(proc.pid, 'SIGSTOP');
+		}
 	}
 
 	unfreezeProcess(proc: ChildProcess) {
-		debug('Unfreezing process %o', proc.pid);
-		process.kill(proc.pid, 'SIGCONT');
+		// `SIGCONT` is not supported on Windows
+		if (!isWin) {
+			debug('Unfreezing process %o', proc.pid);
+			process.kill(proc.pid, 'SIGCONT');
+		}
 	}
 
 	async invoke(params: InvokeParams): Promise<InvokeResult> {
