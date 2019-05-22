@@ -91,15 +91,17 @@ func main() {
 	}
 
 	mockContext.Pid = cmd.Process.Pid
-
-	defer syscall.Kill(-mockContext.Pid, syscall.SIGKILL)
+	p, _ := os.FindProcess(-mockContext.Pid)
+	defer p.Signal(syscall.SIGKILL)
 
 	// Terminate the child process upon SIGINT / SIGTERM
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	go func(){
+	go func() {
 		<-c
-		syscall.Kill(-mockContext.Pid, syscall.SIGKILL)
+		p, _ := os.FindProcess(-mockContext.Pid)
+		p.Signal(syscall.SIGKILL)
+
 		os.Exit(0)
 	}()
 
