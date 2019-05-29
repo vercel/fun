@@ -2,7 +2,10 @@ import { EventEmitter } from 'events';
 
 export function once<T>(emitter: EventEmitter, name: string): Promise<T> {
 	return new Promise((resolve, reject) => {
-		function cleanup() {}
+		function cleanup() {
+			emitter.removeListener(name, onEvent);
+			emitter.removeListener('error', onError);
+		}
 		function onEvent(arg: T) {
 			cleanup();
 			resolve(arg);
