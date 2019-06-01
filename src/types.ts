@@ -9,6 +9,8 @@ export interface LambdaParams {
 	Environment?: { Variables: object };
 	MemorySize?: number; // The amount of memory that your function has access to. Increasing the function's memory also increases it's CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.
 	Region?: string; // AWS Region name (used for generating the fake ARN, etc.)
+	AccessKeyId?: string; // AWS_ACCESS_KEY_ID environment variable (used by AWS SDK for authentication)
+	SecretAccessKey?: string; // AWS_SECRET_ACCESS_KEY environment variable (used by AWS SDK for authentication)
 	Timeout?: number; // The amount of time that Lambda allows a function to run before terminating it. The default is 3 seconds. The maximum allowed value is 900 seconds.
 }
 

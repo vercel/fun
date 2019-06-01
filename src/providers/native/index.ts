@@ -91,6 +91,8 @@ export default class NativeProvider implements Provider {
 			// Restricted env vars
 			_HANDLER: params.Handler,
 			AWS_REGION: region,
+			AWS_ACCESS_KEY_ID: params.AccessKeyId,
+			AWS_SECRET_ACCESS_KEY: params.SecretAccessKey,
 			AWS_DEFAULT_REGION: region,
 			AWS_EXECUTION_ENV: `AWS_Lambda_${params.Runtime}`,
 			AWS_LAMBDA_FUNCTION_NAME: functionName,
