@@ -260,7 +260,9 @@ export const test_env_vars = testInvoke(
 				Directory: __dirname + '/functions/nodejs-env'
 			},
 			Handler: 'index.env',
-			Runtime: 'nodejs'
+			Runtime: 'nodejs',
+			AccessKeyId: 'TestAccessKeyId',
+			SecretAccessKey: 'TestSecretAccessKey'
 		}),
 	async fn => {
 		const res = await fn.invoke();
@@ -275,6 +277,8 @@ export const test_env_vars = testInvoke(
 		assert.equal(env.AWS_EXECUTION_ENV, 'AWS_Lambda_nodejs');
 		assert.equal(env.AWS_LAMBDA_FUNCTION_NAME, 'nodejs-env');
 		assert.equal(env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE, '128');
+		assert.equal(env.AWS_ACCESS_KEY_ID, 'TestAccessKeyId');
+		assert.equal(env.AWS_SECRET_ACCESS_KEY, 'TestSecretAccessKey');
 	}
 );
 
