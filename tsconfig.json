@@ -4,7 +4,8 @@
     "module": "commonjs",
     "outDir": "dist",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "lib": ["esnext", "dom"]
   },
   "include": [
     "src/**/*",
