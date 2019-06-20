@@ -469,6 +469,22 @@ export const test_nodejs810_exit_in_handler = testInvoke(
 	}
 );
 
+// `nodejs10.x` runtime
+export const test_nodejs10_version = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/nodejs-version'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'nodejs10.x'
+		}),
+	async fn => {
+		const versions = await fn({ hello: 'world' });
+		assert.equal(versions.node, '10.15.3');
+	}
+);
+
 // `go1.x` runtime
 export const test_go1x_echo = testInvoke(
 	() =>
