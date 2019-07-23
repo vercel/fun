@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/generic-pool": "3.1.9",
-    "@types/node": "10.14.13",
+    "@types/node": "10.12.30",
     "@types/tar": "4.0.0",
     "@types/yauzl-promise": "2.1.0",
     "@zeit/best": "0.5.1",
