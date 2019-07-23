@@ -27,7 +27,7 @@
     "execa": "1.0.0",
     "fs-extra": "7.0.1",
     "generic-pool": "3.4.2",
-    "micro": "9.3.3",
+    "micro": "9.3.5-canary.3",
     "ms": "2.1.1",
     "node-fetch": "2.3.0",
     "path-match": "1.2.4",
