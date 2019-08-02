@@ -96,6 +96,9 @@ export function test_install_python_tarball_url() {
 }
 
 export async function test_install_python() {
+	if (isWin) {
+		return;
+	}
 	const version = '3.6.8';
 	const dest = join(
 		tmpdir(),
@@ -374,20 +377,25 @@ export const test_clean_cache_dir_recovery = async () => {
 };
 
 // `provided` runtime
-export const test_provided_bash_echo = testInvoke(
-	() =>
-		createFunction({
-			Code: {
-				Directory: __dirname + '/functions/provided-bash-echo'
-			},
-			Handler: 'handler.handler',
-			Runtime: 'provided'
-		}),
-	async fn => {
-		const payload = await fn({ hello: 'world' });
-		assert.deepEqual(payload, { hello: 'world' });
+export const test_provided_bash_echo = () => {
+	if (isWin) {
+		return;
 	}
-);
+	testInvoke(
+		() =>
+			createFunction({
+				Code: {
+					Directory: __dirname + '/functions/provided-bash-echo'
+				},
+				Handler: 'handler.handler',
+				Runtime: 'provided'
+			}),
+		async fn => {
+			const payload = await fn({ hello: 'world' });
+			assert.deepEqual(payload, { hello: 'world' });
+		}
+	);
+};
 
 // `nodejs6.10` runtime
 export const test_nodejs610_version = testInvoke(
