@@ -16,7 +16,5 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: |
-    yarn install
-    yarn test
+- script: yarn install && yarn test
   displayName: 'Install Dependencies & Test'
