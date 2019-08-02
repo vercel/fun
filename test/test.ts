@@ -91,7 +91,7 @@ export async function test_install_node() {
 export function test_install_python_tarball_url() {
 	assert.equal(
 		'https://python-binaries.zeit.sh/python-2.7.12-darwin-x64.tar.gz',
-		generatePythonTarballUrl('2.7.12', 'FAIL', 'x64')
+		generatePythonTarballUrl('2.7.12', 'darwin', 'x64')
 	);
 }
 
