@@ -542,36 +542,46 @@ export const test_python27_version = testInvoke(
 );
 
 // `python3.6` runtime
-export const test_python36_version = testInvoke(
-	() =>
-		createFunction({
-			Code: {
-				Directory: __dirname + '/functions/python-version'
-			},
-			Handler: 'handler.handler',
-			Runtime: 'python3.6'
-		}),
-	async fn => {
-		const payload = await fn();
-		assert.equal(payload['platform.python_version'], '3.6.8');
+export const test_python36_version = () => {
+	if (isWin) {
+		return;
 	}
-);
+	testInvoke(
+		() =>
+			createFunction({
+				Code: {
+					Directory: __dirname + '/functions/python-version'
+				},
+				Handler: 'handler.handler',
+				Runtime: 'python3.6'
+			}),
+		async fn => {
+			const payload = await fn();
+			assert.equal(payload['platform.python_version'], '3.6.8');
+		}
+	);
+};
 
 // `python3.7` runtime
-export const test_python37_version = testInvoke(
-	() =>
-		createFunction({
-			Code: {
-				Directory: __dirname + '/functions/python-version'
-			},
-			Handler: 'handler.handler',
-			Runtime: 'python3.7'
-		}),
-	async fn => {
-		const payload = await fn();
-		assert.equal(payload['platform.python_version'], '3.7.2');
+export const test_python37_version = () => {
+	if (isWin) {
+		return;
 	}
-);
+	testInvoke(
+		() =>
+			createFunction({
+				Code: {
+					Directory: __dirname + '/functions/python-version'
+				},
+				Handler: 'handler.handler',
+				Runtime: 'python3.7'
+			}),
+		async fn => {
+			const payload = await fn();
+			assert.equal(payload['platform.python_version'], '3.7.2');
+		}
+	);
+};
 
 // `ZipFile` Buffer support
 export const test_lambda_zip_file_buffer = testInvoke(
