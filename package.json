@@ -10,7 +10,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc",
     "postbuild": "cpy --parents src test '!**/*.ts' dist",
-    "test": "tsc && best --include dist/test/test.js --verbose",
+    "test": "yarn build && best --include dist/test/test.js --verbose",
     "test-codecov": "nyc npm test",
     "report-codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint:staged": "lint-staged",

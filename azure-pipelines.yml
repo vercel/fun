@@ -18,6 +18,5 @@ steps:
 
 - script: |
     yarn install
-    yarn build
     yarn test
   displayName: 'Install Dependencies & Test'
