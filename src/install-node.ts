@@ -25,7 +25,14 @@ export function generateNodeTarballUrl(
 	} else {
 		ext = 'tar.gz';
 	}
-	return `https://nodejs.org/dist/${version}/node-${version}-${plat}-${arch}.${ext}`;
+
+	let mirror = process.env.ZEIT_FUN_MIRRORS_NODE;
+
+	if (!mirror) {
+		mirror = 'https://nodejs.org/dist';
+	}
+
+	return `${mirror}/${version}/node-${version}-${plat}-${arch}.${ext}`;
 }
 
 export async function installNode(
