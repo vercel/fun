@@ -1,7 +1,7 @@
 import { join } from 'path';
 import createDebug from 'debug';
+import XDGAppPaths from 'xdg-app-paths';
 import { createHash, Hash } from 'crypto';
-import * as cachedir from 'cache-or-tmp-directory';
 import { lstat, mkdirp, readdir, remove, readFile, writeFile } from 'fs-extra';
 
 import { Runtime } from './types';
@@ -26,7 +26,7 @@ interface RuntimeImpl {
 
 export const runtimes: Runtimes = {};
 
-export const funCacheDir = cachedir('co.zeit.fun');
+export const funCacheDir = XDGAppPaths('co.zeit.fun').cache();
 
 function createRuntime(
 	runtimes: Runtimes,

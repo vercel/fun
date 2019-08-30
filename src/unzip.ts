@@ -1,10 +1,10 @@
 import { tmpdir } from 'os';
-import * as Mode from 'stat-mode';
+import Mode from 'stat-mode';
 import pipe from 'promisepipe';
 import createDebug from 'debug';
 import { dirname, basename, join } from 'path';
 import { createWriteStream, mkdirp, symlink, unlink } from 'fs-extra';
-import * as streamToPromise from 'stream-to-promise';
+import streamToPromise from 'stream-to-promise';
 import {
 	Entry,
 	ZipFile,
@@ -45,13 +45,23 @@ const getMode = (entry: Entry) =>
 
 interface UnzipOptions {
 	strip?: number;
-};
+}
 
-export async function unzip(zipFile: ZipFile, dir: string, opts: UnzipOptions = {}): Promise<void> {
+export async function unzip(
+	zipFile: ZipFile,
+	dir: string,
+	opts: UnzipOptions = {}
+): Promise<void> {
 	let entry: Entry;
 	const strip = opts.strip || 0;
 	while ((entry = await zipFile.readEntry()) !== null) {
-		const fileName = strip === 0 ? entry.fileName : entry.fileName.split('/').slice(strip).join('/');
+		const fileName =
+			strip === 0
+				? entry.fileName
+				: entry.fileName
+						.split('/')
+						.slice(strip)
+						.join('/');
 		const destPath = join(dir, fileName);
 		if (/\/$/.test(entry.fileName)) {
 			debug('Creating directory %o', destPath);

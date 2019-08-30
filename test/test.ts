@@ -1,7 +1,7 @@
 import { basename, join } from 'path';
 import { tmpdir } from 'os';
-import * as execa from 'execa';
-import * as assert from 'assert';
+import execa from 'execa';
+import assert from 'assert';
 import { mkdirp, remove, readdir, readFile, stat } from 'fs-extra';
 import {
 	funCacheDir,
