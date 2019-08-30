@@ -1,8 +1,8 @@
-import * as ms from 'ms';
-import * as uuid from 'uuid/v4';
+import ms from 'ms';
+import uuid from 'uuid/v4';
 import createDebug from 'debug';
 import { AddressInfo } from 'net';
-import * as listen from 'async-listen';
+import listen from 'async-listen';
 import { Pool, createPool } from 'generic-pool';
 import { delimiter, basename, join, resolve } from 'path';
 import { ChildProcess, spawn } from 'child_process';

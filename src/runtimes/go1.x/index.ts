@@ -1,5 +1,5 @@
 import { join } from 'path';
-import * as execa from 'execa';
+import execa from 'execa';
 import createDebug from 'debug';
 import { Runtime } from '../../types';
 import { copyFile, mkdirp, remove } from 'fs-extra';

@@ -1,9 +1,9 @@
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 import { parse } from 'url';
 import { Server } from 'http';
 import createDebug from 'debug';
 import { run, text } from 'micro';
-import * as createPathMatch from 'path-match';
+import createPathMatch from 'path-match';
 
 import { once } from './once';
 import { createDeferred, Deferred } from './deferred';

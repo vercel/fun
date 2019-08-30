@@ -470,20 +470,6 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
-cache-directory@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/cache-directory/-/cache-directory-2.0.0.tgz#0d8efa1abbb6d1dd926d255ce733b4f7c5ab2892"
-  integrity sha512-7YKEapH+2Uikde8hySyfobXBqPKULDyHNl/lhKm7cKf/GJFdG/tU/WpLrOg2y9aUrQrWUilYqawFIiGJPS6gDA==
-  dependencies:
-    xdg-basedir "^3.0.0"
-
-cache-or-tmp-directory@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/cache-or-tmp-directory/-/cache-or-tmp-directory-1.0.0.tgz#07834b808f250a307cc77991dc757eca869d8c29"
-  integrity sha512-EuGx1xcSEpPSI2YgivZNvbCgCepc4hyAAFgDO1FRuZ/BYrgnZR4NIQFrcHhawyXxXv/yAtk9ck47qB0Pfhzg8Q==
-  dependencies:
-    cache-directory "^2.0.0"
-
 caching-transform@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/caching-transform/-/caching-transform-3.0.1.tgz#1df89e850803ad15f68dafb2abe9a8b866016c7d"
@@ -3635,10 +3621,17 @@ write-file-atomic@^2.3.0:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.2"
 
-xdg-basedir@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
-  integrity sha1-SWsswQnsqNus/i3HK2A8F8WHCtQ=
+xdg-app-paths@5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/xdg-app-paths/-/xdg-app-paths-5.1.0.tgz#f52f724f91e88244148c085c09bcd396443d8cae"
+  integrity sha512-RAQ3WkPf4KTU1A8RtFx3gWywzVKe00tfOPFfl2NDGqbIFENQO4kqAJp7mhQjNj/33W5x5hiWWUdyfPq/5SU3QA==
+  dependencies:
+    xdg-portable "^7.0.0"
+
+xdg-portable@^7.0.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/xdg-portable/-/xdg-portable-7.1.0.tgz#0b44ed91808262bdb1eac2155692b8e52e453cca"
+  integrity sha512-QBi9hgiacopF0dMgBKO9Josh52YiBw6Chf0AqqMfc96go6EJqNBImFTws7NHIsWX2rWBlEzHC1I+pABYcYM9RQ==
 
 "y18n@^3.2.1 || ^4.0.0":
   version "4.0.0"

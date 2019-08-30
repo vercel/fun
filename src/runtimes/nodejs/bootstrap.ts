@@ -1,7 +1,7 @@
 /**
  * Credit: https://github.com/lambci/node-custom-lambda/blob/master/v10.x/bootstrap.js
  */
-import * as http from 'http';
+import http from 'http';
 
 interface LambdaEvent {}
 

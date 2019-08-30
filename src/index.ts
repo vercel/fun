@@ -8,7 +8,7 @@ import {
 import createDebug from 'debug';
 import { remove } from 'fs-extra';
 import { basename } from 'path';
-import * as listen from 'async-listen';
+import listen from 'async-listen';
 import { unzipToTemp } from './unzip';
 import { LambdaError } from './errors';
 import * as providers from './providers';
