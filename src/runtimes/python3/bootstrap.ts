@@ -11,9 +11,9 @@ let pythonBin = 'python3';
 const fallback = () => {
 	pythonBin = 'python';
 };
-const child = spawn(pythonBin, ['--version', '2>&1']);
+const child = spawn(pythonBin, ['--version']);
 child.on('error', fallback);
-child.stdout.on('data', (data?: string) => {
+child.stderr.on('data', (data?: string) => {
 	const isPython3 =
 		data && data.toString() && data.toString().startsWith('Python 3');
 
