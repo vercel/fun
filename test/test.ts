@@ -533,6 +533,22 @@ export const test_python27_version = testInvoke(
 	}
 );
 
+// `python3` runtime
+export const test_python3_version = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/python-version'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'python3'
+		}),
+	async fn => {
+		const payload = await fn();
+		assert.equal(payload['platform.python_version'][0], '3');
+	}
+);
+
 // `python3.6` runtime
 export const test_python36_version = testInvoke(
 	() =>

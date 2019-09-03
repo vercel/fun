@@ -8,4 +8,4 @@ if (!process.env.PYTHONPATH) {
 }
 
 const bootstrap = join(__dirname, 'bootstrap.py');
-spawn('python', [ bootstrap ], { stdio: 'inherit' });
+spawn('python', [bootstrap], { stdio: 'inherit' });
