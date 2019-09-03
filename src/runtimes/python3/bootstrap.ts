@@ -8,12 +8,10 @@ if (!process.env.PYTHONPATH) {
 }
 
 let pythonBin = 'python3';
-const fallback = () => {
+function fallback() {
 	pythonBin = 'python';
-};
-const child = spawn(pythonBin, ['--version']);
-child.on('error', fallback);
-child.stderr.on('data', (data?: string) => {
+}
+function handler(data?: string) {
 	const isPython3 =
 		data && data.toString() && data.toString().startsWith('Python 3');
 
@@ -23,4 +21,8 @@ child.stderr.on('data', (data?: string) => {
 
 	const bootstrap = join(__dirname, '..', 'python', 'bootstrap.py');
 	spawn(pythonBin, [bootstrap], { stdio: 'inherit' });
-});
+}
+const child = spawn(pythonBin, ['--version']);
+child.on('error', fallback);
+child.stderr.on('data', handler);
+child.stdout.on('data', handler);
