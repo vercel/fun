@@ -1,10 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+PYTHONBIN="$( which python3 || which python || echo '' )"
+
+if [ -z "$PYTHONBIN"  ]; then
+    echo "Please install Python"
+	exit 1
+fi
+
 # `PYTHONPATH` is *not* a restricted env var, so only set the
 # default one if the user did not provide one of their own
 if [ -z "${PYTHONPATH-}" ]; then
 	export PYTHONPATH="$LAMBDA_RUNTIME_DIR"
 fi
 
-exec python "$LAMBDA_RUNTIME_DIR/bootstrap.py"
+exec "$PYTHONBIN" "$LAMBDA_RUNTIME_DIR/bootstrap.py"
