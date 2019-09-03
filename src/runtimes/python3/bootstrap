@@ -10,7 +10,7 @@ fi
 
 # Check if python version is 3
 PYTHONVERSION="$( "$PYTHONBIN" --version 2>&1 )"
-case $PYTHONVERSION in
+case "$PYTHONVERSION" in
   "Python 3"*) ;;
   *) echo "Please install Python 3" && exit 1 ;;
 esac
