@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+# Use the system installed python3
+PYTHONBIN="$( command -v python3 || command -v python || echo '' )"
+if [ -z "$PYTHONBIN"  ]; then
+    echo "Please install Python 3"
+    exit 1
+fi
+
+# Execute the "python" runtime bootstrap
+export LAMBDA_RUNTIME_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}")"/../python >/dev/null 2>&1 && pwd )"
+exec "$PYTHONBIN" "$LAMBDA_RUNTIME_DIR/bootstrap.py" "$@"
