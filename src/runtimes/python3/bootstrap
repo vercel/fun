@@ -8,6 +8,13 @@ if [ -z "$PYTHONBIN"  ]; then
     exit 1
 fi
 
+# Check if python version is 3
+PYTHONVERSION="$( "$PYTHONBIN" --version 2>&1 )"
+case $PYTHONVERSION in
+  "Python 3"*) ;;
+  *) echo "Please install Python 3" && exit 1 ;;
+esac
+
 # Execute the "python" runtime bootstrap
 export LAMBDA_RUNTIME_DIR="$(dirname "$0")/../python"
 exec "$PYTHONBIN" "$LAMBDA_RUNTIME_DIR/bootstrap.py" "$@"
