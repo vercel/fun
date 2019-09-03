@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 # Ensure the downloaded Python version is used
 export PATH="$LAMBDA_RUNTIME_DIR/bin:$PATH"

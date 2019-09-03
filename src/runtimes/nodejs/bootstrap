@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 # Credit: https://github.com/lambci/node-custom-lambda/blob/master/v10.x/bootstrap
 

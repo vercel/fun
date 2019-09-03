@@ -1,5 +1,5 @@
-#!/bin/bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 # `PYTHONPATH` is *not* a restricted env var, so only set the
 # default one if the user did not provide one of their own
