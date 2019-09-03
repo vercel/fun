@@ -10,6 +10,7 @@ import * as nodejs6 from './runtimes/nodejs6.10';
 import * as nodejs8 from './runtimes/nodejs8.10';
 import * as nodejs10 from './runtimes/nodejs10.x';
 import * as python27 from './runtimes/python2.7';
+import * as python3 from './runtimes/python3';
 import * as python36 from './runtimes/python3.6';
 import * as python37 from './runtimes/python3.7';
 
@@ -49,6 +50,7 @@ createRuntime(runtimes, 'nodejs8.10', nodejs8);
 createRuntime(runtimes, 'nodejs10.x', nodejs10);
 createRuntime(runtimes, 'python');
 createRuntime(runtimes, 'python2.7', python27);
+createRuntime(runtimes, 'python3', python3);
 createRuntime(runtimes, 'python3.6', python36);
 createRuntime(runtimes, 'python3.7', python37);
 
