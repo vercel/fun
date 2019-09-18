@@ -347,6 +347,29 @@ export const test_lambda_invoke = testInvoke(
 	}
 );
 
+export const test_nodejs_exit_before_init = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/nodejs-exit'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'nodejs'
+		}),
+	async fn => {
+		let err;
+		try {
+			await fn();
+		} catch (_err) {
+			err = _err;
+		}
+		assert(err);
+		assert(
+			err.message.includes('Process exited before completing request')
+		);
+	}
+);
+
 // `fun` should be resilient to its runtime cache being wiped away during
 // runtime. At least, in between function creations. Consider a user running
 // `now dev cache clean` while a `now dev` server is running, and then the

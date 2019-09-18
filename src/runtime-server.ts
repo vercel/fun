@@ -193,9 +193,10 @@ export class RuntimeServer extends Server {
 	}
 
 	close(callback?: Function): this {
-		if (this.resultDeferred) {
+		const deferred = this.initDeferred || this.resultDeferred;
+		if (deferred) {
 			const statusCode = 200;
-			this.resultDeferred.resolve({
+			deferred.resolve({
 				StatusCode: statusCode,
 				FunctionError: 'Unhandled',
 				ExecutedVersion: '$LATEST',
