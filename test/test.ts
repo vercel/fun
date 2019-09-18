@@ -16,6 +16,16 @@ import { LambdaError } from '../src/errors';
 
 const isWin = process.platform === 'win32';
 
+function assertProcessExitedError(err: Error): void {
+	assert(err instanceof LambdaError);
+	assert.equal(err.name, 'LambdaError');
+	assert(
+		/RequestId: [a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12} Process exited before completing request/.test(
+			err.message
+		)
+	);
+}
+
 export function test_funCacheDir() {
 	assert.equal('string', typeof funCacheDir);
 }
@@ -364,9 +374,7 @@ export const test_nodejs_exit_before_init = testInvoke(
 			err = _err;
 		}
 		assert(err);
-		assert(
-			err.message.includes('Process exited before completing request')
-		);
+		assertProcessExitedError(err);
 	}
 );
 
@@ -508,9 +516,7 @@ export const test_nodejs810_exit_in_handler = testInvoke(
 			err = _err;
 		}
 		assert(err);
-		assert(
-			err.message.includes('Process exited before completing request')
-		);
+		assertProcessExitedError(err);
 	}
 );
 

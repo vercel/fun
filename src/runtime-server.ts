@@ -43,7 +43,7 @@ export class RuntimeServer extends Server {
 		this.nextDeferred = createDeferred<void>();
 		this.invokeDeferred = null;
 		this.resultDeferred = null;
-		this.currentRequestId = null;
+		this.currentRequestId = uuid();
 	}
 
 	async serve(req, res): Promise<any> {
@@ -107,14 +107,12 @@ export class RuntimeServer extends Server {
 		debug('Waiting for the `invoke()` function to be called');
 		req.setTimeout(0); // disable default 2 minute socket timeout
 		const params = await this.invokeDeferred.promise;
-		const requestId = uuid();
-		this.currentRequestId = requestId;
 
 		// TODO: use dynamic values from lambda params
 		const deadline = 5000;
 		const functionArn =
 			'arn:aws:lambda:us-west-1:977805900156:function:nate-dump';
-		res.setHeader('Lambda-Runtime-Aws-Request-Id', requestId);
+		res.setHeader('Lambda-Runtime-Aws-Request-Id', this.currentRequestId);
 		res.setHeader('Lambda-Runtime-Invoked-Function-Arn', functionArn);
 		res.setHeader('Lambda-Runtime-Deadline-Ms', String(deadline));
 		const finish = once(res, 'finish');
