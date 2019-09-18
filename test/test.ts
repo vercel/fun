@@ -446,6 +446,28 @@ export const test_nodejs810_handled_error = testInvoke(
 	}
 );
 
+export const test_nodejs_reference_error = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/nodejs-reference-error'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'nodejs'
+		}),
+	async fn => {
+		let err;
+		try {
+			await fn();
+		} catch (_err) {
+			err = _err;
+		}
+		assert(err);
+		assert.equal(err.name, 'ReferenceError');
+		assert.equal(err.message, 'x is not defined');
+	}
+);
+
 export const test_nodejs810_exit_in_handler = testInvoke(
 	() =>
 		createFunction({
