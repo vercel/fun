@@ -26,7 +26,7 @@ export function generateNodeTarballUrl(
 		ext = 'tar.gz';
 	}
 
-	let mirror = process.env.ZEIT_FUN_MIRRORS_NODE;
+	let mirror = process.env.ZEIT_FUN_NODE_MIRROR;
 
 	if (!mirror) {
 		mirror = 'https://nodejs.org/dist';

@@ -57,6 +57,15 @@ export function test_install_node_tarball_url_windows() {
 	);
 }
 
+export function test_install_node_mirror_tarball_url_darwin() {
+	process.env.ZEIT_FUN_NODE_MIRROR = 'https://npm.taobao.org/mirrors/node';
+	assert.equal(
+		'https://npm.taobao.org/mirrors/node/v8.10.0/node-v8.10.0-darwin-x64.tar.gz',
+		generateNodeTarballUrl('8.10.0', 'darwin', 'x64')
+	);
+	process.env.ZEIT_FUN_NODE_MIRROR = null;
+}
+
 export async function test_install_node() {
 	const version = 'v10.0.0';
 	const dest = join(
