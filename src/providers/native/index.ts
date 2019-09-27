@@ -19,10 +19,10 @@ const isWin = process.platform === 'win32';
 const debug = createDebug('@zeit/fun:providers/native');
 
 export default class NativeProvider implements Provider {
-	pool: Pool<ChildProcess>;
-	lambda: Lambda;
-	params: LambdaParams;
-	runtimeApis: WeakMap<ChildProcess, RuntimeServer>;
+	private pool: Pool<ChildProcess>;
+	private lambda: Lambda;
+	private params: LambdaParams;
+	private runtimeApis: WeakMap<ChildProcess, RuntimeServer>;
 
 	constructor(fn: Lambda, params: LambdaParams) {
 		const factory = {
