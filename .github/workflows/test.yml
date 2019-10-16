@@ -24,11 +24,6 @@ jobs:
     - name: Print Node.js Version
       run: node --version
 
-    - name: Install Go
-      run: sudo ./util/install-go.sh
-      env:
-        CI: true
-
     - name: Install Dependencies
       run: npm install
       env:
