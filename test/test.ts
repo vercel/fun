@@ -686,9 +686,9 @@ export const test_pkg_support = async () => {
 	await execa(pkg, ['-t', 'node8', 'test/pkg-invoke.js'], {
 		cwd: root
 	});
-	const output = await execa.stdout(join(root, 'pkg-invoke'), {
+	const { stdout } = await execa(join(root, 'pkg-invoke'), {
 		cwd: __dirname,
 		stdio: ['ignore', 'pipe', 'inherit']
 	});
-	assert.equal(JSON.parse(output).hello, 'world');
+	assert.equal(JSON.parse(stdout).hello, 'world');
 };
