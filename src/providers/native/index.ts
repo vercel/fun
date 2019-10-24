@@ -157,7 +157,13 @@ export default class NativeProvider implements Provider {
 		} catch (err) {
 			// ESRCH means that the process ID no longer exists, which is fine
 			// in this case since we're shutting down the process anyways
-			if (err.code !== 'ESRCH') {
+			if (err.code === 'ESRCH' || /not found/i.test(err.message)) {
+				debug(
+					'Got error stopping process %o: %s',
+					proc.pid,
+					err.message
+				);
+			} else {
 				throw err;
 			}
 		}
