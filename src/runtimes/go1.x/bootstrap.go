@@ -230,7 +230,7 @@ func (mc *MockLambdaContext) ProcessEvents() {
 		req.Header.Set("Content-Type", "application/json")
 
 		client := &http.Client{}
-		client.Timeout = time.Second * 1
+		client.Timeout = 0
 		_, err = client.Do(req)
 		if err != nil {
 			log.Fatal(fmt.Errorf("Error sending response: %s", err))
