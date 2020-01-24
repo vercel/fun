@@ -9,4 +9,4 @@ if [ -z "$RUBYBIN"  ]; then
 fi
 
 # Execute the "ruby" runtime bootstrap
-exec "$RUBYBIN" "$LAMBDA_RUNTIME_DIR/bootstrap.py" "$@"
+exec "$RUBYBIN" "$LAMBDA_RUNTIME_DIR/bootstrap.rb" "$@"
