@@ -648,6 +648,22 @@ export const test_python37_version = testInvoke(
 	}
 );
 
+// `ruby` runtime
+export const test_ruby_hello = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/ruby-hello'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'ruby'
+		}),
+	async fn => {
+		const payload = await fn();
+		assert.equal(payload['body'], 'Hello from ruby');
+	}
+);
+
 // `ZipFile` Buffer support
 export const test_lambda_zip_file_buffer = testInvoke(
 	async () => {

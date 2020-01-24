@@ -14,6 +14,7 @@ import * as python27 from './runtimes/python2.7';
 import * as python3 from './runtimes/python3';
 import * as python36 from './runtimes/python3.6';
 import * as python37 from './runtimes/python3.7';
+import * as ruby from './runtimes/ruby';
 
 const debug = createDebug('@zeit/fun:runtimes');
 const runtimesDir = join(__dirname, 'runtimes');
@@ -55,6 +56,7 @@ createRuntime(runtimes, 'python2.7', python27);
 createRuntime(runtimes, 'python3', python3);
 createRuntime(runtimes, 'python3.6', python36);
 createRuntime(runtimes, 'python3.7', python37);
+createRuntime(runtimes, 'ruby', ruby);
 
 /**
  * Reads the file path `f` as an ascii string.

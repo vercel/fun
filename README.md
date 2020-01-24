@@ -105,6 +105,7 @@ implemented are:
  * `python3` for Python Lambda functions using the system `python3` binary (or fallback to `python`)
  * `python3.6` for Python Lambda functions using a downloaded Python v3.6.8 binary
  * `python3.7` for Python Lambda functions using a downloaded Python v3.7.2 binary
+ * `ruby` for Ruby Lambda functions using the system `ruby` binary
  * `go1.x` for Lambda functions written in Go - binary must be compiled for your platform
  * `provided` for [custom runtimes][]
 
