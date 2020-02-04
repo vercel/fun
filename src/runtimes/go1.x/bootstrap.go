@@ -21,6 +21,7 @@ import (
 	"os/signal"
 	"path"
 	"reflect"
+	"runtime"
 	"strconv"
 	"syscall"
 	"time"
@@ -83,7 +84,10 @@ func main() {
 	}
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+
+	if runtime.GOOS != "windows" {
+		cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	}
 
 	if err = cmd.Start(); err != nil {
 		defer abortRequest(mockContext, err)
