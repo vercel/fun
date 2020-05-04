@@ -18,6 +18,7 @@ export type RuntimeLiteral =
 	| 'go1.x'
 	| 'ruby'
 	| 'ruby2.5'
+	| 'ruby2.7'
 	| 'provided';
 
 export interface LambdaParams {
@@ -57,7 +58,7 @@ export interface Provider {
 }
 
 export interface Runtime {
-	name: string;
+	name: RuntimeLiteral;
 	runtimeDir: string;
 	cacheDir?: string;
 	init?(runtime: Runtime): Promise<void>;

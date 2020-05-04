@@ -4,7 +4,7 @@ import XDGAppPaths from 'xdg-app-paths';
 import { createHash, Hash } from 'crypto';
 import { lstat, mkdirp, readdir, remove, readFile, writeFile } from 'fs-extra';
 
-import { Runtime } from './types';
+import { Runtime, RuntimeLiteral } from './types';
 import * as go1x from './runtimes/go1.x';
 import * as nodejs6 from './runtimes/nodejs6.10';
 import * as nodejs8 from './runtimes/nodejs8.10';
@@ -14,6 +14,8 @@ import * as python27 from './runtimes/python2.7';
 import * as python3 from './runtimes/python3';
 import * as python36 from './runtimes/python3.6';
 import * as python37 from './runtimes/python3.7';
+import * as ruby25 from './runtimes/ruby2.5';
+import * as ruby27 from './runtimes/ruby2.7';
 
 const debug = createDebug('@zeit/fun:runtimes');
 const runtimesDir = join(__dirname, 'runtimes');
@@ -32,7 +34,7 @@ export const funCacheDir = XDGAppPaths('co.zeit.fun').cache();
 
 function createRuntime(
 	runtimes: Runtimes,
-	name: string,
+	name: RuntimeLiteral,
 	mod?: RuntimeImpl
 ): void {
 	const runtime: Runtime = {
@@ -56,6 +58,8 @@ createRuntime(runtimes, 'python3', python3);
 createRuntime(runtimes, 'python3.6', python36);
 createRuntime(runtimes, 'python3.7', python37);
 createRuntime(runtimes, 'ruby');
+createRuntime(runtimes, 'ruby2.5', ruby25);
+createRuntime(runtimes, 'ruby2.7', ruby27);
 
 /**
  * Reads the file path `f` as an ascii string.
