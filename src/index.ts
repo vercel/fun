@@ -3,8 +3,7 @@ import {
 	LambdaParams,
 	InvokeParams,
 	InvokeResult,
-	Runtime,
-	RuntimeLiteral
+	Runtime
 } from './types';
 import createDebug from 'debug';
 import { remove } from 'fs-extra';
@@ -21,7 +20,6 @@ const debug = createDebug('@zeit/fun:index');
 export {
 	Lambda,
 	LambdaParams,
-	RuntimeLiteral,
 	InvokeParams,
 	InvokeResult,
 	runtimes,

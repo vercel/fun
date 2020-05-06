@@ -1,22 +1,29 @@
 import createDebug from 'debug';
 import execa from 'execa';
-
 const debug = createDebug('@zeit/fun:install-ruby');
 
-export async function installRVM(version: string): Promise<any> {
+export async function installRVM(version: string, dest: string): Promise<void> {
 	try {
-		await execa('rvm');
+		debug('Checking for RVM');
+		await execa(`${dest}/bin/rvm`);
 		debug('RVM present');
+
+		const versionsString = (await execa.command(
+			`${dest}/bin/rvm list strings`
+		)).stdout;
+
+		if (!versionsString.includes(version)) {
+			debug(`Installing ruby version ${version}`);
+			await execa.command(`${dest}/bin/rvm install ${version}`);
+		}
 	} catch (error) {
 		debug(error);
-		debug('Installing RVM');
-		execa.command('curl -sSL https://get.rvm.io | bash -s stable');
-	}
 
-	const versionsString = (await execa.command('rvm list strings')).stdout;
-	if (!versionsString.includes(version)) {
-		debug(`Installing ruby version ${version}`);
-		await execa.command(`rvm install ${version}`);
+		debug(`Installing RVM with ruby version ${version}`);
+		await execa.command(
+			`curl -sSL https://get.rvm.io | bash -s -- --path ${dest} --ruby=${version}`,
+			{ shell: true, stdio: 'inherit' }
+		);
 	}
 
 	return;
@@ -25,10 +32,10 @@ export async function installRVM(version: string): Promise<any> {
 export async function copyInstalledRuby(
 	version: string,
 	dest: string
-): Promise<any> {
-	debug('Copying ruby version to cachedir');
+): Promise<void> {
+	debug('Copying ruby version to cachedir/ruby_bin');
 	await execa.command(
-		`cp -r ${process.env['HOME']}/.rvm/rubies/ruby-${version}/bin ${dest}`
+		`cp -r ${dest}/rubies/ruby-${version}/bin ${dest}/ruby_bin`
 	);
 	return;
 }
@@ -38,9 +45,8 @@ export async function installRuby(
 	version: string
 ): Promise<void> {
 	return new Promise(async (resolve, reject) => {
-		debug('Checking for RVM');
 		try {
-			await installRVM(version);
+			await installRVM(version, dest);
 			await copyInstalledRuby(version, dest);
 			resolve();
 		} catch (error) {

@@ -660,7 +660,10 @@ export const test_ruby_hello = testInvoke(
 		}),
 	async fn => {
 		const payload = await fn();
-		assert.equal(payload['body'], 'Hello from ruby');
+		assert.equal(
+			JSON.parse(payload['body'])['hello_text'],
+			'Hello from ruby'
+		);
 	}
 );
 

@@ -1,31 +1,8 @@
-export type RuntimeLiteral =
-	| 'nodejs'
-	| 'nodejs4.3'
-	| 'nodejs6.10'
-	| 'nodejs8.10'
-	| 'nodejs10.x'
-	| 'nodejs12.x'
-	| 'java8'
-	| 'python2.7'
-	| 'python'
-	| 'python3'
-	| 'python3.6'
-	| 'python3.7'
-	| 'dotnetcore1.0'
-	| 'dotnetcore2.0'
-	| 'dotnetcore2.1'
-	| 'nodejs4.3-edge'
-	| 'go1.x'
-	| 'ruby'
-	| 'ruby2.5'
-	| 'ruby2.7'
-	| 'provided';
-
 export interface LambdaParams {
 	FunctionName?: string;
 	Code: { ZipFile?: Buffer | string; Directory?: string };
 	Handler: string;
-	Runtime: RuntimeLiteral;
+	Runtime: string; // nodejs | nodejs4.3 | nodejs6.10 | nodejs8.10 | nodejs10.x | nodejs12.x | java8 | python2.7 | python3.6 | python3.7 | dotnetcore1.0 | dotnetcore2.0 | dotnetcore2.1 | nodejs4.3-edge | go1.x | ruby2.5 | ruby2.7 | provided;
 	Provider?: string; // native | docker
 	Environment?: { Variables: object };
 	MemorySize?: number; // The amount of memory that your function has access to. Increasing the function's memory also increases it's CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.
@@ -58,7 +35,7 @@ export interface Provider {
 }
 
 export interface Runtime {
-	name: RuntimeLiteral;
+	name: string;
 	runtimeDir: string;
 	cacheDir?: string;
 	init?(runtime: Runtime): Promise<void>;

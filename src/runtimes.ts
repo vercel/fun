@@ -4,7 +4,7 @@ import XDGAppPaths from 'xdg-app-paths';
 import { createHash, Hash } from 'crypto';
 import { lstat, mkdirp, readdir, remove, readFile, writeFile } from 'fs-extra';
 
-import { Runtime, RuntimeLiteral } from './types';
+import { Runtime } from './types';
 import * as go1x from './runtimes/go1.x';
 import * as nodejs6 from './runtimes/nodejs6.10';
 import * as nodejs8 from './runtimes/nodejs8.10';
@@ -34,7 +34,7 @@ export const funCacheDir = XDGAppPaths('co.zeit.fun').cache();
 
 function createRuntime(
 	runtimes: Runtimes,
-	name: RuntimeLiteral,
+	name: string,
 	mod?: RuntimeImpl
 ): void {
 	const runtime: Runtime = {
