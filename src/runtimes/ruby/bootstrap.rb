@@ -54,16 +54,14 @@ class LambdaHandler
   end
 
 class LambdaServer
-  LAMBDA_SERVER_ADDRESS = "http://127.0.0.1:9001/2018-06-01"
-
   LONG_TIMEOUT = 1_000_000
 
-  def initialize(server_address: LAMBDA_SERVER_ADDRESS)
-    @server_address = server_address
+  def initialize
+    @server_address = ENV['AWS_LAMBDA_RUNTIME_API']
   end
 
   def next_invocation
-    next_invocation_uri = URI(@server_address + "/runtime/invocation/next")
+    next_invocation_uri = URI("http://#{@server_address}/2018-06-01/runtime/invocation/next")
     begin
       http = Net::HTTP.new(next_invocation_uri.host, next_invocation_uri.port)
       http.read_timeout = LONG_TIMEOUT
@@ -86,9 +84,7 @@ class LambdaServer
   end
 
   def send_response(request_id:, response_object:, content_type: 'application/json')
-    response_uri = URI(
-      @server_address + "/runtime/invocation/#{request_id}/response"
-    )
+    response_uri = URI("http://#{@server_address}/2018-06-01/runtime/invocation/#{request_id}/response")
     begin
       # unpack IO at this point
       if content_type == 'application/unknown'
@@ -288,7 +284,7 @@ exit_code = 0
 
 begin
   @lambda_handler = LambdaHandler.new(env_handler: @env_handler)
-  require @lambda_handler.handler_file_name
+  require "#{ENV["LAMBDA_TASK_ROOT"]}/#{@lambda_handler.handler_file_name}"
 rescue Exception => e # which includes LoadError or any exception within static user code
   runtime_loop_active = false
   exit_code = -4

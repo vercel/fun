@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+# Ensure the downloaded Ruby version is used
+export PATH="$LAMBDA_RUNTIME_DIR/ruby-2.5.5/bin:$PATH"
+
+# Ensure libraries can be found on linux
+export LD_LIBRARY_PATH="$LAMBDA_RUNTIME_DIR/ruby-2.5.5/lib"
+
+# Execute the "ruby" runtime bootstrap
+export LAMBDA_RUNTIME_DIR="$(dirname "$0")/../ruby"
+
+exec "$LAMBDA_RUNTIME_DIR/bootstrap" "$@"

@@ -660,7 +660,42 @@ export const test_ruby_hello = testInvoke(
 		}),
 	async fn => {
 		const payload = await fn();
-		assert.equal(payload['body'], 'Hello from ruby');
+		assert.equal(
+			JSON.parse(payload['body'])['hello_text'],
+			'Hello from ruby'
+		);
+	}
+);
+
+// `ruby2.5` runtime
+export const test_ruby25_version = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/ruby-version'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'ruby2.5'
+		}),
+	async fn => {
+		const payload = await fn();
+		assert.equal(payload['body'], '2.5.5');
+	}
+);
+
+// `ruby2.7` runtime
+export const test_ruby27_version = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/ruby-version'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'ruby2.7'
+		}),
+	async fn => {
+		const payload = await fn();
+		assert.equal(payload['body'], '2.7.0');
 	}
 );
 
