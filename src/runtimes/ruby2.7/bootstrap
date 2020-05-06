@@ -2,7 +2,10 @@
 set -eu
 
 # Ensure the downloaded Ruby version is used
-export PATH="$LAMBDA_RUNTIME_DIR/ruby_bin:$PATH"
+export PATH="$LAMBDA_RUNTIME_DIR/ruby-2.7.0/bin:$PATH"
+
+# Ensure libraries can be found on linux
+export LD_LIBRARY_PATH="$LAMBDA_RUNTIME_DIR/ruby-2.7.0/lib"
 
 # Execute the "ruby" runtime bootstrap
 export LAMBDA_RUNTIME_DIR="$(dirname "$0")/../ruby"

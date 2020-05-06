@@ -21,7 +21,7 @@ export async function installRVM(version: string, dest: string): Promise<void> {
 
 		debug(`Installing RVM with ruby version ${version}`);
 		await execa.command(
-			`curl -sSL https://get.rvm.io | bash -s -- --path ${dest} --ruby=${version}`,
+			`curl -sSL https://get.rvm.io | bash -s -- --path ${dest}/rvm_cache --ruby=${version}`,
 			{ shell: true, stdio: 'inherit' }
 		);
 	}
@@ -35,7 +35,7 @@ export async function copyInstalledRuby(
 ): Promise<void> {
 	debug('Copying ruby version to cachedir/ruby_bin');
 	await execa.command(
-		`cp -r ${dest}/rubies/ruby-${version}/bin ${dest}/ruby_bin`
+		`cp -r ${dest}/rvm_cache/rubies/ruby-${version} ${dest}/ruby-${version}`
 	);
 	return;
 }
