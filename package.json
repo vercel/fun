@@ -48,7 +48,7 @@
     "@types/tar": "4.0.0",
     "@types/yauzl-promise": "2.1.0",
     "@zeit/best": "0.5.1",
-    "codecov": "3.6.5",
+    "codecov": "3.7.1",
     "cpy-cli": "2.0.0",
     "lint-staged": "9.2.5",
     "nyc": "14.1.1",
