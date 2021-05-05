@@ -4,7 +4,7 @@
   "description": "Local Lambda development environment",
   "main": "dist/src/index",
   "typings": "dist/src/index",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": "zeit/fun",
   "scripts": {
     "prebuild": "rimraf dist",
