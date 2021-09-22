@@ -1,6 +1,6 @@
 # ƒun
 
-[![Build Status](https://github.com/zeit/fun/workflows/Node%20CI/badge.svg)](https://github.com/zeit/fun/actions?workflow=Node+CI)
+[![Build Status](https://github.com/vercel/fun/workflows/Node%20CI/badge.svg)](https://github.com/vercel/fun/actions?workflow=Node+CI)
 
 Local serverless function λ development runtime.
 
@@ -25,7 +25,7 @@ exports.handler = function(event, context, callback) {
 You can invoke this function locally using the code below:
 
 ```js
-const { createFunction } = require('@zeit/fun');
+import { createFunction } from '@vercel/fun';
 
 async function main() {
 	// Starts up the necessary server to be able to invoke the function
