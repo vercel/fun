@@ -548,7 +548,7 @@ export const test_nodejs12_version = testInvoke(
 		}),
 	async fn => {
 		const versions = await fn({ hello: 'world' });
-		assert.equal(versions.node, '12.14.1');
+		assert.equal(versions.node, '12.22.7');
 	}
 );
 
