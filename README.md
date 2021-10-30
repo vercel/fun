@@ -1,22 +1,14 @@
 # ƒun
-
 [![Build Status](https://github.com/vercel/fun/workflows/Node%20CI/badge.svg)](https://github.com/vercel/fun/actions?workflow=Node+CI)
 
 Local serverless function λ development runtime.
-
- * Programmatic. A TypeScript API is exposed to trigger invocations.
- * Provider agnostic. AWS Lambda + other cloud providers planned.
- * Runtime agnostic. Node, go, python and custom runtime APIs.
- * Platform agnostic. Functions can be executed natively (e.g. macOS) or via Docker.
- * Zero setup needed. ƒun acquires the necessary runtime files (e.g. `node`).
-
 
 ## Example
 
 Given a Lambda function like this one:
 
 ```js
-// index.js
+// example/index.js
 exports.handler = function(event, context, callback) {
 	callback(null, { hello: 'world' });
 };
@@ -59,17 +51,9 @@ async function main() {
 main().catch(console.error);
 ```
 
+## Caveats
 
-## Providers
-
-ƒun has a concept of pluggable "providers", which are responsible for
-creating, freezing, unfreezing and shutting down the processes that execute the
-Lambda function.
-
-### `native`
-
-The `native` provider executes Lambda functions directly on the machine executing
-ƒun. This provides an execution environment that closely resembles the
+ƒun provides an execution environment that closely resembles the
 real Lambda environment, with some key differences that are documented here:
 
  * Lambdas processes are ran as your own user, not the `sbx_user1051` user.
@@ -82,13 +66,6 @@ real Lambda environment, with some key differences that are documented here:
  * Lambdas that compile to native executables (i.e. Go) will need to be compiled
    for your operating system. So if you are on macOS, then the binary needs to be
    executable on macOS.
-
-### `docker`
-
-A `docker` provider is planned, but not yet implemented. This will allow for an
-execution environment that more closely matches the AWS Lambda environment,
-including the ability to execute Linux x64 binaries / shared libraries.
-
 
 ## Runtimes
 
