@@ -5,7 +5,7 @@ import { Runtime } from '../../types';
 import { readFile, writeFile, mkdirp, remove } from 'fs-extra';
 import { getOutputFile } from './filename';
 
-const debug = createDebug('@zeit/fun:runtimes/go1.x');
+const debug = createDebug('@vercel/fun:runtimes/go1.x');
 
 function _go(opts) {
 	return function go(...args) {

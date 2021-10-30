@@ -14,7 +14,7 @@ import {
 
 export { zipFromFile, zipFromBuffer, ZipFile };
 
-const debug = createDebug('@zeit/fun:unzip');
+const debug = createDebug('@vercel/fun:unzip');
 
 export async function unzipToTemp(
 	data: Buffer | string,

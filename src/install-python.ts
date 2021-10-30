@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'zlib';
 
-const debug = createDebug('@zeit/fun:install-python');
+const debug = createDebug('@vercel/fun:install-python');
 
 export function generatePythonTarballUrl(
 	version: string,

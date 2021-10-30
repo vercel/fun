@@ -15,7 +15,7 @@ import * as python3 from './runtimes/python3';
 import * as python36 from './runtimes/python3.6';
 import * as python37 from './runtimes/python3.7';
 
-const debug = createDebug('@zeit/fun:runtimes');
+const debug = createDebug('@vercel/fun:runtimes');
 const runtimesDir = join(__dirname, 'runtimes');
 
 interface Runtimes {

@@ -7,7 +7,7 @@ import { basename, join } from 'path';
 import { createWriteStream, mkdirp } from 'fs-extra';
 import { unzip, zipFromFile } from './unzip';
 
-const debug = createDebug('@zeit/fun:install-node');
+const debug = createDebug('@vercel/fun:install-node');
 
 export function generateNodeTarballUrl(
 	version: string,

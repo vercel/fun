@@ -15,7 +15,7 @@ import * as providers from './providers';
 import { RuntimeServer } from './runtime-server';
 import { funCacheDir, runtimes, initializeRuntime } from './runtimes';
 
-const debug = createDebug('@zeit/fun:index');
+const debug = createDebug('@vercel/fun:index');
 
 export {
 	Lambda,

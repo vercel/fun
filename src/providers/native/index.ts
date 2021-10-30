@@ -18,7 +18,7 @@ import {
 } from '../../types';
 
 const isWin = process.platform === 'win32';
-const debug = createDebug('@zeit/fun:providers/native');
+const debug = createDebug('@vercel/fun:providers/native');
 const treeKill = promisify(_treeKill);
 
 export default class NativeProvider implements Provider {
