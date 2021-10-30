@@ -5,6 +5,6 @@ import { runtimes, initializeRuntime } from '../../runtimes';
 export async function init({ cacheDir }: Runtime): Promise<void> {
 	await Promise.all([
 		initializeRuntime(runtimes.nodejs),
-		installNode(cacheDir, '12.22.7')
+		installNode(cacheDir, '14.18.1')
 	]);
 }
