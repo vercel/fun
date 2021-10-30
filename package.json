@@ -69,5 +69,8 @@
       "prettier --write --single-quote",
       "git add"
     ]
+  },
+  "engines": {
+    "node": ">= 10"
   }
 }
