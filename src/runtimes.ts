@@ -28,7 +28,7 @@ interface RuntimeImpl {
 
 export const runtimes: Runtimes = {};
 
-export const funCacheDir = XDGAppPaths('co.zeit.fun').cache();
+export const funCacheDir = XDGAppPaths('com.vercel.fun').cache();
 
 function createRuntime(
 	runtimes: Runtimes,
