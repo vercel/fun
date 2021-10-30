@@ -1,5 +1,4 @@
 const { join } = require('path');
-const { readFileSync } = require('fs');
 const { createFunction } = require('../');
 
 async function main() {
