@@ -552,6 +552,22 @@ export const test_nodejs12_version = testInvoke(
 	}
 );
 
+// `nodejs14.x` runtime
+export const test_nodejs14_version = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/nodejs-version'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'nodejs14.x'
+		}),
+	async fn => {
+		const versions = await fn({ hello: 'world' });
+		assert.equal(versions.node, '14.18.1');
+	}
+);
+
 // `go1.x` runtime
 export const test_go1x_echo = testInvoke(
 	() =>

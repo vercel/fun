@@ -100,6 +100,7 @@ implemented are:
  * `nodejs8.10` for Node.js Lambda functions using a downloaded Node v8.10.0 binary
  * `nodejs10.x` for Node.js Lambda functions using a downloaded Node v10.15.3 binary
  * `nodejs12.x` for Node.js Lambda functions using a downloaded Node v12.22.7 binary
+ * `nodejs14.x` for Node.js Lambda functions using a downloaded Node v14.18.1 binary
  * `python` for Python Lambda functions using the system `python` binary
  * `python2.7` for Python Lambda functions using a downloaded Python v2.7.12 binary
  * `python3` for Python Lambda functions using the system `python3` binary (or fallback to `python`)
