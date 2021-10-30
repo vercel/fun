@@ -1,8 +1,9 @@
-import uuid from 'uuid/v4';
+import http from 'http';
 import { parse } from 'url';
 import { Server } from 'http';
 import createDebug from 'debug';
 import { run, text } from 'micro';
+import { v4 as uuid } from 'uuid';
 import createPathMatch from 'path-match';
 import once from '@tootallnate/once';
 
@@ -13,7 +14,7 @@ const pathMatch = createPathMatch();
 const match = pathMatch('/:version/runtime/:subject/:target/:action?');
 const debug = createDebug('@vercel/fun:runtime-server');
 
-function send404(res) {
+function send404(res: http.ServerResponse) {
 	res.statusCode = 404;
 	res.end();
 }
@@ -46,10 +47,12 @@ export class RuntimeServer extends Server {
 		this.currentRequestId = uuid();
 	}
 
-	async serve(req, res): Promise<any> {
+	async serve(
+		req: http.IncomingMessage,
+		res: http.ServerResponse
+	): Promise<any> {
 		debug('%s %s', req.method, req.url);
 
-		let err;
 		const params = match(parse(req.url).pathname);
 		if (!params) {
 			return send404(res);
@@ -64,7 +67,6 @@ export class RuntimeServer extends Server {
 			);
 			return send404(res);
 		}
-		//console.error({ url: req.url, headers: req.headers, params });
 
 		// Routing logic
 		if (subject === 'invocation') {
@@ -91,7 +93,10 @@ export class RuntimeServer extends Server {
 		}
 	}
 
-	async handleNextInvocation(req, res): Promise<void> {
+	async handleNextInvocation(
+		req: http.IncomingMessage,
+		res: http.ServerResponse
+	): Promise<void> {
 		const { initDeferred } = this;
 		if (initDeferred) {
 			debug('Runtime successfully initialized');
@@ -105,6 +110,7 @@ export class RuntimeServer extends Server {
 		this.nextDeferred = null;
 
 		debug('Waiting for the `invoke()` function to be called');
+		// @ts-ignore
 		req.setTimeout(0); // disable default 2 minute socket timeout
 		const params = await this.invokeDeferred.promise;
 

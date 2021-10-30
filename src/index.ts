@@ -7,12 +7,9 @@ import {
 } from './types';
 import createDebug from 'debug';
 import { remove } from 'fs-extra';
-import { basename } from 'path';
-import listen from 'async-listen';
 import { unzipToTemp } from './unzip';
 import { LambdaError } from './errors';
 import * as providers from './providers';
-import { RuntimeServer } from './runtime-server';
 import { funCacheDir, runtimes, initializeRuntime } from './runtimes';
 
 const debug = createDebug('@vercel/fun:index');
