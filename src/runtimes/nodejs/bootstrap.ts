@@ -58,7 +58,10 @@ function promisify(fn) {
 				if (err) return reject(err);
 				resolve(result);
 			});
-			fn.apply(this, args);
+			const r = fn.apply(this, args);
+			if (typeof r !== 'undefined') {
+				resolve(r);
+			}
 		});
 	};
 }

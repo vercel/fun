@@ -357,6 +357,21 @@ export const test_lambda_invoke = testInvoke(
 	}
 );
 
+export const test_lambda_callback_with_return = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/nodejs-callback-with-return'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'nodejs'
+		}),
+	async fn => {
+		const payload = await fn();
+		assert.deepEqual(payload, { foo: 'bar' });
+	}
+);
+
 export const test_nodejs_exit_before_init = testInvoke(
 	() =>
 		createFunction({
