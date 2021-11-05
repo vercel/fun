@@ -4,7 +4,8 @@ import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'zlib';
 import { basename, join } from 'path';
-import { createWriteStream, mkdirp } from 'fs-extra';
+import { createWriteStream } from 'fs-extra';
+import { satisfies } from 'semver';
 import { unzip, zipFromFile } from './unzip';
 
 const debug = createDebug('@vercel/fun:install-node');
@@ -34,6 +35,16 @@ export async function installNode(
 	platform: string = process.platform,
 	arch: string = process.arch
 ): Promise<void> {
+	// For Apple M1, use the x64 binaries for v14 or less,
+	// since there are no arm64 binaries for these versions
+	if (
+		platform === 'darwin' &&
+		arch === 'arm64' &&
+		satisfies(version, '<= 14')
+	) {
+		arch = 'x64';
+	}
+
 	const tarballUrl = generateNodeTarballUrl(version, platform, arch);
 	debug('Downloading Node.js %s tarball %o', version, tarballUrl);
 	const res = await fetch(tarballUrl);

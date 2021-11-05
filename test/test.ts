@@ -1,8 +1,8 @@
-import { basename, join } from 'path';
-import { tmpdir } from 'os';
 import execa from 'execa';
+import { tmpdir } from 'os';
 import assert from 'assert';
-import { mkdirp, remove, readdir, readFile, stat } from 'fs-extra';
+import { basename, join } from 'path';
+import { mkdirp, remove, readFile, stat } from 'fs-extra';
 import {
 	funCacheDir,
 	initializeRuntime,
