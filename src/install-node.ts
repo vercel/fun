@@ -12,7 +12,7 @@ const debug = createDebug('@vercel/fun:install-node');
 
 export function generateNodeTarballUrl(
 	version: string,
-	platform: string = process.platform,
+	platform: NodeJS.Platform = process.platform,
 	arch: string = process.arch
 ): string {
 	if (!version.startsWith('v')) {
@@ -32,7 +32,7 @@ export function generateNodeTarballUrl(
 export async function installNode(
 	dest: string,
 	version: string,
-	platform: string = process.platform,
+	platform: NodeJS.Platform = process.platform,
 	arch: string = process.arch
 ): Promise<void> {
 	// For Apple M1, use the x64 binaries for v14 or less,
