@@ -640,21 +640,26 @@ it(
 	)
 );
 
-// `go1.x` runtime
+// Support for paths as Handler
 it(
-	'go1x_echo',
+	'lambda_nested_handler',
 	testInvoke(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/go-echo'
+					Directory: __dirname + '/functions/nodejs-nested-handler'
 				},
-				Handler: 'handler',
-				Runtime: 'go1.x'
+				Handler: '.hidden/launcher.handler',
+				Runtime: 'nodejs',
+				Environment: {
+					Variables: {
+						HELLO: 'world'
+					}
+				}
 			}),
 		async fn => {
-			const payload = await fn({ hello: 'world' });
-			assert.deepEqual(payload, { hello: 'world' });
+			const env = await fn();
+			assert.equal(env.HELLO, 'world');
 		}
 	)
 );
@@ -826,26 +831,21 @@ it('pkg_support', async () => {
 	assert.equal(JSON.parse(stdout).hello, 'world');
 });
 
-// Support for paths as Handler
+// `go1.x` runtime
 it(
-	'lambda_nested_handler',
+	'go1x_echo',
 	testInvoke(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-nested-handler'
+					Directory: __dirname + '/functions/go-echo'
 				},
-				Handler: '.hidden/launcher.handler',
-				Runtime: 'nodejs',
-				Environment: {
-					Variables: {
-						HELLO: 'world'
-					}
-				}
+				Handler: 'handler',
+				Runtime: 'go1.x'
 			}),
 		async fn => {
-			const env = await fn();
-			assert.equal(env.HELLO, 'world');
+			const payload = await fn({ hello: 'world' });
+			assert.deepEqual(payload, { hello: 'world' });
 		}
 	)
 );
