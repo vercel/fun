@@ -739,3 +739,24 @@ export const test_pkg_support = async () => {
 	});
 	assert.equal(JSON.parse(stdout).hello, 'world');
 };
+
+// Support for paths as Handler
+export const test_lambda_nested_handler = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/nodejs-nested-handler'
+			},
+			Handler: '.hidden/launcher.handler',
+			Runtime: 'nodejs',
+			Environment: {
+				Variables: {
+					HELLO: 'world'
+				}
+			}
+		}),
+	async fn => {
+		const env = await fn();
+		assert.equal(env.HELLO, 'world');
+	}
+);
