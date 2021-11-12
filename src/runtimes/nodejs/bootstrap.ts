@@ -192,7 +192,8 @@ function getHandler(): HandlerFunction {
 		throw new Error(`Bad handler ${_HANDLER}`);
 	}
 
-	const [modulePath, handlerName] = appParts;
+	const [moduleFile, handlerName] = appParts;
+	const modulePath = [...segments.slice(0, -1), moduleFile].join('/');
 
 	let app;
 	try {
