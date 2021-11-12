@@ -185,7 +185,8 @@ async function postError(path, err) {
 }
 
 function getHandler(): HandlerFunction {
-	const appParts = _HANDLER.split('.');
+	const segments = _HANDLER.split('/');
+	const appParts = segments[segments.length - 1].split('.');
 
 	if (appParts.length !== 2) {
 		throw new Error(`Bad handler ${_HANDLER}`);
