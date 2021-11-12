@@ -649,7 +649,7 @@ it(
 				Code: {
 					Directory: __dirname + '/functions/nodejs-nested-handler'
 				},
-				Handler: '.hidden/launcher.handler',
+				Handler: 'hid.den/launcher.handler',
 				Runtime: 'nodejs',
 				Environment: {
 					Variables: {
@@ -659,7 +659,7 @@ it(
 			}),
 		async fn => {
 			const env = await fn();
-			assert.equal(env.HELLO, 'world');
+			expect(env.HELLO).toBe('world');
 		}
 	)
 );
