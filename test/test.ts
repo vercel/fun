@@ -817,7 +817,7 @@ it(
 	)
 );
 
-// `pkg` compilation support
+// `pkg` compilation support, requires go@1.15, must not be a higher version
 it('pkg_support', async () => {
 	const root = require.resolve('pkg').replace(/\/node_modules(.*)$/, '');
 	const pkg = join(root, 'node_modules/.bin/pkg');
@@ -831,7 +831,7 @@ it('pkg_support', async () => {
 	expect(JSON.parse(stdout).hello).toBe('world');
 });
 
-// `go1.x` runtime
+// `go1.x` runtime, requires go@1.15, must not be a higher version
 it(
 	'go1x_echo',
 	testInvoke(
