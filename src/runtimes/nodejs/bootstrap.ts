@@ -185,13 +185,15 @@ async function postError(path, err) {
 }
 
 function getHandler(): HandlerFunction {
-	const appParts = _HANDLER.split('.');
+	const segments = _HANDLER.split('/');
+	const appParts = segments[segments.length - 1].split('.');
 
 	if (appParts.length !== 2) {
 		throw new Error(`Bad handler ${_HANDLER}`);
 	}
 
-	const [modulePath, handlerName] = appParts;
+	const [moduleFile, handlerName] = appParts;
+	const modulePath = [...segments.slice(0, -1), moduleFile].join('/');
 
 	let app;
 	try {
