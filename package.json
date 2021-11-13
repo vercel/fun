@@ -1,6 +1,6 @@
 {
   "name": "@vercel/fun",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Local Lambda development environment",
   "main": "dist/src/index",
   "typings": "dist/src/index",
