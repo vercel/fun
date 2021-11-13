@@ -828,7 +828,7 @@ it('pkg_support', async () => {
 		cwd: __dirname,
 		stdio: ['ignore', 'pipe', 'inherit']
 	});
-	assert.equal(JSON.parse(stdout).hello, 'world');
+	expect(JSON.parse(stdout).hello).toBe('world');
 });
 
 // `go1.x` runtime
@@ -845,7 +845,7 @@ it(
 			}),
 		async fn => {
 			const payload = await fn({ hello: 'world' });
-			assert.deepEqual(payload, { hello: 'world' });
+			expect(payload).toEqual({ hello: 'world' });
 		}
 	)
 );
