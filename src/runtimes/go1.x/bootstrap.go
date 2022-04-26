@@ -1,5 +1,5 @@
 // Credits:
-//   https://git.io/fh2AB
+//   https://github.com/lambci/docker-lambda/blob/f6b4765a9b659ceb949c34b19390026820ddd462/go1.x/run/aws-lambda-mock.go
 //   https://binx.io/blog/2018/12/03/aws-lambda-custom-bootstrap-in-go
 
 package main
