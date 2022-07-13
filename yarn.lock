@@ -1088,10 +1088,10 @@ assign-symbols@^1.0.0:
   resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
   integrity sha1-WWZ/QfrdTyDMvCu5a41Pf3jsA2c=
 
-async-listen@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/async-listen/-/async-listen-1.0.0.tgz#7596c057d867448c408d82afdced842e7772217e"
-  integrity sha1-dZbAV9hnRIxAjYKv3O2ELndyIX4=
+async-listen@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/async-listen/-/async-listen-1.2.0.tgz#861ab6f92e1703ba54498b10ddb9b5da7b69f363"
+  integrity sha512-CcEtRh/oc9Jc4uWeUwdpG/+Mb2YUHKmdaTf0gUr7Wa+bfp4xx70HOb3RuSTJMvqKNB1TkdTfjLdrcz2X4rkkZA==
 
 asynckit@^0.4.0:
   version "0.4.0"
