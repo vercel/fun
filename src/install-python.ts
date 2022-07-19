@@ -28,7 +28,7 @@ export async function installPython(
 	debug('Downloading Python %s tarball %o', version, tarballUrl);
 	const res = await fetch(tarballUrl);
 	if (!res.ok) {
-		throw new Error(`HTTP request failed: ${res.status}`);
+		throw new Error(`HTTP request ${tarballUrl} failed: ${res.status}`);
 	}
 	return new Promise((resolve, reject) => {
 		debug('Extracting Python %s tarball to %o', version, dest);
