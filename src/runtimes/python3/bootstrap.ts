@@ -12,8 +12,7 @@ function fallback() {
 	pythonBin = 'python';
 }
 function handler(data?: string) {
-	const isPython3 =
-		data && data.toString() && data.toString().startsWith('Python 3');
+	const isPython3 = data && data.startsWith('Python 3');
 
 	if (!isPython3) {
 		fallback();
@@ -24,5 +23,22 @@ function handler(data?: string) {
 }
 const child = spawn(pythonBin, ['--version']);
 child.on('error', fallback);
-child.stderr.on('data', handler);
-child.stdout.on('data', handler);
+
+Promise.all([child.stdout, child.stderr].map(stream2Promise)).then(
+	([stdout, stderr]) => {
+		// if there are stderr messages, then we know the python version is not 3
+		if (stderr.length) {
+			handler();
+		} else {
+			handler(stdout.toString());
+		}
+	}
+);
+
+function stream2Promise(stream: NodeJS.ReadableStream): Promise<Buffer> {
+	const buffers = [];
+	return new Promise(resolve => {
+		stream.on('data', data => buffers.push(data));
+		stream.on('end', () => resolve(Buffer.concat(buffers)));
+	});
+}
