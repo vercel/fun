@@ -29,7 +29,7 @@
     "generic-pool": "3.4.2",
     "micro": "9.3.5-canary.3",
     "ms": "2.1.1",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.7",
     "path-match": "1.2.4",
     "promisepipe": "3.0.0",
     "semver": "7.3.5",
