@@ -12,7 +12,7 @@ interface LambdaErrorPayload {
 export class LambdaError extends Error {
 	constructor(data: LambdaErrorPayload = {}) {
 		super(data.errorMessage || 'Unspecified runtime initialization error');
-		Object.setPrototypeOf(this, new.target.prototype);
+		Object.setPrototypeOf(this, LambdaError.prototype);
 
 		Object.defineProperty(this, 'name', {
 			value: data.errorType || this.constructor.name
