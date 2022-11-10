@@ -54,8 +54,8 @@ export class ValidationError extends Error {
 		super(message);
 
 		// Restore prototype chain (see https://stackoverflow.com/a/41102306/376773)
-		this.name = new.target.name;
-		const actualProto = new.target.prototype;
+		this.name = ValidationError.name;
+		const actualProto = ValidationError.prototype;
 		Object.setPrototypeOf(this, actualProto);
 	}
 }
