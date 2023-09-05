@@ -32,7 +32,7 @@
     "node-fetch": "2.6.7",
     "path-match": "1.2.4",
     "promisepipe": "3.0.0",
-    "semver": "7.3.5",
+    "semver": "7.5.2",
     "stat-mode": "0.3.0",
     "stream-to-promise": "2.2.0",
     "tar": "4.4.18",
