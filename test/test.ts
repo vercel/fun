@@ -719,7 +719,7 @@ it(
 			}),
 		async fn => {
 			const payload = await fn();
-			assert.equal(payload['platform.python_version'][0], '3');
+			assert.equal(payload['platform.python_version'], '3.6.8');
 		}
 	)
 );
