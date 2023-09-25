@@ -88,3 +88,7 @@ implemented are:
 
 [cgroup freezer]: https://www.kernel.org/doc/Documentation/cgroup-v1/freezer-subsystem.txt
 [custom runtimes]: https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html
+
+## Releasing
+
+See [`semantic-release`](https://github.com/semantic-release/semantic-release)
