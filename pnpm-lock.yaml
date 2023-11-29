@@ -1,7 +1,7 @@
 lockfileVersion: '6.0'
 
 settings:
-  autoInstallPeers: true
+  autoInstallPeers: false
   excludeLinksFromLockfile: false
 
 dependencies:
@@ -12,8 +12,8 @@ dependencies:
     specifier: 1.2.0
     version: 1.2.0
   debug:
-    specifier: 4.1.1
-    version: 4.1.1
+    specifier: 4.3.4
+    version: 4.3.4
   execa:
     specifier: 3.2.0
     version: 3.2.0
@@ -39,8 +39,8 @@ dependencies:
     specifier: 3.0.0
     version: 3.0.0
   semver:
-    specifier: 7.3.5
-    version: 7.3.5
+    specifier: 7.5.4
+    version: 7.5.4
   stat-mode:
     specifier: 0.3.0
     version: 0.3.0
@@ -68,8 +68,8 @@ dependencies:
 
 devDependencies:
   '@types/debug':
-    specifier: 4.1.7
-    version: 4.1.7
+    specifier: 4.1.9
+    version: 4.1.9
   '@types/fs-extra':
     specifier: 8.1.0
     version: 8.1.0
@@ -129,7 +129,7 @@ devDependencies:
     version: 0.5.10
   ts-jest:
     specifier: 27.0.7
-    version: 27.0.7(@babel/core@7.22.17)(@types/jest@27.0.2)(jest@27.3.1)(typescript@4.4.4)
+    version: 27.0.7(@types/jest@27.0.2)(jest@27.3.1)(typescript@4.4.4)
   typescript:
     specifier: 4.4.4
     version: 4.4.4
@@ -815,8 +815,8 @@ packages:
       '@babel/types': 7.22.17
     dev: true
 
-  /@types/debug@4.1.7:
-    resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
+  /@types/debug@4.1.9:
+    resolution: {integrity: sha512-8Hz50m2eoS56ldRlepxSBa6PWEVCtzUo/92HgLc2qTMnotJNIm7xP+UZhyWoYsyOdd5dxZ+NZLb24rsKyFs2ow==}
     dependencies:
       '@types/ms': 0.7.31
     dev: true
@@ -1828,6 +1828,7 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.1
+    dev: true
 
   /debug@4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
@@ -1839,7 +1840,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /decamelize-keys@1.1.1:
     resolution: {integrity: sha512-WiPxgEirIV0/eIOMcnFBA3/IJZAZqKnwAwWyvvdi4lsr1WCN22nhdf/3db3DoZcUjTV2SqfzIwNyp6y2xs3nmg==}
@@ -4107,7 +4107,6 @@ packages:
 
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
-    dev: true
 
   /multistream@2.1.1:
     resolution: {integrity: sha512-xasv76hl6nr1dEy3lPvy7Ej7K/Lx3O/FCvwge8PeVJpciPPoNCbaANcNiBug3IpdvTveZUcAV0DJzdnUDMesNQ==}
@@ -4932,6 +4931,7 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
+    dev: true
 
   /semver@7.5.4:
     resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
@@ -4939,7 +4939,6 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
-    dev: true
 
   /set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
@@ -5525,7 +5524,7 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /ts-jest@27.0.7(@babel/core@7.22.17)(@types/jest@27.0.2)(jest@27.3.1)(typescript@4.4.4):
+  /ts-jest@27.0.7(@types/jest@27.0.2)(jest@27.3.1)(typescript@4.4.4):
     resolution: {integrity: sha512-O41shibMqzdafpuP+CkrOL7ykbmLh+FqQrXEmV9CydQ5JBk0Sj0uAEF5TNNe94fZWKm3yYvWa/IbyV4Yg1zK2Q==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -5543,7 +5542,6 @@ packages:
       babel-jest:
         optional: true
     dependencies:
-      '@babel/core': 7.22.17
       '@types/jest': 27.0.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
