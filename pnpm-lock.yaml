@@ -1,7 +1,7 @@
 lockfileVersion: '6.0'
 
 settings:
-  autoInstallPeers: false
+  autoInstallPeers: true
   excludeLinksFromLockfile: false
 
 dependencies:
@@ -129,7 +129,7 @@ devDependencies:
     version: 0.5.10
   ts-jest:
     specifier: 27.0.7
-    version: 27.0.7(@types/jest@27.0.2)(jest@27.3.1)(typescript@4.4.4)
+    version: 27.0.7(@babel/core@7.22.17)(@types/jest@27.0.2)(jest@27.3.1)(typescript@4.4.4)
   typescript:
     specifier: 4.4.4
     version: 4.4.4
@@ -5524,7 +5524,7 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /ts-jest@27.0.7(@types/jest@27.0.2)(jest@27.3.1)(typescript@4.4.4):
+  /ts-jest@27.0.7(@babel/core@7.22.17)(@types/jest@27.0.2)(jest@27.3.1)(typescript@4.4.4):
     resolution: {integrity: sha512-O41shibMqzdafpuP+CkrOL7ykbmLh+FqQrXEmV9CydQ5JBk0Sj0uAEF5TNNe94fZWKm3yYvWa/IbyV4Yg1zK2Q==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -5542,6 +5542,7 @@ packages:
       babel-jest:
         optional: true
     dependencies:
+      '@babel/core': 7.22.17
       '@types/jest': 27.0.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
