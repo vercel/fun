@@ -823,11 +823,9 @@ it(
 it.skip('pkg_support', async () => {
 	const root = require.resolve('pkg').replace(/\/node_modules(.*)$/, '');
 	const pkg = join(root, 'node_modules/.bin/pkg');
-	console.log('hi1');
 	await execa(pkg, ['-t', 'node8', 'test/pkg-invoke.js'], {
 		cwd: root
 	});
-	console.log('hi2');
 	const { stdout } = await execa(join(root, 'pkg-invoke'), {
 		cwd: __dirname,
 		stdio: ['ignore', 'pipe', 'inherit']
