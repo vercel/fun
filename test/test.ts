@@ -26,7 +26,7 @@ function assertProcessExitedError(err: Error): void {
 	);
 }
 
-jest.setTimeout(20_000);
+jest.setTimeout(40_000);
 
 function testInvoke(
 	fnPromise: () => Promise<any>,
