@@ -3,7 +3,6 @@ import { parse } from 'url';
 import { Server } from 'http';
 import createDebug from 'debug';
 import { run, text } from 'micro';
-import { v4 as uuid } from 'uuid';
 import createPathMatch from 'path-match';
 import once from '@tootallnate/once';
 
@@ -44,7 +43,7 @@ export class RuntimeServer extends Server {
 		this.nextDeferred = createDeferred<void>();
 		this.invokeDeferred = null;
 		this.resultDeferred = null;
-		this.currentRequestId = uuid();
+		this.currentRequestId = crypto.randomUUID();
 	}
 
 	async serve(
