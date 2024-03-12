@@ -74,8 +74,6 @@ export default class NativeProvider implements Provider {
 		debug('Creating process %o', bootstrap);
 		const taskDir = resolve(extractedDir || params.Code.Directory);
 		const functionName = params.FunctionName || basename(taskDir);
-		const memorySize =
-			typeof params.MemorySize === 'number' ? params.MemorySize : 128;
 		const logGroupName = `aws/lambda/${functionName}`;
 		const logStreamName = `2019/01/12/[${version}]${uuid().replace(
 			/\-/g,
