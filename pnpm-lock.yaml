@@ -56,9 +56,6 @@ dependencies:
   uid-promise:
     specifier: 1.0.0
     version: 1.0.0
-  uuid:
-    specifier: 3.3.2
-    version: 3.3.2
   xdg-app-paths:
     specifier: 5.1.0
     version: 5.1.0
@@ -91,9 +88,6 @@ devDependencies:
   '@types/tar':
     specifier: 4.0.0
     version: 4.0.0
-  '@types/uuid':
-    specifier: 8.3.1
-    version: 8.3.1
   '@types/yauzl-promise':
     specifier: 2.1.0
     version: 2.1.0
@@ -937,10 +931,6 @@ packages:
     resolution: {integrity: sha512-YybbEHNngcHlIWVCYsoj7Oo1JU9JqONuAlt1LlTH/lmL8BMhbzdFUgReY87a05rY1j8mfK47Del+TCkaLAXwLw==}
     dependencies:
       '@types/node': 10.12.29
-    dev: true
-
-  /@types/uuid@8.3.1:
-    resolution: {integrity: sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==}
     dev: true
 
   /@types/yargs-parser@21.0.0:
@@ -5698,6 +5688,7 @@ packages:
     resolution: {integrity: sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==}
     deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
     hasBin: true
+    dev: true
 
   /v8-to-istanbul@8.1.1:
     resolution: {integrity: sha512-FGtKtv3xIpR6BYhvgH8MI/y78oT7d8Au3ww4QIxymrCtZEh5b8gCw2siywE+puhEmuWKDtmfrvF5UlB298ut3w==}
