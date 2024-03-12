@@ -1,5 +1,5 @@
 import ms from 'ms';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 import createDebug from 'debug';
 import { promisify } from 'util';
 import { AddressInfo } from 'net';
