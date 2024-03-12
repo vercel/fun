@@ -3,6 +3,7 @@ import { parse } from 'url';
 import { Server } from 'http';
 import createDebug from 'debug';
 import { run, text } from 'micro';
+import { randomUUID } from 'crypto';
 import createPathMatch from 'path-match';
 import once from '@tootallnate/once';
 
@@ -43,7 +44,7 @@ export class RuntimeServer extends Server {
 		this.nextDeferred = createDeferred<void>();
 		this.invokeDeferred = null;
 		this.resultDeferred = null;
-		this.currentRequestId = crypto.randomUUID();
+		this.currentRequestId = randomUUID();
 	}
 
 	async serve(
@@ -195,7 +196,7 @@ export class RuntimeServer extends Server {
 		return result;
 	}
 
-	close(callback?: Function): this {
+	close(callback?: (err?: Error) => void): this {
 		const deferred = this.initDeferred || this.resultDeferred;
 		if (deferred) {
 			const statusCode = 200;

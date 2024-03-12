@@ -1,6 +1,7 @@
 import ms from 'ms';
 import createDebug from 'debug';
 import { promisify } from 'util';
+import { randomUUID } from 'crypto';
 import { AddressInfo } from 'net';
 import listen from 'async-listen';
 import _treeKill from 'tree-kill';
@@ -76,9 +77,7 @@ export default class NativeProvider implements Provider {
 		const memorySize =
 			typeof params.MemorySize === 'number' ? params.MemorySize : 128;
 		const logGroupName = `aws/lambda/${functionName}`;
-		const logStreamName = `2019/01/12/[${version}]${crypto
-			.randomUUID()
-			.replace(/\-/g, '')}`;
+		const logStreamName = `2019/01/12/[${version}]${randomUUID().replace(/\-/g, '')}`;
 
 		// https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html
 		const env = {
