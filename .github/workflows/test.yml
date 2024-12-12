@@ -27,9 +27,6 @@ jobs:
       with:
         go-version: '1.16.4'
 
-    - name: Use pnpm
-      run: corepack enable pnpm && pnpm --version
-
     - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v3
       with:
@@ -38,13 +35,16 @@ jobs:
     - name: Print Node.js Version
       run: node --version
 
+    - name: Use pnpm
+      run: corepack enable pnpm && pnpm --version
+
     - name: Install Dependencies
-      run: npm install
+      run: pnpm install
       env:
         CI: true
 
     - name: Run "build" step
-      run: npm run build --if-present
+      run: pnpm build
       env:
         CI: true
 
@@ -54,7 +54,7 @@ jobs:
         CI: true
 
     - name: Run tests
-      run: npm test
+      run: pnpm test
       env:
         CI: true
 

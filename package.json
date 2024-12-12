@@ -15,7 +15,7 @@
     "report-codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint:staged": "lint-staged",
     "prettier": "prettier --write --single-quote './{src,test}/**/*.ts'",
-    "prepublishOnly": "npm run build && rm -rf dist/test"
+    "prepublishOnly": "pnpm run build && rm -rf dist/test"
   },
   "files": [
     "dist/src"
