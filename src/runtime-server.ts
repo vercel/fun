@@ -195,7 +195,7 @@ export class RuntimeServer extends Server {
 		return result;
 	}
 
-	close(callback?: Function): this {
+	close(callback?: (err?: Error) => void): this {
 		const deferred = this.initDeferred || this.resultDeferred;
 		if (deferred) {
 			const statusCode = 200;

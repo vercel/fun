@@ -23,13 +23,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - uses: actions/setup-go@v2
-      with:
-        go-version: '1.13.15'
-
-    - name: Use pnpm
-      run: corepack enable pnpm && pnpm --version
-
     - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v3
       with:
@@ -38,23 +31,21 @@ jobs:
     - name: Print Node.js Version
       run: node --version
 
+    - name: Use pnpm
+      run: corepack enable pnpm && pnpm --version
+
     - name: Install Dependencies
-      run: npm install
+      run: pnpm install
       env:
         CI: true
 
     - name: Run "build" step
-      run: npm run build --if-present
-      env:
-        CI: true
-
-    - name: Compile Go Test Functions
-      run: ./test/go-build.sh
+      run: pnpm build
       env:
         CI: true
 
     - name: Run tests
-      run: npm test
+      run: pnpm test
       env:
         CI: true
 
