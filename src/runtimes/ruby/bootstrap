@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+# Use the system installed ruby
+RUBYBIN="$( command -v ruby || echo '' )"
+if [ -z "$RUBYBIN"  ]; then
+    echo "Please install Ruby"
+    exit 1
+fi
+
+# Execute the "ruby" runtime bootstrap
+exec "$RUBYBIN" "$LAMBDA_RUNTIME_DIR/bootstrap.rb" "$@"
