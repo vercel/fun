@@ -816,38 +816,3 @@ it(
 		}
 	)
 );
-
-// `pkg` compilation support, requires go@1.15 (must not be a higher version)
-// and only supports up to Node.js 10 and requires Python 2.6 or 2.7, so
-// we are skipping this until `pkg` becomes more modernized
-it.skip('pkg_support', async () => {
-	const root = require.resolve('pkg').replace(/\/node_modules(.*)$/, '');
-	const pkg = join(root, 'node_modules/.bin/pkg');
-	await execa(pkg, ['-t', 'node8', 'test/pkg-invoke.js'], {
-		cwd: root
-	});
-	const { stdout } = await execa(join(root, 'pkg-invoke'), {
-		cwd: __dirname,
-		stdio: ['ignore', 'pipe', 'inherit']
-	});
-	expect(JSON.parse(stdout).hello).toBe('world');
-});
-
-// `go1.x` runtime, requires go@1.15, must not be a higher version
-it.skip(
-	'go1x_echo',
-	testInvoke(
-		() =>
-			createFunction({
-				Code: {
-					Directory: __dirname + '/functions/go-echo'
-				},
-				Handler: 'handler',
-				Runtime: 'go1.x'
-			}),
-		async fn => {
-			const payload = await fn({ hello: 'world' });
-			expect(payload).toEqual({ hello: 'world' });
-		}
-	)
-);
