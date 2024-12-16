@@ -2,7 +2,7 @@ import { tmpdir } from 'os';
 import Mode from 'stat-mode';
 import pipe from 'promisepipe';
 import createDebug from 'debug';
-import { dirname, basename, join } from 'path';
+import { dirname, join } from 'path';
 import { createWriteStream, mkdirp, symlink, unlink } from 'fs-extra';
 import streamToPromise from 'stream-to-promise';
 import {
