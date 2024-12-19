@@ -762,6 +762,22 @@ it(
 	)
 );
 
+// `ruby` runtime
+export const test_ruby_hello = testInvoke(
+	() =>
+		createFunction({
+			Code: {
+				Directory: __dirname + '/functions/ruby-hello'
+			},
+			Handler: 'handler.handler',
+			Runtime: 'ruby'
+		}),
+	async fn => {
+		const payload = await fn();
+		assert.equal(payload['body'], 'Hello from ruby');
+	}
+);
+
 // `ZipFile` Buffer support
 it(
 	'lambda_zip_file_buffer',

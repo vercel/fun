@@ -57,6 +57,7 @@ createRuntime(runtimes, 'python2.7', python27);
 createRuntime(runtimes, 'python3', python3);
 createRuntime(runtimes, 'python3.6', python36);
 createRuntime(runtimes, 'python3.7', python37);
+createRuntime(runtimes, 'ruby');
 
 /**
  * Reads the file path `f` as an ascii string.
