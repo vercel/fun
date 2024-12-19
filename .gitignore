@@ -10,5 +10,4 @@ __pycache__
 /test/functions/*/out
 /.nyc_output
 /zeit-fun-*.tgz
-/pkg-invoke
 /util/python/python-binaries

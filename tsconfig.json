@@ -6,6 +6,7 @@
     "outDir": "dist",
     "sourceMap": true,
     "declaration": true,
+    "skipLibCheck": true,
     "lib": ["esnext", "dom"]
   },
   "include": [

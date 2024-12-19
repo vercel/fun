@@ -7,15 +7,13 @@
   "license": "Apache-2.0",
   "repository": "vercel/fun",
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "tsc",
-    "postbuild": "cpy --parents src test '!**/*.ts' dist",
-    "test": "echo \"Node.js version: $(node -v)\\n\" && pnpm build && jest --detectOpenHandles --verbose test/test.js",
+    "build": "rm -rf dist && tsc && cpy --parents src test '!**/*.ts' dist",
+    "test": "echo \"Node.js version: $(node -v)\\n\" && pnpm build && jest --detectOpenHandles --forceExit --runInBand --verbose dist/test/test.js",
     "test-codecov": "nyc pnpm test",
     "report-codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint:staged": "lint-staged",
     "prettier": "prettier --write --single-quote './{src,test}/**/*.ts'",
-    "prepublishOnly": "npm run build && rm -rf dist/test"
+    "prepublishOnly": "pnpm run build && rm -rf dist/test"
   },
   "files": [
     "dist/src"
@@ -38,6 +36,7 @@
     "tar": "4.4.18",
     "tree-kill": "1.2.2",
     "uid-promise": "1.0.0",
+    "uuid": "3.3.2",
     "xdg-app-paths": "5.1.0",
     "yauzl-promise": "2.1.3"
   },
@@ -47,22 +46,21 @@
     "@types/generic-pool": "3.1.9",
     "@types/jest": "27.0.2",
     "@types/micro": "7.3.6",
-    "@types/node": "10.12.29",
+    "@types/node": "16.18.122",
     "@types/node-fetch": "2.5.0",
     "@types/tar": "4.0.0",
+    "@types/uuid": "8.3.1",
     "@types/yauzl-promise": "2.1.0",
     "codecov": "3.7.1",
     "cpy-cli": "2.0.0",
     "jest": "27.3.1",
     "lint-staged": "9.2.5",
     "nyc": "14.1.1",
-    "pkg": "4.3.7",
     "pre-commit": "1.2.2",
     "prettier": "1.15.3",
-    "rimraf": "2.6.3",
     "source-map-support": "0.5.10",
     "ts-jest": "27.0.7",
-    "typescript": "4.4.4"
+    "typescript": "4.9.3"
   },
   "pre-commit": "lint:staged",
   "jest": {
@@ -83,6 +81,6 @@
   },
   "packageManager": "pnpm@8.7.4",
   "engines": {
-    "node": ">= 10"
+    "node": ">= 16"
   }
 }
