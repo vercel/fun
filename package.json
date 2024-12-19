@@ -8,7 +8,7 @@
 	"repository": "vercel/fun",
 	"scripts": {
 		"build": "rm -rf dist && tsc && cpy --parents src test '!**/*.ts' dist",
-		"test": "echo \"Node.js version: $(node -v)\\n\" && pnpm build && echo starting tests && jest --detectOpenHandles --forceExit --runInBand --verbose dist/test/test.js",
+		"test": "echo \"Node.js version: $(node -v)\\n\" && pnpm build && jest --detectOpenHandles --forceExit --runInBand --verbose dist/test/test.js",
 		"test-codecov": "nyc pnpm test",
 		"report-codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
 		"lint:staged": "lint-staged",
