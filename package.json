@@ -47,7 +47,7 @@
     "@types/generic-pool": "3.1.9",
     "@types/jest": "27.0.2",
     "@types/micro": "7.3.6",
-    "@types/node": "10.12.29",
+    "@types/node": "16.18.122",
     "@types/node-fetch": "2.5.0",
     "@types/tar": "4.0.0",
     "@types/yauzl-promise": "2.1.0",
@@ -62,7 +62,7 @@
     "rimraf": "2.6.3",
     "source-map-support": "0.5.10",
     "ts-jest": "27.0.7",
-    "typescript": "4.4.4"
+    "typescript": "4.9.5"
   },
   "pre-commit": "lint:staged",
   "jest": {
@@ -83,6 +83,6 @@
   },
   "packageManager": "pnpm@8.7.4",
   "engines": {
-    "node": ">= 10"
+    "node": ">= 16"
   }
 }
