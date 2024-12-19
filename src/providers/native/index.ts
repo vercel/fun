@@ -1,4 +1,5 @@
 import ms from 'ms';
+import uuid from 'uuid/v4';
 import createDebug from 'debug';
 import { promisify } from 'util';
 import { AddressInfo } from 'net';
@@ -74,9 +75,10 @@ export default class NativeProvider implements Provider {
 		const taskDir = resolve(extractedDir || params.Code.Directory);
 		const functionName = params.FunctionName || basename(taskDir);
 		const logGroupName = `aws/lambda/${functionName}`;
-		const logStreamName = `2019/01/12/[${version}]${crypto
-			.randomUUID()
-			.replace(/\-/g, '')}`;
+		const logStreamName = `2019/01/12/[${version}]${uuid().replace(
+			/\-/g,
+			''
+		)}`;
 
 		// https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html
 		const env = {
