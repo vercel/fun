@@ -1,9 +1,10 @@
-import { tmpdir } from 'os';
+import { tmpdir } from 'node:os';
 import Mode from 'stat-mode';
 import pipe from 'promisepipe';
 import createDebug from 'debug';
-import { dirname, basename, join } from 'path';
-import { createWriteStream, mkdirp, symlink, unlink } from 'fs-extra';
+import { dirname, join } from 'node:path';
+import { createWriteStream } from 'node:fs';
+import { mkdir, symlink, unlink } from 'node:fs/promises';
 import streamToPromise from 'stream-to-promise';
 import {
 	Entry,
@@ -65,12 +66,12 @@ export async function unzip(
 		const destPath = join(dir, fileName);
 		if (/\/$/.test(entry.fileName)) {
 			debug('Creating directory %o', destPath);
-			await mkdirp(destPath);
+			await mkdir(destPath, { recursive: true });
 		} else {
 			const [entryStream] = await Promise.all([
 				entry.openReadStream(),
 				// ensure parent directory exists
-				mkdirp(dirname(destPath))
+				mkdir(dirname(destPath), { recursive: true })
 			]);
 			const mode = getMode(entry);
 			if (mode.isSymbolicLink()) {

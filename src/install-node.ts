@@ -2,9 +2,9 @@ import { extract } from 'tar';
 import pipe from 'promisepipe';
 import fetch from 'node-fetch';
 import createDebug from 'debug';
-import { createGunzip } from 'zlib';
-import { basename, join } from 'path';
-import { createWriteStream } from 'fs-extra';
+import { createGunzip } from 'node:zlib';
+import { basename, join } from 'node:path';
+import { createWriteStream } from 'node:fs';
 import { satisfies } from 'semver';
 import { unzip, zipFromFile } from './unzip';
 

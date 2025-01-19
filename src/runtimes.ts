@@ -1,8 +1,15 @@
-import { join } from 'path';
+import { join } from 'node:path';
 import createDebug from 'debug';
 import XDGAppPaths from 'xdg-app-paths';
-import { createHash, Hash } from 'crypto';
-import { lstat, mkdirp, readdir, remove, readFile, writeFile } from 'fs-extra';
+import { createHash, Hash } from 'node:crypto';
+import {
+	lstat,
+	mkdir,
+	readdir,
+	rm as remove,
+	readFile,
+	writeFile
+} from 'node:fs/promises';
 
 import { Runtime } from './types';
 import * as go1x from './runtimes/go1.x';
@@ -118,7 +125,10 @@ function calculateRuntimeSha(src: string): Promise<string> {
  */
 async function copy(src: string, dest: string): Promise<void> {
 	debug('copy(%o, %o)', src, dest);
-	const [entries] = await Promise.all([readdir(src), mkdirp(dest)]);
+	const [entries] = await Promise.all([
+		readdir(src),
+		mkdir(dest, { recursive: true })
+	]);
 	debug('Entries: %o', entries);
 
 	for (const entry of entries) {
@@ -154,7 +164,7 @@ async function _initializeRuntime(runtime: Runtime): Promise<void> {
 	} else {
 		debug('Initializing %o runtime at %o', runtime.name, cacheDir);
 		try {
-			await mkdirp(cacheDir);
+			await mkdir(cacheDir, { recursive: true });
 
 			// The runtime directory is copied from the module dir to the cache
 			// dir. This is so that when compiled through `pkg`, then the

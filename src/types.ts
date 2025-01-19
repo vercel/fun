@@ -1,5 +1,3 @@
-import { ChildProcess } from 'child_process';
-
 export interface LambdaParams {
 	FunctionName?: string;
 	Code: { ZipFile?: Buffer | string; Directory?: string };

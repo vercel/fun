@@ -1,8 +1,9 @@
-import execa from 'execa';
-import { tmpdir } from 'os';
-import assert from 'assert';
-import { basename, join } from 'path';
-import { mkdirp, remove, readFile, stat } from 'fs-extra';
+import { exec } from 'tinyexec';
+import { tmpdir } from 'node:os';
+import assert from 'node:assert';
+import { basename, join } from 'node:path';
+import { mkdir, readFile } from 'node:fs/promises';
+import { remove, stat } from 'fs-extra';
 import {
 	funCacheDir,
 	initializeRuntime,
@@ -25,8 +26,6 @@ function assertProcessExitedError(err: Error): void {
 		)
 	);
 }
-
-jest.setTimeout(40_000);
 
 function testInvoke(
 	fnPromise: () => Promise<any>,
@@ -89,10 +88,10 @@ it('install_node', async () => {
 			.toString(16)
 			.substring(2)}`
 	);
-	await mkdirp(dest);
+	await mkdir(dest, { recursive: true });
 	try {
 		await installNode(dest, version);
-		const res = await execa(join(dest, 'bin/node'), [
+		const res = await exec(join(dest, 'bin/node'), [
 			'-p',
 			'process.version'
 		]);
@@ -126,10 +125,10 @@ it('install_python', async () => {
 			.toString(16)
 			.substring(2)}`
 	);
-	await mkdirp(dest);
+	await mkdir(dest, { recursive: true });
 	try {
 		await installPython(dest, version);
-		const res = await execa(join(dest, 'bin/python'), [
+		const res = await exec(join(dest, 'bin/python'), [
 			'-c',
 			'import platform; print(platform.python_version())'
 		]);
