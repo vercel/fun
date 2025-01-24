@@ -2,8 +2,7 @@ import { exec } from 'tinyexec';
 import { tmpdir } from 'node:os';
 import assert from 'node:assert';
 import { basename, join } from 'node:path';
-import { mkdir, readFile } from 'node:fs/promises';
-import { remove, stat } from 'fs-extra';
+import { mkdir, readFile, rm as remove, stat } from 'node:fs/promises';
 import {
 	funCacheDir,
 	initializeRuntime,
