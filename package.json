@@ -57,7 +57,7 @@
     "prettier": "1.15.3",
     "source-map-support": "0.5.10",
     "typescript": "4.9.3",
-    "vitest": "^3.0.2"
+    "vitest": "3.0.2"
   },
   "pre-commit": "lint:staged",
   "lint-staged": {
