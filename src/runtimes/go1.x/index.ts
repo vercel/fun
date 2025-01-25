@@ -43,5 +43,5 @@ export async function init({ cacheDir }: Runtime): Promise<void> {
 	await go('build', '-o', bootstrap, 'bootstrap.go');
 
 	// Clean up `$GOPATH` from the cacheDir
-	await remove(GOPATH);
+	await remove(GOPATH, { recursive: true });
 }

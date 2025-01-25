@@ -186,7 +186,7 @@ async function _initializeRuntime(runtime: Runtime): Promise<void> {
 				cacheDir
 			);
 			try {
-				await remove(cacheDir);
+				await remove(cacheDir, { recursive: true });
 			} catch (err2) {
 				debug('Cleaning up cache dir failed: %o', err2);
 			}

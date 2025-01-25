@@ -98,7 +98,7 @@ it('install_node', async () => {
 	} finally {
 		// Clean up
 		try {
-			await remove(dest);
+			await remove(dest, { recursive: true });
 		} catch (err) {
 			// On Windows EPERM can happen due to anti-virus software like Windows Defender.
 			// There's nothing that we can do about it so don't fail the test case when it happens.
