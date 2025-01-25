@@ -10,6 +10,7 @@ export default defineConfig({
 		globals: true,
 		environment: 'node',
 		testTimeout: 40_000,
-		include: ['test/*.ts']
+		include: ['dist/test/test.js'],
+		exclude: ['**/node_modules/**','**/.{idea,git,cache,output,temp}/**']
 	}
 });
