@@ -1,8 +1,8 @@
-import { join } from 'path';
-import execa from 'execa';
+import { join } from 'node:path';
+import { exec } from 'tinyexec';
 import createDebug from 'debug';
 import { Runtime } from '../../types';
-import { readFile, writeFile, mkdirp, remove } from 'fs-extra';
+import { readFile, writeFile, mkdir, rm as remove } from 'node:fs/promises';
 import { getOutputFile } from './filename';
 
 const debug = createDebug('@vercel/fun:runtimes/go1.x');
@@ -10,7 +10,7 @@ const debug = createDebug('@vercel/fun:runtimes/go1.x');
 function _go(opts) {
 	return function go(...args) {
 		debug('Exec %o', `go ${args.join(' ')}`);
-		return execa('go', args, { stdio: 'inherit', ...opts });
+		return exec('go', args, { stdio: 'inherit', ...opts });
 	};
 }
 
@@ -33,7 +33,7 @@ export async function init({ cacheDir }: Runtime): Promise<void> {
 
 	// The source code must reside in `$GOPATH/src` for `go get` to work
 	const bootstrapDir = join(GOPATH, 'src', out);
-	await mkdirp(bootstrapDir);
+	await mkdir(bootstrapDir, { recursive: true });
 	await writeFile(join(bootstrapDir, 'bootstrap.go'), data);
 
 	const go = _go({ cwd: bootstrapDir, env: { ...process.env, GOPATH } });
@@ -43,5 +43,5 @@ export async function init({ cacheDir }: Runtime): Promise<void> {
 	await go('build', '-o', bootstrap, 'bootstrap.go');
 
 	// Clean up `$GOPATH` from the cacheDir
-	await remove(GOPATH);
+	await remove(GOPATH, { recursive: true });
 }

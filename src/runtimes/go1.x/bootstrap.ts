@@ -1,5 +1,5 @@
-import { join } from 'path';
-import { spawn } from 'child_process';
+import { join } from 'node:path';
+import { spawn } from 'node:child_process';
 import { getOutputFile } from './filename';
 
 const out = getOutputFile();

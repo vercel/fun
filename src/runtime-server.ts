@@ -1,6 +1,5 @@
-import http from 'http';
-import { parse } from 'url';
-import { Server } from 'http';
+import http, { Server } from 'node:http';
+import { parse } from 'node:url';
 import createDebug from 'debug';
 import { run, text } from 'micro';
 import { v4 as uuid } from 'uuid';

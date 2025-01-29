@@ -6,7 +6,7 @@ import {
 	Runtime
 } from './types';
 import createDebug from 'debug';
-import { remove } from 'fs-extra';
+import { rm as remove } from 'node:fs/promises';
 import { unzipToTemp } from './unzip';
 import { LambdaError } from './errors';
 import * as providers from './providers';
@@ -146,12 +146,12 @@ export async function destroy(fn: Lambda): Promise<void> {
 			fn.extractedDir,
 			fn.functionName
 		);
-		ops.push(remove(fn.extractedDir));
+		ops.push(remove(fn.extractedDir, { recursive: true }));
 	}
 	await Promise.all(ops);
 }
 
 export async function cleanCacheDir(): Promise<void> {
 	debug('Deleting fun cache directory %o', funCacheDir);
-	await remove(funCacheDir);
+	await remove(funCacheDir, { recursive: true });
 }

@@ -1,7 +1,7 @@
 import { extract } from 'tar';
 import fetch from 'node-fetch';
 import createDebug from 'debug';
-import { createGunzip } from 'zlib';
+import { createGunzip } from 'node:zlib';
 
 const debug = createDebug('@vercel/fun:install-python');
 

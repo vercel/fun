@@ -1,12 +1,12 @@
 import ms from 'ms';
 import uuid from 'uuid/v4';
 import createDebug from 'debug';
-import { promisify } from 'util';
-import { AddressInfo } from 'net';
+import { promisify } from 'node:util';
+import { AddressInfo } from 'node:net';
 import listen from 'async-listen';
 import _treeKill from 'tree-kill';
 import { Pool, createPool } from 'generic-pool';
-import { delimiter, basename, join, resolve } from 'path';
+import { delimiter, basename, join, resolve } from 'node:path';
 import { ChildProcess, spawn } from 'child_process';
 import { RuntimeServer } from '../../runtime-server';
 import {
