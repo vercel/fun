@@ -32,7 +32,7 @@ jobs:
       run: node --version
 
     - name: Use pnpm
-      run: pnpm --version
+      run: npm install -g pnpm@10.1.0 && pnpm --version
 
     - name: Install Dependencies
       run: pnpm install
