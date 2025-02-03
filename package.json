@@ -69,10 +69,5 @@
   "packageManager": "pnpm@10.1.0",
   "engines": {
     "node": ">= 18"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "vite@6.0.11": "patches/vite@6.0.11.patch"
-    }
   }
 }
