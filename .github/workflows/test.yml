@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        node: [16, 18]
+        node: [18, 20, 22]
 
     runs-on: ${{ matrix.os }}
 
@@ -32,7 +32,7 @@ jobs:
       run: node --version
 
     - name: Use pnpm
-      run: corepack enable pnpm && pnpm --version
+      run: npm install -g pnpm@10.1.0 && pnpm --version
 
     - name: Install Dependencies
       run: pnpm install
@@ -50,7 +50,7 @@ jobs:
         CI: true
 
     - name: Maybe Release
-      if: matrix.os == 'ubuntu-latest' && matrix.node == 18 && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      if: matrix.os == 'ubuntu-latest' && matrix.node == 22 && github.event_name == 'push' && github.ref == 'refs/heads/main'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN_ELEVATED }}
