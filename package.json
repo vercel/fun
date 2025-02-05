@@ -49,7 +49,6 @@
     "@types/tar": "4.0.0",
     "@types/uuid": "8.3.1",
     "@types/yauzl-promise": "2.1.0",
-    "@ungap/structured-clone": "1.3.0",
     "codecov": "3.7.1",
     "cpy-cli": "2.0.0",
     "lint-staged": "9.2.5",
@@ -70,10 +69,5 @@
   "packageManager": "pnpm@10.1.0",
   "engines": {
     "node": ">= 18"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "vite@6.0.11": "patches/vite@6.0.11.patch"
-    }
   }
 }
