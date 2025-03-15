@@ -35,7 +35,7 @@
     "tinyexec": "0.3.2",
     "tree-kill": "1.2.2",
     "uid-promise": "1.0.0",
-    "uuid": "3.3.2",
+    "uuid": "11.1.0",
     "xdg-app-paths": "5.1.0",
     "yauzl-promise": "2.1.3"
   },
