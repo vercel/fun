@@ -2,7 +2,7 @@ import http, { Server } from 'node:http';
 import { parse } from 'node:url';
 import createDebug from 'debug';
 import { run, text } from 'micro';
-import { v4 as uuid } from 'uuid';
+import { randomUUID as uuid } from 'node:crypto';
 import createPathMatch from 'path-match';
 import once from '@tootallnate/once';
 
