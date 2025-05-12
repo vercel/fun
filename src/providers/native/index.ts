@@ -1,5 +1,6 @@
 import ms from 'ms';
-import { v4 as uuid } from 'uuid';
+import { randomUUID as uuid } from 'node:crypto';
+
 import createDebug from 'debug';
 import { promisify } from 'node:util';
 import { AddressInfo } from 'node:net';
