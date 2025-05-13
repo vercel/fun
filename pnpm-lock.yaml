@@ -56,9 +56,6 @@ importers:
       uid-promise:
         specifier: 1.0.0
         version: 1.0.0
-      uuid:
-        specifier: 3.3.2
-        version: 3.3.2
       xdg-app-paths:
         specifier: 5.1.0
         version: 5.1.0
@@ -87,9 +84,6 @@ importers:
       '@types/tar':
         specifier: 4.0.0
         version: 4.0.0
-      '@types/uuid':
-        specifier: 8.3.1
-        version: 8.3.1
       '@types/yauzl-promise':
         specifier: 2.1.0
         version: 2.1.0
@@ -183,7 +177,6 @@ packages:
   '@esbuild/darwin-arm64@0.24.2':
     resolution: {integrity: sha512-kj3AnYWc+CekmZnS5IPu9D+HWtUI49hbnyqk0FLEJDbzCIQt7hg7ucF1SQAilhtYpIujfaHr6O0UHlzzSPdOeA==}
     engines: {node: '>=18'}
-    cpu: [arm64]
     os: [darwin]
 
   '@esbuild/darwin-x64@0.24.2':
@@ -501,9 +494,6 @@ packages:
 
   '@types/tar@4.0.0':
     resolution: {integrity: sha512-YybbEHNngcHlIWVCYsoj7Oo1JU9JqONuAlt1LlTH/lmL8BMhbzdFUgReY87a05rY1j8mfK47Del+TCkaLAXwLw==}
-
-  '@types/uuid@8.3.1':
-    resolution: {integrity: sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==}
 
   '@types/yauzl-promise@2.1.0':
     resolution: {integrity: sha512-7PkQ5UtElDsanzjdUQzXnstCqxx6KAOTMURuHwOuqC6YO2WaYQ6ItLnLy3TiEVNQMO/pD+QSOcfnAkeSX4hsTA==}
@@ -2667,8 +2657,6 @@ snapshots:
   '@types/tar@4.0.0':
     dependencies:
       '@types/node': 18.19.74
-
-  '@types/uuid@8.3.1': {}
 
   '@types/yauzl-promise@2.1.0':
     dependencies:
