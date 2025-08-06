@@ -9,7 +9,12 @@ import once from '@tootallnate/once';
 import { createDeferred, Deferred } from './deferred';
 import { Lambda, InvokeParams, InvokeResult } from './types';
 
-const matchFn = match('/:version/runtime/:subject/:target{/:action}');
+const matchFn = match<{
+	version: string;
+	subject: string;
+	target: string;
+	action?: string;
+}>('/:version/runtime/:subject/:target{/:action}');
 const debug = createDebug('@vercel/fun:runtime-server');
 
 function send404(res: http.ServerResponse) {
@@ -56,12 +61,7 @@ export class RuntimeServer extends Server {
 			return send404(res);
 		}
 
-		const { version, subject, target, action } = result.params as {
-			version: string;
-			subject: string;
-			target: string;
-			action?: string;
-		};
+		const { version, subject, target, action } = result.params;
 		if (this.version !== version) {
 			debug(
 				'Invalid API version, expected %o but got %o',
