@@ -85,6 +85,7 @@ implemented are:
  * `python3.7` for Python Lambda functions using a downloaded Python v3.7.2 binary
  * `go1.x` for Lambda functions written in Go - binary must be compiled for your platform
  * `provided` for [custom runtimes][]
+ * `executable` for executables that are powered by Fluid compute
 
 [cgroup freezer]: https://www.kernel.org/doc/Documentation/cgroup-v1/freezer-subsystem.txt
 [custom runtimes]: https://docs.aws.amazon.com/lambda/latest/dg/runtimes-custom.html
