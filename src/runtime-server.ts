@@ -3,14 +3,18 @@ import { parse } from 'node:url';
 import createDebug from 'debug';
 import { run, text } from 'micro';
 import { randomUUID as uuid } from 'node:crypto';
-import createPathMatch from 'path-match';
+import { match } from 'path-to-regexp';
 import once from '@tootallnate/once';
 
 import { createDeferred, Deferred } from './deferred';
 import { Lambda, InvokeParams, InvokeResult } from './types';
 
-const pathMatch = createPathMatch();
-const match = pathMatch('/:version/runtime/:subject/:target/:action?');
+const matchFn = match<{
+	version: string;
+	subject: string;
+	target: string;
+	action?: string;
+}>('/:version/runtime/:subject/:target{/:action}');
 const debug = createDebug('@vercel/fun:runtime-server');
 
 function send404(res: http.ServerResponse) {
@@ -52,12 +56,12 @@ export class RuntimeServer extends Server {
 	): Promise<any> {
 		debug('%s %s', req.method, req.url);
 
-		const params = match(parse(req.url).pathname);
-		if (!params) {
+		const result = matchFn(parse(req.url).pathname);
+		if (!result) {
 			return send404(res);
 		}
 
-		const { version, subject, target, action } = params;
+		const { version, subject, target, action } = result.params;
 		if (this.version !== version) {
 			debug(
 				'Invalid API version, expected %o but got %o',
