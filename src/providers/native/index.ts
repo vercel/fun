@@ -63,9 +63,11 @@ export default class NativeProvider implements Provider {
 	async createProcess(): Promise<ChildProcess> {
 		const { runtime, params, region, version, extractedDir } = this.lambda;
 		const binDir = join(runtime.cacheDir, 'bin');
+		const bootstrapFile =
+			runtime.name === 'executable' ? 'executable' : 'bootstrap';
 		const bootstrap = join(
 			runtime.cacheDir,
-			isWin ? 'bootstrap.js' : 'bootstrap'
+			isWin ? 'bootstrap.js' : bootstrapFile
 		);
 
 		const server = new RuntimeServer(this.lambda);

@@ -51,6 +51,7 @@ function createRuntime(
 	runtimes[name] = runtime;
 }
 
+createRuntime(runtimes, 'executable');
 createRuntime(runtimes, 'provided');
 createRuntime(runtimes, 'go1.x', go1x);
 createRuntime(runtimes, 'nodejs');
