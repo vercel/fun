@@ -31,7 +31,7 @@
     "semver": "7.5.4",
     "stat-mode": "0.3.0",
     "stream-to-promise": "2.2.0",
-    "tar": "7.5.7",
+    "tar": "^7.5.9",
     "tinyexec": "0.3.2",
     "tree-kill": "1.2.2",
     "uid-promise": "1.0.0",
