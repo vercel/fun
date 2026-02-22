@@ -4,8 +4,8 @@ import createDebug from 'debug';
 import { dirname, join } from 'node:path';
 import { createWriteStream } from 'node:fs';
 import { mkdir, symlink, unlink } from 'node:fs/promises';
-import streamToPromise from 'stream-to-promise';
 import { pipeline } from 'node:stream/promises';
+import { text } from 'node:stream/consumers';
 import {
 	Entry,
 	ZipFile,
@@ -75,7 +75,7 @@ export async function unzip(
 			]);
 			const mode = getMode(entry);
 			if (mode.isSymbolicLink()) {
-				const linkDest = String(await streamToPromise(entryStream));
+				const linkDest = await text(entryStream);
 				debug('Creating symboling link %o to %o', destPath, linkDest);
 				await symlink(linkDest, destPath);
 			} else {
