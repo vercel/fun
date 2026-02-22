@@ -1,8 +1,8 @@
 import { unpackTar } from 'modern-tar/fs';
-import pipe from 'promisepipe';
 import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'node:zlib';
+import { pipeline } from 'node:stream/promises';
 import { basename, join } from 'node:path';
 import { createWriteStream } from 'node:fs';
 import { satisfies } from 'semver';
@@ -58,20 +58,13 @@ export async function installNode(
 		const zipPath = join(dest, zipName);
 
 		debug('Saving Node.js %s zip file to %o', version, zipPath);
-		await pipe(
-			res.body,
-			createWriteStream(zipPath)
-		);
+		await pipeline(res.body, createWriteStream(zipPath));
 
 		debug('Extracting Node.js %s zip file to %o', version, finalDest);
 		const zipFile = await zipFromFile(zipPath);
 		await unzip(zipFile, finalDest, { strip: 1 });
 	} else {
 		debug('Extracting Node.js %s tarball to %o', version, dest);
-		await pipe(
-			res.body,
-			createGunzip(),
-			unpackTar(dest, { strip: 1 })
-		);
+		await pipeline(res.body, createGunzip(), unpackTar(dest, { strip: 1 }));
 	}
 }

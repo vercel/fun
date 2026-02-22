@@ -1,11 +1,11 @@
 import { tmpdir } from 'node:os';
 import Mode from 'stat-mode';
-import pipe from 'promisepipe';
 import createDebug from 'debug';
 import { dirname, join } from 'node:path';
 import { createWriteStream } from 'node:fs';
 import { mkdir, symlink, unlink } from 'node:fs/promises';
 import streamToPromise from 'stream-to-promise';
+import { pipeline } from 'node:stream/promises';
 import {
 	Entry,
 	ZipFile,
@@ -101,10 +101,7 @@ export async function unzip(
 				const destStream = createWriteStream(destPath, {
 					mode: modeVal
 				});
-				await pipe(
-					entryStream,
-					destStream
-				);
+				await pipeline(entryStream, destStream);
 			}
 		}
 	}

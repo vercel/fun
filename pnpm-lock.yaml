@@ -35,9 +35,6 @@ importers:
       path-to-regexp:
         specifier: 8.2.0
         version: 8.2.0
-      promisepipe:
-        specifier: 3.0.0
-        version: 3.0.0
       semver:
         specifier: 7.5.4
         version: 7.5.4
@@ -3944,8 +3941,6 @@ snapshots:
   prettier@1.15.3: {}
 
   process-nextick-args@2.0.1: {}
-
-  promisepipe@3.0.0: {}
 
   pseudomap@1.0.2: {}
 
