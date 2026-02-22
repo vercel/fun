@@ -1,4 +1,4 @@
-import { extract } from 'tar';
+import { unpackTar } from 'modern-tar/fs';
 import pipe from 'promisepipe';
 import fetch from 'node-fetch';
 import createDebug from 'debug';
@@ -71,7 +71,7 @@ export async function installNode(
 		await pipe(
 			res.body,
 			createGunzip(),
-			extract({ strip: 1, C: dest })
+			unpackTar(dest, { strip: 1 })
 		);
 	}
 }

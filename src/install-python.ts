@@ -1,4 +1,4 @@
-import { extract } from 'tar';
+import { unpackTar } from 'modern-tar/fs';
 import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'node:zlib';
@@ -34,8 +34,8 @@ export async function installPython(
 		debug('Extracting Python %s tarball to %o', version, dest);
 		res.body
 			.pipe(createGunzip())
-			.pipe(extract({ strip: 1, C: dest }))
+			.pipe(unpackTar(dest, { strip: 1 }))
 			.on('error', reject)
-			.on('end', resolve);
+			.on('close', resolve);
 	});
 }
