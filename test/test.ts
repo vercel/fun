@@ -466,25 +466,6 @@ it(
 	)
 );
 
-// `nodejs6.10` runtime
-it(
-	'nodejs610_version',
-	testInvoke(
-		() =>
-			createFunction({
-				Code: {
-					Directory: __dirname + '/functions/nodejs-version'
-				},
-				Handler: 'handler.handler',
-				Runtime: 'nodejs6.10'
-			}),
-		async fn => {
-			const versions = await fn({ hello: 'world' });
-			assert.equal(versions.node, '6.10.0');
-		}
-	)
-);
-
 // `nodejs8.10` runtime
 it(
 	'nodejs810_version',
