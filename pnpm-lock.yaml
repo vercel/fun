@@ -76,8 +76,8 @@ importers:
         specifier: 7.3.6
         version: 7.3.6
       '@types/node':
-        specifier: 18.19.74
-        version: 18.19.74
+        specifier: 20.19.33
+        version: 20.19.33
       '@types/node-fetch':
         specifier: 2.5.0
         version: 2.5.0
@@ -109,11 +109,11 @@ importers:
         specifier: 0.5.10
         version: 0.5.10
       typescript:
-        specifier: 4.9.3
-        version: 4.9.3
+        specifier: 5.9.3
+        version: 5.9.3
       vitest:
         specifier: 3.0.5
-        version: 3.0.5(@types/debug@4.1.9)(@types/node@18.19.74)
+        version: 3.0.5(@types/debug@4.1.9)(@types/node@20.19.33)
 
 packages:
 
@@ -486,8 +486,8 @@ packages:
   '@types/node-fetch@2.5.0':
     resolution: {integrity: sha512-TLFRywthBgL68auWj+ziWu+vnmmcHCDFC/sqCOQf1xTz4hRq8cu79z8CtHU9lncExGBsB8fXA4TiLDLt6xvMzw==}
 
-  '@types/node@18.19.74':
-    resolution: {integrity: sha512-HMwEkkifei3L605gFdV+/UwtpxP6JSzM+xFk2Ia6DNFSwSVBRh9qp5Tgf4lNFOMfPVuU0WnkcWpXZpgn5ufO4A==}
+  '@types/node@20.19.33':
+    resolution: {integrity: sha512-Rs1bVAIdBs5gbTIKza/tgpMuG1k3U/UMJLWecIMxNdJFDMzcM5LOiLVRYh3PilWEYDIeUDv7bpiHPLPsbydGcw==}
 
   '@types/socket.io-parser@3.0.0':
     resolution: {integrity: sha512-Ry/rbTE6HQNL9eu3LpL1Ocup5VexXu1bSSGlSho/IR5LuRc8YvxwSNJ3JxqTltVJEATLbZkMQETSbxfKNgp4Ew==}
@@ -2157,16 +2157,16 @@ packages:
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  typescript@4.9.3:
-    resolution: {integrity: sha512-CIfGzTelbKNEnLpLdGFgdyKhG23CKdKgQPOBc+OUNrkJ2vr+KSzsSV5kq5iWhEQbok+quxgGzrAtGWCyU7tHnA==}
-    engines: {node: '>=4.2.0'}
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
     hasBin: true
 
   uid-promise@1.0.0:
     resolution: {integrity: sha512-R8375j0qwXyIu/7R0tjdF06/sElHqbmdmWC9M2qQHpEVbvE4I5+38KJI7LUUmQMp7NVq4tKHiBMkT0NFM453Ig==}
 
-  undici-types@5.26.5:
-    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
   union-value@1.0.1:
     resolution: {integrity: sha512-tJfXmxMeWYnczCVs7XAEvIV7ieppALdyepWMkHkwciRpZraG/xwT+s2JN8+pr1+8jCRf80FFzvr+MpQeeoF4Xg==}
@@ -2593,7 +2593,7 @@ snapshots:
 
   '@types/engine.io@3.1.10':
     dependencies:
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
 
   '@types/estree@1.0.6': {}
 
@@ -2601,16 +2601,16 @@ snapshots:
 
   '@types/generic-pool@3.1.9':
     dependencies:
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
 
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
 
   '@types/micro@7.3.6':
     dependencies:
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
       '@types/socket.io': 2.1.13
     transitivePeerDependencies:
       - supports-color
@@ -2621,11 +2621,11 @@ snapshots:
 
   '@types/node-fetch@2.5.0':
     dependencies:
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
 
-  '@types/node@18.19.74':
+  '@types/node@20.19.33':
     dependencies:
-      undici-types: 5.26.5
+      undici-types: 6.21.0
 
   '@types/socket.io-parser@3.0.0':
     dependencies:
@@ -2636,24 +2636,24 @@ snapshots:
   '@types/socket.io@2.1.13':
     dependencies:
       '@types/engine.io': 3.1.10
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
       '@types/socket.io-parser': 3.0.0
     transitivePeerDependencies:
       - supports-color
 
   '@types/tar@4.0.0':
     dependencies:
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
 
   '@types/yauzl-promise@2.1.0':
     dependencies:
       '@types/events': 3.0.3
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
       '@types/yauzl': 2.10.3
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
 
   '@vitest/expect@3.0.5':
     dependencies:
@@ -2662,13 +2662,13 @@ snapshots:
       chai: 5.1.2
       tinyrainbow: 2.0.0
 
-  '@vitest/mocker@3.0.5(vite@6.1.0(@types/node@18.19.74))':
+  '@vitest/mocker@3.0.5(vite@6.1.0(@types/node@20.19.33))':
     dependencies:
       '@vitest/spy': 3.0.5
       estree-walker: 3.0.3
       magic-string: 0.30.17
     optionalDependencies:
-      vite: 6.1.0(@types/node@18.19.74)
+      vite: 6.1.0(@types/node@20.19.33)
 
   '@vitest/pretty-format@3.0.5':
     dependencies:
@@ -4412,11 +4412,11 @@ snapshots:
 
   typedarray@0.0.6: {}
 
-  typescript@4.9.3: {}
+  typescript@5.9.3: {}
 
   uid-promise@1.0.0: {}
 
-  undici-types@5.26.5: {}
+  undici-types@6.21.0: {}
 
   union-value@1.0.1:
     dependencies:
@@ -4447,13 +4447,13 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  vite-node@3.0.5(@types/node@18.19.74):
+  vite-node@3.0.5(@types/node@20.19.33):
     dependencies:
       cac: 6.7.14
       debug: 4.4.0
       es-module-lexer: 1.6.0
       pathe: 2.0.2
-      vite: 6.1.0(@types/node@18.19.74)
+      vite: 6.1.0(@types/node@20.19.33)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -4468,19 +4468,19 @@ snapshots:
       - tsx
       - yaml
 
-  vite@6.1.0(@types/node@18.19.74):
+  vite@6.1.0(@types/node@20.19.33):
     dependencies:
       esbuild: 0.24.2
       postcss: 8.5.1
       rollup: 4.34.3
     optionalDependencies:
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
       fsevents: 2.3.3
 
-  vitest@3.0.5(@types/debug@4.1.9)(@types/node@18.19.74):
+  vitest@3.0.5(@types/debug@4.1.9)(@types/node@20.19.33):
     dependencies:
       '@vitest/expect': 3.0.5
-      '@vitest/mocker': 3.0.5(vite@6.1.0(@types/node@18.19.74))
+      '@vitest/mocker': 3.0.5(vite@6.1.0(@types/node@20.19.33))
       '@vitest/pretty-format': 3.0.5
       '@vitest/runner': 3.0.5
       '@vitest/snapshot': 3.0.5
@@ -4496,12 +4496,12 @@ snapshots:
       tinyexec: 0.3.2
       tinypool: 1.0.2
       tinyrainbow: 2.0.0
-      vite: 6.1.0(@types/node@18.19.74)
-      vite-node: 3.0.5(@types/node@18.19.74)
+      vite: 6.1.0(@types/node@20.19.33)
+      vite-node: 3.0.5(@types/node@20.19.33)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/debug': 4.1.9
-      '@types/node': 18.19.74
+      '@types/node': 20.19.33
     transitivePeerDependencies:
       - jiti
       - less

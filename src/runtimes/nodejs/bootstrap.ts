@@ -29,7 +29,7 @@ interface HttpResult {
 type HandlerFunction = (
 	event: LambdaEvent,
 	context?: LambdaContext
-) => Promise<object | void>;
+) => Promise<unknown>;
 
 const RUNTIME_PATH = '/2018-06-01/runtime';
 
