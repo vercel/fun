@@ -2,6 +2,7 @@ import { extract } from 'tar';
 import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'node:zlib';
+import { pipeline } from 'node:stream/promises';
 
 const debug = createDebug('@vercel/fun:install-python');
 
@@ -30,12 +31,6 @@ export async function installPython(
 	if (!res.ok) {
 		throw new Error(`HTTP request ${tarballUrl} failed: ${res.status}`);
 	}
-	return new Promise((resolve, reject) => {
-		debug('Extracting Python %s tarball to %o', version, dest);
-		res.body
-			.pipe(createGunzip())
-			.pipe(extract({ strip: 1, C: dest }))
-			.on('error', reject)
-			.on('end', resolve);
-	});
+	debug('Extracting Python %s tarball to %o', version, dest);
+	await pipeline(res.body, createGunzip(), extract({ strip: 1, C: dest }));
 }
