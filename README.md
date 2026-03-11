@@ -1,5 +1,6 @@
 # ƒun
-[![Build Status](https://github.com/vercel/fun/workflows/Node%20CI/badge.svg)](https://github.com/vercel/fun/actions?workflow=Node+CI)
+[![CI](https://github.com/vercel/fun/actions/workflows/test.yml/badge.svg)](https://github.com/vercel/fun/actions/workflows/test.yml)
+
 
 Local serverless function λ development runtime.
 
