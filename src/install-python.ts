@@ -3,6 +3,8 @@ import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'node:zlib';
 import { pipeline } from 'node:stream/promises';
+import { join } from 'node:path';
+import { lstat, symlink } from 'node:fs/promises';
 
 const debug = createDebug('@vercel/fun:install-python');
 
@@ -33,4 +35,16 @@ export async function installPython(
 	}
 	debug('Extracting Python %s tarball to %o', version, dest);
 	await pipeline(res.body, createGunzip(), extract({ strip: 1, C: dest }));
+
+	// tar@7.5.9+ drops symlinks whose target is itself a symlink.
+	// The Python tarballs have bin/python -> python3 -> python3.6,
+	// so bin/python gets silently skipped. Recreate it if missing.
+	const pythonBin = join(dest, 'bin', 'python');
+	try {
+		await lstat(pythonBin);
+	} catch {
+		const target = version.startsWith('2.') ? 'python2.7' : 'python3';
+		debug('Recreating missing symlink %o -> %o', pythonBin, target);
+		await symlink(target, pythonBin);
+	}
 }
