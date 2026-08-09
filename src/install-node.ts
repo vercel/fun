@@ -1,6 +1,6 @@
-import { extract } from 'tar';
 import fetch from 'node-fetch';
 import createDebug from 'debug';
+import { unpackTar } from 'modern-tar/fs';
 import { createGunzip } from 'node:zlib';
 import { pipeline } from 'node:stream/promises';
 import { basename, join } from 'node:path';
@@ -65,6 +65,6 @@ export async function installNode(
 		await unzip(zipFile, finalDest, { strip: 1 });
 	} else {
 		debug('Extracting Node.js %s tarball to %o', version, dest);
-		await pipeline(res.body, createGunzip(), extract({ strip: 1, C: dest }));
+		await pipeline(res.body, createGunzip(), unpackTar(dest, { strip: 1 }));
 	}
 }
