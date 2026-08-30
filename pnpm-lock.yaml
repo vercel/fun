@@ -47,9 +47,6 @@ importers:
       tree-kill:
         specifier: 1.2.2
         version: 1.2.2
-      uid-promise:
-        specifier: 1.0.0
-        version: 1.0.0
       xdg-app-paths:
         specifier: 5.1.0
         version: 5.1.0
@@ -57,27 +54,18 @@ importers:
         specifier: 2.1.3
         version: 2.1.3
     devDependencies:
-      '@esbuild/darwin-arm64':
-        specifier: 0.24.2
-        version: 0.24.2
       '@types/debug':
         specifier: 4.1.9
         version: 4.1.9
       '@types/generic-pool':
         specifier: 3.1.9
         version: 3.1.9
-      '@types/micro':
-        specifier: 7.3.6
-        version: 7.3.6
       '@types/node':
         specifier: 20.19.33
         version: 20.19.33
       '@types/node-fetch':
         specifier: 2.5.0
         version: 2.5.0
-      '@types/tar':
-        specifier: 4.0.0
-        version: 4.0.0
       '@types/yauzl-promise':
         specifier: 2.1.0
         version: 2.1.0
@@ -171,6 +159,7 @@ packages:
   '@esbuild/darwin-arm64@0.24.2':
     resolution: {integrity: sha512-kj3AnYWc+CekmZnS5IPu9D+HWtUI49hbnyqk0FLEJDbzCIQt7hg7ucF1SQAilhtYpIujfaHr6O0UHlzzSPdOeA==}
     engines: {node: '>=18'}
+    cpu: [arm64]
     os: [darwin]
 
   '@esbuild/darwin-x64@0.24.2':
@@ -453,9 +442,6 @@ packages:
   '@types/debug@4.1.9':
     resolution: {integrity: sha512-8Hz50m2eoS56ldRlepxSBa6PWEVCtzUo/92HgLc2qTMnotJNIm7xP+UZhyWoYsyOdd5dxZ+NZLb24rsKyFs2ow==}
 
-  '@types/engine.io@3.1.10':
-    resolution: {integrity: sha512-tmuKBF+q3h0nZ075osSKJ55nmvL5lWDjU8+QS/8XZT1YQ4xrxNSW3wXbjeMs8RugGxVpHAEnf9kXiRf7G94acw==}
-
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
@@ -468,9 +454,6 @@ packages:
   '@types/glob@7.2.0':
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
 
-  '@types/micro@7.3.6':
-    resolution: {integrity: sha512-rZHvZ3+Ev3cGJJSy/wtSiXZmafU8guI07PHXf4ku9sQLfDuFALHMCiV+LuH4VOaeMMMnRs8nqxU392gxfn661g==}
-
   '@types/minimatch@5.1.2':
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
 
@@ -482,16 +465,6 @@ packages:
 
   '@types/node@20.19.33':
     resolution: {integrity: sha512-Rs1bVAIdBs5gbTIKza/tgpMuG1k3U/UMJLWecIMxNdJFDMzcM5LOiLVRYh3PilWEYDIeUDv7bpiHPLPsbydGcw==}
-
-  '@types/socket.io-parser@3.0.0':
-    resolution: {integrity: sha512-Ry/rbTE6HQNL9eu3LpL1Ocup5VexXu1bSSGlSho/IR5LuRc8YvxwSNJ3JxqTltVJEATLbZkMQETSbxfKNgp4Ew==}
-    deprecated: This is a stub types definition. socket.io-parser provides its own type definitions, so you do not need this installed.
-
-  '@types/socket.io@2.1.13':
-    resolution: {integrity: sha512-JRgH3nCgsWel4OPANkhH8TelpXvacAJ9VeryjuqCDiaVDMpLysd6sbt0dr6Z15pqH3p2YpOT3T1C5vQ+O/7uyg==}
-
-  '@types/tar@4.0.0':
-    resolution: {integrity: sha512-YybbEHNngcHlIWVCYsoj7Oo1JU9JqONuAlt1LlTH/lmL8BMhbzdFUgReY87a05rY1j8mfK47Del+TCkaLAXwLw==}
 
   '@types/yauzl-promise@2.1.0':
     resolution: {integrity: sha512-7PkQ5UtElDsanzjdUQzXnstCqxx6KAOTMURuHwOuqC6YO2WaYQ6ItLnLy3TiEVNQMO/pD+QSOcfnAkeSX4hsTA==}
@@ -837,14 +810,6 @@ packages:
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-
-  debug@3.1.0:
-    resolution: {integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==}
     peerDependencies:
       supports-color: '*'
     peerDependenciesMeta:
@@ -1294,9 +1259,6 @@ packages:
 
   isarray@1.0.0:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
-
-  isarray@2.0.1:
-    resolution: {integrity: sha512-c2cu3UxbI+b6kR3fy0nRnAhodsvR9dx7U5+znCOzdj6IfP3upFURTr0Xl5BlQZNKZjEtxrmVyfSdeE3O57smoQ==}
 
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
@@ -1925,9 +1887,6 @@ packages:
     resolution: {integrity: sha512-FtyOnWN/wCHTVXOMwvSv26d+ko5vWlIDD6zoUJ7LW8vh+ZBC8QdljveRP+crNrtBwioEUWy/4dMtbBjA4ioNlg==}
     engines: {node: '>=0.10.0'}
 
-  socket.io-parser@3.3.4:
-    resolution: {integrity: sha512-z/pFQB3x+EZldRRzORYW1vwVO8m/3ILkswtnpoeU6Ve3cbMWkmHEWDAVJn4QJtchiiFTo5j7UG2QvwxvaA9vow==}
-
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -2136,9 +2095,6 @@ packages:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
-
-  uid-promise@1.0.0:
-    resolution: {integrity: sha512-R8375j0qwXyIu/7R0tjdF06/sElHqbmdmWC9M2qQHpEVbvE4I5+38KJI7LUUmQMp7NVq4tKHiBMkT0NFM453Ig==}
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
@@ -2391,7 +2347,8 @@ snapshots:
   '@esbuild/android-x64@0.24.2':
     optional: true
 
-  '@esbuild/darwin-arm64@0.24.2': {}
+  '@esbuild/darwin-arm64@0.24.2':
+    optional: true
 
   '@esbuild/darwin-x64@0.24.2':
     optional: true
@@ -2566,10 +2523,6 @@ snapshots:
     dependencies:
       '@types/ms': 2.1.0
 
-  '@types/engine.io@3.1.10':
-    dependencies:
-      '@types/node': 20.19.33
-
   '@types/estree@1.0.6': {}
 
   '@types/events@3.0.3': {}
@@ -2583,13 +2536,6 @@ snapshots:
       '@types/minimatch': 5.1.2
       '@types/node': 20.19.33
 
-  '@types/micro@7.3.6':
-    dependencies:
-      '@types/node': 20.19.33
-      '@types/socket.io': 2.1.13
-    transitivePeerDependencies:
-      - supports-color
-
   '@types/minimatch@5.1.2': {}
 
   '@types/ms@2.1.0': {}
@@ -2601,24 +2547,6 @@ snapshots:
   '@types/node@20.19.33':
     dependencies:
       undici-types: 6.21.0
-
-  '@types/socket.io-parser@3.0.0':
-    dependencies:
-      socket.io-parser: 3.3.4
-    transitivePeerDependencies:
-      - supports-color
-
-  '@types/socket.io@2.1.13':
-    dependencies:
-      '@types/engine.io': 3.1.10
-      '@types/node': 20.19.33
-      '@types/socket.io-parser': 3.0.0
-    transitivePeerDependencies:
-      - supports-color
-
-  '@types/tar@4.0.0':
-    dependencies:
-      '@types/node': 20.19.33
 
   '@types/yauzl-promise@2.1.0':
     dependencies:
@@ -2980,10 +2908,6 @@ snapshots:
   date-fns@1.30.1: {}
 
   debug@2.6.9:
-    dependencies:
-      ms: 2.0.0
-
-  debug@3.1.0:
     dependencies:
       ms: 2.0.0
 
@@ -3460,8 +3384,6 @@ snapshots:
   is-windows@1.0.2: {}
 
   isarray@1.0.0: {}
-
-  isarray@2.0.1: {}
 
   isexe@2.0.0: {}
 
@@ -4154,14 +4076,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  socket.io-parser@3.3.4:
-    dependencies:
-      component-emitter: 1.3.1
-      debug: 3.1.0
-      isarray: 2.0.1
-    transitivePeerDependencies:
-      - supports-color
-
   source-map-js@1.2.1: {}
 
   source-map-resolve@0.5.3:
@@ -4366,8 +4280,6 @@ snapshots:
   typedarray@0.0.6: {}
 
   typescript@5.9.3: {}
-
-  uid-promise@1.0.0: {}
 
   undici-types@6.21.0: {}
 
