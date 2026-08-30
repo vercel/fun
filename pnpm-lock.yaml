@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@tootallnate/once':
-        specifier: 2.0.1
-        version: 2.0.1
       async-listen:
         specifier: 1.2.0
         version: 1.2.0
@@ -393,10 +390,6 @@ packages:
   '@tootallnate/once@1.1.2':
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
     engines: {node: '>= 6'}
-
-  '@tootallnate/once@2.0.1':
-    resolution: {integrity: sha512-HqmEUIGRJ5fSXchkVgR5F7qn48bDBzv0kWj/Kfu5e6uci4UlEeng4331LnBkWffb++Ei3FOVLxo8JJWMFBDMeQ==}
-    engines: {node: '>= 10'}
 
   '@types/debug@4.1.9':
     resolution: {integrity: sha512-8Hz50m2eoS56ldRlepxSBa6PWEVCtzUo/92HgLc2qTMnotJNIm7xP+UZhyWoYsyOdd5dxZ+NZLb24rsKyFs2ow==}
@@ -1578,8 +1571,6 @@ snapshots:
     optional: true
 
   '@tootallnate/once@1.1.2': {}
-
-  '@tootallnate/once@2.0.1': {}
 
   '@types/debug@4.1.9':
     dependencies:

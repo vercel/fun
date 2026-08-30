@@ -19,7 +19,6 @@
     "dist/src"
   ],
   "dependencies": {
-    "@tootallnate/once": "2.0.1",
     "async-listen": "1.2.0",
     "debug": "4.3.4",
     "generic-pool": "3.4.2",
