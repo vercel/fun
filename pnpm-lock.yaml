@@ -29,9 +29,6 @@ importers:
       semver:
         specifier: 7.5.4
         version: 7.5.4
-      stat-mode:
-        specifier: 0.3.0
-        version: 0.3.0
       tar:
         specifier: 7.5.22
         version: 7.5.22
@@ -1105,9 +1102,6 @@ packages:
 
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
-
-  stat-mode@0.3.0:
-    resolution: {integrity: sha512-QjMLR0A3WwFY2aZdV0okfFEJB5TRjkggXZjxP3A1RsWsNHNu3YPv8btmtc6iCFZ0Rul3FE93OYogvhOUClU+ng==}
 
   statuses@1.5.0:
     resolution: {integrity: sha512-OpZ3zP+jT1PI7I8nemJX4AKmAX070ZkYPVWV/AaKTJl+tXCTGyVdC1a4SL8RUQYEwk/f34ZX8UTykN68FwrqAA==}
@@ -2338,8 +2332,6 @@ snapshots:
   sprintf-js@1.0.3: {}
 
   stackback@0.0.2: {}
-
-  stat-mode@0.3.0: {}
 
   statuses@1.5.0: {}
 
