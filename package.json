@@ -7,7 +7,7 @@
   "license": "Apache-2.0",
   "repository": "vercel/fun",
   "scripts": {
-    "build": "rm -rf dist && tsc && cpy --parents src test '!**/*.ts' dist",
+    "build": "rm -rf dist && tsc && rsync -a --exclude='*.ts' src test dist/",
     "test": "echo \"Node.js version: $(node -v)\\n\" && pnpm build && vitest run",
     "test-codecov": "nyc pnpm test",
     "report-codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
@@ -46,8 +46,7 @@
     "@types/tar": "4.0.0",
     "@types/yauzl-promise": "2.1.0",
     "codecov": "3.7.1",
-    "cpy-cli": "2.0.0",
-    "lint-staged": "9.2.5",
+    "lint-staged": "17.4.1",
     "nyc": "14.1.1",
     "pre-commit": "1.2.2",
     "prettier": "1.15.3",
