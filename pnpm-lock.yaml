@@ -97,8 +97,8 @@ importers:
         specifier: 1.2.2
         version: 1.2.2
       prettier:
-        specifier: 1.15.3
-        version: 1.15.3
+        specifier: 3.9.6
+        version: 3.9.6
       source-map-support:
         specifier: 0.5.10
         version: 0.5.10
@@ -1723,9 +1723,9 @@ packages:
   pre-commit@1.2.2:
     resolution: {integrity: sha512-qokTiqxD6GjODy5ETAIgzsRgnBWWQHQH2ghy86PU7mIn/wuWeTwF3otyNQZxWBwVn8XNr8Tdzj/QfUXpH+gRZA==}
 
-  prettier@1.15.3:
-    resolution: {integrity: sha512-gAU9AGAPMaKb3NNSUUuhhFAS7SCO4ALTN4nRIn6PJ075Qd28Yn2Ig2ahEJWdJwJmlEBTUfC7mMUSFy8MwsOCfg==}
-    engines: {node: '>=4'}
+  prettier@3.9.6:
+    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
+    engines: {node: '>=14'}
     hasBin: true
 
   process-nextick-args@2.0.1:
@@ -3946,7 +3946,7 @@ snapshots:
       spawn-sync: 1.0.15
       which: 1.2.14
 
-  prettier@1.15.3: {}
+  prettier@3.9.6: {}
 
   process-nextick-args@2.0.1: {}
 

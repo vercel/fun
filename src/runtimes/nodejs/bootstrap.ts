@@ -28,7 +28,7 @@ interface HttpResult {
 
 type HandlerFunction = (
 	event: LambdaEvent,
-	context?: LambdaContext
+	context?: LambdaContext,
 ) => Promise<unknown>;
 
 const RUNTIME_PATH = '/2018-06-01/runtime';
@@ -41,7 +41,7 @@ const {
 	AWS_LAMBDA_LOG_STREAM_NAME,
 	LAMBDA_TASK_ROOT,
 	_HANDLER,
-	AWS_LAMBDA_RUNTIME_API
+	AWS_LAMBDA_RUNTIME_API,
 } = process.env;
 
 delete process.env.SHLVL;
@@ -52,7 +52,7 @@ start();
 
 // Simple `util.promisify()` polyfill for Node 6.x
 function promisify(fn) {
-	return function(...args) {
+	return function (...args) {
 		return new Promise((resolve, reject) => {
 			args.push((err, result) => {
 				if (err) return reject(err);
@@ -105,7 +105,7 @@ async function nextInvocation() {
 
 	if (res.statusCode !== 200) {
 		throw new Error(
-			`Unexpected /invocation/next response: ${JSON.stringify(res)}`
+			`Unexpected /invocation/next response: ${JSON.stringify(res)}`,
 		);
 	}
 
@@ -128,18 +128,18 @@ async function nextInvocation() {
 		invokeid: awsRequestId,
 		awsRequestId,
 		invokedFunctionArn: res.headers['lambda-runtime-invoked-function-arn'],
-		getRemainingTimeInMillis: () => deadlineMs - Date.now()
+		getRemainingTimeInMillis: () => deadlineMs - Date.now(),
 	};
 
 	if (res.headers['lambda-runtime-client-context']) {
 		context.clientContext = JSON.parse(
-			res.headers['lambda-runtime-client-context']
+			res.headers['lambda-runtime-client-context'],
 		);
 	}
 
 	if (res.headers['lambda-runtime-cognito-identity']) {
 		context.identity = JSON.parse(
-			res.headers['lambda-runtime-cognito-identity']
+			res.headers['lambda-runtime-cognito-identity'],
 		);
 	}
 
@@ -152,11 +152,11 @@ async function invokeResponse(result, context) {
 	const res = await request({
 		method: 'POST',
 		path: `${RUNTIME_PATH}/invocation/${context.awsRequestId}/response`,
-		body: JSON.stringify(result)
+		body: JSON.stringify(result),
 	});
 	if (res.statusCode !== 202) {
 		throw new Error(
-			`Unexpected /invocation/response response: ${JSON.stringify(res)}`
+			`Unexpected /invocation/response response: ${JSON.stringify(res)}`,
 		);
 	}
 }
@@ -164,7 +164,7 @@ async function invokeResponse(result, context) {
 async function invokeError(err, context) {
 	return postError(
 		`${RUNTIME_PATH}/invocation/${context.awsRequestId}/error`,
-		err
+		err,
 	);
 }
 
@@ -175,9 +175,9 @@ async function postError(path, err) {
 		path,
 		headers: {
 			'Content-Type': 'application/json',
-			'Lambda-Runtime-Function-Error-Type': lambdaErr.errorType
+			'Lambda-Runtime-Function-Error-Type': lambdaErr.errorType,
 		},
-		body: JSON.stringify(lambdaErr)
+		body: JSON.stringify(lambdaErr),
 	});
 	if (res.statusCode !== 202) {
 		throw new Error(`Unexpected ${path} response: ${JSON.stringify(res)}`);
@@ -209,11 +209,11 @@ function getHandler(): HandlerFunction {
 
 	if (userHandler == null) {
 		throw new Error(
-			`Handler '${handlerName}' missing on module '${modulePath}'`
+			`Handler '${handlerName}' missing on module '${modulePath}'`,
 		);
 	} else if (typeof userHandler !== 'function') {
 		throw new Error(
-			`Handler '${handlerName}' from '${modulePath}' is not a function`
+			`Handler '${handlerName}' from '${modulePath}' is not a function`,
 		);
 	}
 
@@ -225,15 +225,15 @@ async function request(options): Promise<HttpResult> {
 	options.port = PORT;
 
 	return new Promise((resolve, reject) => {
-		const req = http.request(options, res => {
+		const req = http.request(options, (res) => {
 			const bufs = [];
-			res.on('data', data => bufs.push(data));
+			res.on('data', (data) => bufs.push(data));
 			res.on('end', () =>
 				resolve({
 					statusCode: res.statusCode,
 					headers: res.headers,
-					body: Buffer.concat(bufs).toString('utf8')
-				})
+					body: Buffer.concat(bufs).toString('utf8'),
+				}),
 			);
 			res.on('error', reject);
 		});
@@ -246,6 +246,6 @@ function toLambdaErr({ name, message, stack }) {
 	return {
 		errorType: name,
 		errorMessage: message,
-		stackTrace: (stack || '').split('\n').slice(1)
+		stackTrace: (stack || '').split('\n').slice(1),
 	};
 }
