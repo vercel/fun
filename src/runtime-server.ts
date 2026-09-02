@@ -52,7 +52,7 @@ export class RuntimeServer extends Server {
 
 	async serve(
 		req: http.IncomingMessage,
-		res: http.ServerResponse
+		res: http.ServerResponse,
 	): Promise<any> {
 		debug('%s %s', req.method, req.url);
 
@@ -66,7 +66,7 @@ export class RuntimeServer extends Server {
 			debug(
 				'Invalid API version, expected %o but got %o',
 				this.version,
-				version
+				version,
 			);
 			return send404(res);
 		}
@@ -98,7 +98,7 @@ export class RuntimeServer extends Server {
 
 	async handleNextInvocation(
 		req: http.IncomingMessage,
-		res: http.ServerResponse
+		res: http.ServerResponse,
 	): Promise<void> {
 		const { initDeferred } = this;
 		if (initDeferred) {
@@ -137,7 +137,7 @@ export class RuntimeServer extends Server {
 		const payload: InvokeResult = {
 			StatusCode: statusCode,
 			ExecutedVersion: '$LATEST',
-			Payload: await text(req, { limit: '6mb' })
+			Payload: await text(req, { limit: '6mb' }),
 		};
 
 		res.statusCode = 202;
@@ -155,7 +155,7 @@ export class RuntimeServer extends Server {
 			StatusCode: statusCode,
 			FunctionError: 'Handled',
 			ExecutedVersion: '$LATEST',
-			Payload: await text(req, { limit: '6mb' })
+			Payload: await text(req, { limit: '6mb' }),
 		};
 
 		res.statusCode = 202;
@@ -173,7 +173,7 @@ export class RuntimeServer extends Server {
 			StatusCode: statusCode,
 			FunctionError: 'Unhandled',
 			ExecutedVersion: '$LATEST',
-			Payload: await text(req, { limit: '6mb' })
+			Payload: await text(req, { limit: '6mb' }),
 		};
 
 		res.statusCode = 202;
@@ -185,7 +185,7 @@ export class RuntimeServer extends Server {
 	}
 
 	async invoke(
-		params: InvokeParams = { InvocationType: 'RequestResponse' }
+		params: InvokeParams = { InvocationType: 'RequestResponse' },
 	): Promise<InvokeResult> {
 		if (this.nextDeferred) {
 			debug('Waiting for `next` invocation request from runtime');
@@ -210,8 +210,8 @@ export class RuntimeServer extends Server {
 				Payload: JSON.stringify({
 					errorMessage: `RequestId: ${
 						this.currentRequestId
-					} Process exited before completing request`
-				})
+					} Process exited before completing request`,
+				}),
 			});
 		}
 		super.close(callback);

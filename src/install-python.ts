@@ -11,7 +11,7 @@ const debug = createDebug('@vercel/fun:install-python');
 export function generatePythonTarballUrl(
 	version: string,
 	platform: NodeJS.Platform = process.platform,
-	arch: string = process.arch
+	arch: string = process.arch,
 ): string {
 	return `https://python-binaries.zeit.sh/python-${version}-${platform}-${arch}.tar.gz`;
 }
@@ -20,7 +20,7 @@ export async function installPython(
 	dest: string,
 	version: string,
 	platform: NodeJS.Platform = process.platform,
-	arch: string = process.arch
+	arch: string = process.arch,
 ): Promise<void> {
 	// For Apple M1 use the x64 binaries
 	if (platform === 'darwin' && arch === 'arm64') {
