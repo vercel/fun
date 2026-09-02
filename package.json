@@ -32,18 +32,14 @@
     "tar": "7.5.13",
     "tinyexec": "0.3.2",
     "tree-kill": "1.2.2",
-    "uid-promise": "1.0.0",
     "xdg-app-paths": "5.1.0",
     "yauzl-promise": "2.1.3"
   },
   "devDependencies": {
-    "@esbuild/darwin-arm64": "0.24.2",
     "@types/debug": "4.1.9",
     "@types/generic-pool": "3.1.9",
-    "@types/micro": "7.3.6",
     "@types/node": "20.19.33",
     "@types/node-fetch": "2.5.0",
-    "@types/tar": "4.0.0",
     "@types/yauzl-promise": "2.1.0",
     "codecov": "3.7.1",
     "cpy-cli": "2.0.0",
