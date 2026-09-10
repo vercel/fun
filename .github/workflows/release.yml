@@ -1,7 +1,11 @@
-name: CI
+name: CI and Release
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - "!*"
 
 permissions:
   contents: read
@@ -41,3 +45,35 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22.14.0
+
+      - name: Use pnpm
+        run: npm install -g pnpm@10.1.0 && pnpm --version
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm dlx semantic-release@25.0.9
