@@ -22,7 +22,7 @@ The workflow runs on GitHub-hosted runners and grants `id-token: write` only to 
 ## Release requirements
 
 - Commits merged to `main` must follow Conventional Commits. For example, `fix:` creates a patch release and `feat:` creates a minor release.
-- The release job uses Node.js 22.14.0, semantic-release 25.0.9, and an npm CLI version bundled by `@semantic-release/npm` that supports trusted publishing.
+- The release job uses Node.js 22.14.0, npm 11.6.2, and semantic-release 25.0.9. It explicitly installs npm on `PATH` for trusted publishing; do not rely on the npm version bundled with Node.js or the transitive npm dependency of `@semantic-release/npm` being selected by `pnpm dlx`.
 - The release workflow must remain at `.github/workflows/release.yml`. Renaming it requires updating the npm trusted publisher first.
 - If a GitHub environment is added to the release job, the same exact environment name must also be added to the npm trusted publisher configuration.
 
