@@ -26,6 +26,12 @@ The workflow runs on GitHub-hosted runners and grants `id-token: write` only to 
 - The release workflow must remain at `.github/workflows/release.yml`. Renaming it requires updating the npm trusted publisher first.
 - If a GitHub environment is added to the release job, the same exact environment name must also be added to the npm trusted publisher configuration.
 
+## Triggering a patch release
+
+To trigger a release without runtime changes, merge a release-only change with a Conventional Commit message such as `fix: trigger patch release`. If squash-merging a pull request, use that message as the final squash commit title. A `chore:` or `docs:` commit alone does not trigger a release.
+
+Leave the `0.0.0-development` version in `package.json` unchanged; semantic-release determines the published version from all commits since the last release. Pending features or breaking changes can result in a minor or major release instead of a patch.
+
 ## Verification
 
 After a release, verify all three outputs:
