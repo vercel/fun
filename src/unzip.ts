@@ -10,7 +10,7 @@ import {
 	Entry,
 	ZipFile,
 	open as zipFromFile,
-	fromBuffer as zipFromBuffer
+	fromBuffer as zipFromBuffer,
 } from 'yauzl-promise';
 
 export { zipFromFile, zipFromBuffer, ZipFile };
@@ -19,13 +19,11 @@ const debug = createDebug('@vercel/fun:unzip');
 
 export async function unzipToTemp(
 	data: Buffer | string,
-	tmpDir: string = tmpdir()
+	tmpDir: string = tmpdir(),
 ): Promise<string> {
 	const dir = join(
 		tmpDir,
-		`zeit-fun-${Math.random()
-			.toString(16)
-			.substring(2)}`
+		`zeit-fun-${Math.random().toString(16).substring(2)}`,
 	);
 	let zip: ZipFile;
 	if (Buffer.isBuffer(data)) {
@@ -51,7 +49,7 @@ interface UnzipOptions {
 export async function unzip(
 	zipFile: ZipFile,
 	dir: string,
-	opts: UnzipOptions = {}
+	opts: UnzipOptions = {},
 ): Promise<void> {
 	let entry: Entry;
 	const strip = opts.strip || 0;
@@ -59,10 +57,7 @@ export async function unzip(
 		const fileName =
 			strip === 0
 				? entry.fileName
-				: entry.fileName
-						.split('/')
-						.slice(strip)
-						.join('/');
+				: entry.fileName.split('/').slice(strip).join('/');
 		const destPath = join(dir, fileName);
 		if (/\/$/.test(entry.fileName)) {
 			debug('Creating directory %o', destPath);
@@ -71,7 +66,7 @@ export async function unzip(
 			const [entryStream] = await Promise.all([
 				entry.openReadStream(),
 				// ensure parent directory exists
-				mkdir(dirname(destPath), { recursive: true })
+				mkdir(dirname(destPath), { recursive: true }),
 			]);
 			const mode = getMode(entry);
 			if (mode.isSymbolicLink()) {
@@ -88,7 +83,7 @@ export async function unzip(
 						'Unzipping file to %o with mode %s (%s)',
 						destPath,
 						modeOctal,
-						String(mode)
+						String(mode),
 					);
 				}
 				try {
@@ -99,7 +94,7 @@ export async function unzip(
 					}
 				}
 				const destStream = createWriteStream(destPath, {
-					mode: modeVal
+					mode: modeVal,
 				});
 				await pipeline(entryStream, destStream);
 			}

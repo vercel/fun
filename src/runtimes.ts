@@ -8,7 +8,7 @@ import {
 	readdir,
 	rm as remove,
 	readFile,
-	writeFile
+	writeFile,
 } from 'node:fs/promises';
 
 import { Runtime } from './types';
@@ -41,12 +41,12 @@ export const funCacheDir = XDGAppPaths('com.vercel.fun').cache();
 function createRuntime(
 	runtimes: Runtimes,
 	name: string,
-	mod?: RuntimeImpl
+	mod?: RuntimeImpl,
 ): void {
 	const runtime: Runtime = {
 		name,
 		runtimeDir: join(runtimesDir, name),
-		...mod
+		...mod,
 	};
 	runtimes[name] = runtime;
 }
@@ -128,7 +128,7 @@ async function copy(src: string, dest: string): Promise<void> {
 	debug('copy(%o, %o)', src, dest);
 	const [entries] = await Promise.all([
 		readdir(src),
-		mkdir(dest, { recursive: true })
+		mkdir(dest, { recursive: true }),
 	]);
 	debug('Entries: %o', entries);
 
@@ -153,14 +153,14 @@ async function _initializeRuntime(runtime: Runtime): Promise<void> {
 	const cacheShaFile = join(cacheDir, '.cache-sha');
 	const [cachedRuntimeSha, runtimeSha] = await Promise.all([
 		getCachedRuntimeSha(cacheShaFile),
-		calculateRuntimeSha(runtime.runtimeDir)
+		calculateRuntimeSha(runtime.runtimeDir),
 	]);
 	runtime.cacheDir = cacheDir;
 	if (cachedRuntimeSha === runtimeSha) {
 		debug(
 			'Runtime %o is already initialized at %o',
 			runtime.name,
-			cacheDir
+			cacheDir,
 		);
 	} else {
 		debug('Initializing %o runtime at %o', runtime.name, cacheDir);
@@ -184,7 +184,7 @@ async function _initializeRuntime(runtime: Runtime): Promise<void> {
 				'Runtime %o `init()` failed %o. Cleaning up cache dir %o',
 				runtime.name,
 				err,
-				cacheDir
+				cacheDir,
 			);
 			try {
 				await remove(cacheDir, { recursive: true });
@@ -197,7 +197,7 @@ async function _initializeRuntime(runtime: Runtime): Promise<void> {
 }
 
 export async function initializeRuntime(
-	target: string | Runtime
+	target: string | Runtime,
 ): Promise<Runtime> {
 	let runtime: Runtime;
 	if (typeof target === 'string') {

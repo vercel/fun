@@ -32,13 +32,13 @@ Promise.all([child.stdout, child.stderr].map(stream2Promise)).then(
 		} else {
 			handler(stdout.toString());
 		}
-	}
+	},
 );
 
 function stream2Promise(stream: NodeJS.ReadableStream): Promise<Buffer> {
 	const buffers = [];
-	return new Promise(resolve => {
-		stream.on('data', data => buffers.push(data));
+	return new Promise((resolve) => {
+		stream.on('data', (data) => buffers.push(data));
 		stream.on('end', () => resolve(Buffer.concat(buffers)));
 	});
 }

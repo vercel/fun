@@ -3,7 +3,7 @@ import {
 	LambdaParams,
 	InvokeParams,
 	InvokeResult,
-	Runtime
+	Runtime,
 } from './types';
 import createDebug from 'debug';
 import { rm as remove } from 'node:fs/promises';
@@ -22,7 +22,7 @@ export {
 	runtimes,
 	providers,
 	funCacheDir,
-	initializeRuntime
+	initializeRuntime,
 };
 
 // Environment variable names that AWS Lambda does not allow to be overridden.
@@ -44,7 +44,7 @@ const reservedEnvVars = new Set([
 	'AWS_SECRET_KEY',
 	'AWS_SECRET_ACCESS_KEY',
 	'AWS_SESSION_TOKEN',
-	'TZ'
+	'TZ',
 ]);
 
 export class ValidationError extends Error {
@@ -73,25 +73,25 @@ export async function createFunction(params: LambdaParams): Promise<Lambda> {
 	await initializeRuntime(runtime);
 
 	const envVars = (params.Environment && params.Environment.Variables) || {};
-	const reserved = Object.keys(envVars).filter(name => {
+	const reserved = Object.keys(envVars).filter((name) => {
 		return reservedEnvVars.has(name.toUpperCase());
 	});
 	if (reserved.length > 0) {
 		const err = new ValidationError(
 			`The following environment variables can not be configured: ${reserved.join(
-				', '
-			)}`
+				', ',
+			)}`,
 		);
 		err.reserved = reserved;
 		throw err;
 	}
 
-	const fn: Lambda = async function<T>(
-		payload?: string | object
+	const fn: Lambda = async function <T>(
+		payload?: string | object,
 	): Promise<T> {
 		const result = await fn.invoke({
 			InvocationType: 'RequestResponse',
-			Payload: JSON.stringify(payload)
+			Payload: JSON.stringify(payload),
 		});
 		let resultPayload = result.Payload;
 		if (typeof resultPayload !== 'string') {
@@ -131,7 +131,7 @@ export async function createFunction(params: LambdaParams): Promise<Lambda> {
 
 export async function invoke(
 	fn: Lambda,
-	params: InvokeParams
+	params: InvokeParams,
 ): Promise<InvokeResult> {
 	debug('Invoking function %o', fn.functionName);
 	const result = await fn.provider.invoke(params);
@@ -144,7 +144,7 @@ export async function destroy(fn: Lambda): Promise<void> {
 		debug(
 			'Deleting directory %o for function %o',
 			fn.extractedDir,
-			fn.functionName
+			fn.functionName,
 		);
 		ops.push(remove(fn.extractedDir, { recursive: true }));
 	}

@@ -5,6 +5,6 @@ import { runtimes, initializeRuntime } from '../../runtimes';
 export async function init({ cacheDir }: Runtime): Promise<void> {
 	await Promise.all([
 		initializeRuntime(runtimes.python),
-		installPython(cacheDir, '3.7.2')
+		installPython(cacheDir, '3.7.2'),
 	]);
 }

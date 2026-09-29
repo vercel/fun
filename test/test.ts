@@ -8,7 +8,7 @@ import {
 	initializeRuntime,
 	cleanCacheDir,
 	createFunction,
-	ValidationError
+	ValidationError,
 } from '../src';
 import { generateNodeTarballUrl, installNode } from '../src/install-node';
 import { generatePythonTarballUrl, installPython } from '../src/install-python';
@@ -21,16 +21,16 @@ function assertProcessExitedError(err: Error): void {
 	assert.equal(err.name, 'LambdaError');
 	assert(
 		/RequestId: [a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12} Process exited before completing request/.test(
-			err.message
-		)
+			err.message,
+		),
 	);
 }
 
 function testInvoke(
 	fnPromise: () => Promise<any>,
-	test: (...args: any[]) => Promise<unknown>
+	test: (...args: any[]) => Promise<unknown>,
 ) {
-	return async function() {
+	return async function () {
 		const fn = await fnPromise();
 		try {
 			await test(fn);
@@ -58,8 +58,8 @@ it('LambdaError', () => {
 			'    at Module.require (module.js:596:17)',
 			'    at require (internal/module.js:11:18)',
 			'    at getHandler (/Library/Caches/co.zeit.fun/runtimes/nodejs/bootstrap.js:151:15)',
-			'    at /Library/Caches/co.zeit.fun/runtimes/nodejs/bootstrap.js:37:23'
-		]
+			'    at /Library/Caches/co.zeit.fun/runtimes/nodejs/bootstrap.js:37:23',
+		],
 	});
 	expect(err.name).toBe('InitError');
 	expect(err.message).toBe('I crashed!');
@@ -69,13 +69,13 @@ it('LambdaError', () => {
 // `install-node.ts` tests
 it('install_node_tarball_url_darwin', () => {
 	expect(generateNodeTarballUrl('8.10.0', 'darwin', 'x64')).toBe(
-		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-darwin-x64.tar.gz'
+		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-darwin-x64.tar.gz',
 	);
 });
 
 it('install_node_tarball_url_windows', () => {
 	expect(generateNodeTarballUrl('8.10.0', 'win32', 'x64')).toBe(
-		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-win-x64.zip'
+		'https://nodejs.org/dist/v8.10.0/node-v8.10.0-win-x64.zip',
 	);
 });
 
@@ -83,16 +83,14 @@ it('install_node', async () => {
 	const version = 'v10.0.0';
 	const dest = join(
 		tmpdir(),
-		`install-node-${Math.random()
-			.toString(16)
-			.substring(2)}`
+		`install-node-${Math.random().toString(16).substring(2)}`,
 	);
 	await mkdir(dest, { recursive: true });
 	try {
 		await installNode(dest, version);
 		const res = await exec(join(dest, 'bin/node'), [
 			'-p',
-			'process.version'
+			'process.version',
 		]);
 		expect(res.stdout.trim()).toBe(version);
 	} finally {
@@ -112,7 +110,7 @@ it('install_node', async () => {
 // `install-python.ts` tests
 it('install_python_tarball_url', () => {
 	expect(generatePythonTarballUrl('2.7.12', 'darwin', 'x64')).toBe(
-		'https://python-binaries.zeit.sh/python-2.7.12-darwin-x64.tar.gz'
+		'https://python-binaries.zeit.sh/python-2.7.12-darwin-x64.tar.gz',
 	);
 });
 
@@ -120,16 +118,14 @@ it('install_python', async () => {
 	const version = '3.6.8';
 	const dest = join(
 		tmpdir(),
-		`install-python-${Math.random()
-			.toString(16)
-			.substring(2)}`
+		`install-python-${Math.random().toString(16).substring(2)}`,
 	);
 	await mkdir(dest, { recursive: true });
 	try {
 		await installPython(dest, version);
 		const res = await exec(join(dest, 'bin/python'), [
 			'-c',
-			'import platform; print(platform.python_version())'
+			'import platform; print(platform.python_version())',
 		]);
 		expect(res.stdout.trim()).toBe(version);
 	} finally {
@@ -142,15 +138,15 @@ it('install_python', async () => {
 it('lambda_properties', async () => {
 	const fn = await createFunction({
 		Code: {
-			Directory: __dirname + '/functions/nodejs-echo'
+			Directory: __dirname + '/functions/nodejs-echo',
 		},
 		Handler: 'handler.handler',
 		Runtime: 'nodejs',
 		Environment: {
 			Variables: {
-				HELLO: 'world'
-			}
-		}
+				HELLO: 'world',
+			},
+		},
 	});
 	expect(fn.version).toBe('$LATEST');
 	//assert.equal(fn.functionName, 'nodejs-echo');
@@ -161,16 +157,16 @@ it('reserved_env', async () => {
 	try {
 		await createFunction({
 			Code: {
-				Directory: __dirname + '/functions/nodejs-echo'
+				Directory: __dirname + '/functions/nodejs-echo',
 			},
 			Handler: 'handler.handler',
 			Runtime: 'nodejs',
 			Environment: {
 				Variables: {
 					AWS_REGION: 'foo',
-					TZ: 'US/Pacific'
-				}
-			}
+					TZ: 'US/Pacific',
+				},
+			},
 		});
 	} catch (_err) {
 		err = _err;
@@ -181,7 +177,7 @@ it('reserved_env', async () => {
 	assert.deepEqual(err.reserved, ['AWS_REGION', 'TZ']);
 	assert.equal(
 		err.toString(),
-		'ValidationError: The following environment variables can not be configured: AWS_REGION, TZ'
+		'ValidationError: The following environment variables can not be configured: AWS_REGION, TZ',
 	);
 });
 
@@ -212,22 +208,22 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-echo'
+					Directory: __dirname + '/functions/nodejs-echo',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs'
+				Runtime: 'nodejs',
 			}),
-		async fn => {
+		async (fn) => {
 			const res = await fn.invoke({
-				Payload: JSON.stringify({ hello: 'world' })
+				Payload: JSON.stringify({ hello: 'world' }),
 			});
 			assert.equal(res.StatusCode, 200);
 			assert.equal(res.ExecutedVersion, '$LATEST');
 			assert.equal(typeof res.Payload, 'string');
 			const payload = JSON.parse(String(res.Payload));
 			assert.deepEqual(payload.event, { hello: 'world' });
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -236,18 +232,18 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-echo'
+					Directory: __dirname + '/functions/nodejs-echo',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs'
+				Runtime: 'nodejs',
 			}),
-		async fn => {
+		async (fn) => {
 			const res = await fn.invoke();
 			assert.equal(typeof res.Payload, 'string');
 			const payload = JSON.parse(String(res.Payload));
 			assert.deepEqual(payload.event, {});
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -256,20 +252,20 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-echo'
+					Directory: __dirname + '/functions/nodejs-echo',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs'
+				Runtime: 'nodejs',
 			}),
-		async fn => {
+		async (fn) => {
 			const res = await fn.invoke();
 			const { context } = JSON.parse(String(res.Payload));
 			assert.equal(context.logGroupName, 'aws/lambda/nodejs-echo');
 			assert.equal(context.functionName, 'nodejs-echo');
 			assert.equal(context.memoryLimitInMB, '128');
 			assert.equal(context.functionVersion, '$LATEST');
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -278,14 +274,14 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-env'
+					Directory: __dirname + '/functions/nodejs-env',
 				},
 				Handler: 'index.env',
 				Runtime: 'nodejs',
 				AccessKeyId: 'TestAccessKeyId',
-				SecretAccessKey: 'TestSecretAccessKey'
+				SecretAccessKey: 'TestSecretAccessKey',
 			}),
-		async fn => {
+		async (fn) => {
 			const res = await fn.invoke();
 			assert.equal(typeof res.Payload, 'string');
 			const env = JSON.parse(String(res.Payload));
@@ -300,8 +296,8 @@ it(
 			assert.equal(env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE, '128');
 			assert.equal(env.AWS_ACCESS_KEY_ID, 'TestAccessKeyId');
 			assert.equal(env.AWS_SECRET_ACCESS_KEY, 'TestSecretAccessKey');
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -310,12 +306,12 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-pid'
+					Directory: __dirname + '/functions/nodejs-pid',
 				},
 				Handler: 'index.pid',
-				Runtime: 'nodejs'
+				Runtime: 'nodejs',
 			}),
-		async fn => {
+		async (fn) => {
 			let res;
 
 			// Invoke once, will fire up a new lambda process
@@ -330,8 +326,8 @@ it(
 			assert.equal(typeof res.Payload, 'string');
 			const pid2 = JSON.parse(String(res.Payload));
 			assert.equal(pid, pid2);
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -340,12 +336,12 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-pid'
+					Directory: __dirname + '/functions/nodejs-pid',
 				},
 				Handler: 'index.pid',
-				Runtime: 'nodejs'
+				Runtime: 'nodejs',
 			}),
-		async fn => {
+		async (fn) => {
 			const [res1, res2] = await Promise.all([fn.invoke(), fn.invoke()]);
 			const pid1 = JSON.parse(String(res1.Payload));
 			const pid2 = JSON.parse(String(res2.Payload));
@@ -356,8 +352,8 @@ it(
 			// CircleCI's containers due to the second worker process not yet
 			// being in an initialized state.
 			// assert.notEqual(pid1, pid2);
-		}
-	)
+		},
+	),
 );
 
 test(
@@ -366,16 +362,16 @@ test(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-echo'
+					Directory: __dirname + '/functions/nodejs-echo',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs'
+				Runtime: 'nodejs',
 			}),
-		async fn => {
+		async (fn) => {
 			const payload = await fn({ hello: 'world' });
 			assert.deepEqual(payload.event, { hello: 'world' });
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -385,16 +381,16 @@ it(
 			createFunction({
 				Code: {
 					Directory:
-						__dirname + '/functions/nodejs-callback-with-return'
+						__dirname + '/functions/nodejs-callback-with-return',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs'
+				Runtime: 'nodejs',
 			}),
-		async fn => {
+		async (fn) => {
 			const payload = await fn();
 			assert.deepEqual(payload, { foo: 'bar' });
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -403,12 +399,12 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-exit'
+					Directory: __dirname + '/functions/nodejs-exit',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs'
+				Runtime: 'nodejs',
 			}),
-		async fn => {
+		async (fn) => {
 			let err;
 			try {
 				await fn();
@@ -417,8 +413,8 @@ it(
 			}
 			assert(err);
 			assertProcessExitedError(err);
-		}
-	)
+		},
+	),
 );
 
 // `fun` should be resilient to its runtime cache being wiped away during
@@ -434,10 +430,10 @@ it('clean_cache_dir_recovery', async () => {
 	await cleanCacheDir();
 	const fn = await createFunction({
 		Code: {
-			Directory: __dirname + '/functions/nodejs-echo'
+			Directory: __dirname + '/functions/nodejs-echo',
 		},
 		Handler: 'handler.handler',
-		Runtime: 'nodejs'
+		Runtime: 'nodejs',
 	});
 	try {
 		const payload = await fn<Hello>({ hello: 'world' });
@@ -454,16 +450,16 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/provided-bash-echo'
+					Directory: __dirname + '/functions/provided-bash-echo',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'provided'
+				Runtime: 'provided',
 			}),
-		async fn => {
+		async (fn) => {
 			const payload = await fn({ hello: 'world' });
 			assert.deepEqual(payload, { hello: 'world' });
-		}
-	)
+		},
+	),
 );
 
 // `nodejs8.10` runtime
@@ -473,16 +469,16 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-version'
+					Directory: __dirname + '/functions/nodejs-version',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs8.10'
+				Runtime: 'nodejs8.10',
 			}),
-		async fn => {
+		async (fn) => {
 			const versions = await fn({ hello: 'world' });
 			assert.equal(versions.node, '8.10.0');
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -491,12 +487,12 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-eval'
+					Directory: __dirname + '/functions/nodejs-eval',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs8.10'
+				Runtime: 'nodejs8.10',
 			}),
-		async fn => {
+		async (fn) => {
 			let err;
 			const error = 'this is a handled error';
 			try {
@@ -509,8 +505,8 @@ it(
 
 			const { result } = await fn({ code: '1 + 1' });
 			expect(result).toBe(2);
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -519,12 +515,12 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-reference-error'
+					Directory: __dirname + '/functions/nodejs-reference-error',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs'
+				Runtime: 'nodejs',
 			}),
-		async fn => {
+		async (fn) => {
 			let err;
 			try {
 				await fn();
@@ -534,8 +530,8 @@ it(
 			assert(err);
 			assert.equal(err.name, 'ReferenceError');
 			assert.equal(err.message, 'x is not defined');
-		}
-	)
+		},
+	),
 );
 
 it(
@@ -544,12 +540,12 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-eval'
+					Directory: __dirname + '/functions/nodejs-eval',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs8.10'
+				Runtime: 'nodejs8.10',
 			}),
-		async fn => {
+		async (fn) => {
 			let err;
 			try {
 				await fn({ code: 'process.exit(5)' });
@@ -558,8 +554,8 @@ it(
 			}
 			assert(err);
 			assertProcessExitedError(err);
-		}
-	)
+		},
+	),
 );
 
 // `nodejs10.x` runtime
@@ -569,16 +565,16 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-version'
+					Directory: __dirname + '/functions/nodejs-version',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs10.x'
+				Runtime: 'nodejs10.x',
 			}),
-		async fn => {
+		async (fn) => {
 			const versions = await fn({ hello: 'world' });
 			assert.equal(versions.node, '10.15.3');
-		}
-	)
+		},
+	),
 );
 
 // `nodejs12.x` runtime
@@ -588,16 +584,16 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-version'
+					Directory: __dirname + '/functions/nodejs-version',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs12.x'
+				Runtime: 'nodejs12.x',
 			}),
-		async fn => {
+		async (fn) => {
 			const versions = await fn({ hello: 'world' });
 			assert.equal(versions.node, '12.22.7');
-		}
-	)
+		},
+	),
 );
 
 // `nodejs14.x` runtime
@@ -607,16 +603,16 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-version'
+					Directory: __dirname + '/functions/nodejs-version',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'nodejs14.x'
+				Runtime: 'nodejs14.x',
 			}),
-		async fn => {
+		async (fn) => {
 			const versions = await fn({ hello: 'world' });
 			assert.equal(versions.node, '14.18.1');
-		}
-	)
+		},
+	),
 );
 
 // Support for paths as Handler
@@ -626,21 +622,21 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/nodejs-nested-handler'
+					Directory: __dirname + '/functions/nodejs-nested-handler',
 				},
 				Handler: 'hid.den/launcher.handler',
 				Runtime: 'nodejs',
 				Environment: {
 					Variables: {
-						HELLO: 'world'
-					}
-				}
+						HELLO: 'world',
+					},
+				},
 			}),
-		async fn => {
+		async (fn) => {
 			const env = await fn();
 			expect(env.HELLO).toBe('world');
-		}
-	)
+		},
+	),
 );
 
 // `python` runtime
@@ -650,19 +646,19 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/python-hello'
+					Directory: __dirname + '/functions/python-hello',
 				},
 				Handler: 'hello.hello_handler',
-				Runtime: 'python'
+				Runtime: 'python',
 			}),
-		async fn => {
+		async (fn) => {
 			const payload = await fn({
 				first_name: 'John',
-				last_name: 'Smith'
+				last_name: 'Smith',
 			});
 			assert.deepEqual(payload, { message: 'Hello John Smith!' });
-		}
-	)
+		},
+	),
 );
 
 // `python2.7` runtime
@@ -672,16 +668,16 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/python-version'
+					Directory: __dirname + '/functions/python-version',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'python2.7'
+				Runtime: 'python2.7',
 			}),
-		async fn => {
+		async (fn) => {
 			const payload = await fn();
 			assert.equal(payload['platform.python_version'], '2.7.12');
-		}
-	)
+		},
+	),
 );
 
 // `python3` runtime
@@ -691,16 +687,16 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/python-version'
+					Directory: __dirname + '/functions/python-version',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'python3'
+				Runtime: 'python3',
 			}),
-		async fn => {
+		async (fn) => {
 			const payload = await fn();
 			assert.equal(payload['platform.python_version'][0], '3');
-		}
-	)
+		},
+	),
 );
 
 // `python3.6` runtime
@@ -710,16 +706,16 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/python-version'
+					Directory: __dirname + '/functions/python-version',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'python3.6'
+				Runtime: 'python3.6',
 			}),
-		async fn => {
+		async (fn) => {
 			const payload = await fn();
 			assert.equal(payload['platform.python_version'], '3.6.8');
-		}
-	)
+		},
+	),
 );
 
 // `python3.7` runtime
@@ -729,16 +725,16 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					Directory: __dirname + '/functions/python-version'
+					Directory: __dirname + '/functions/python-version',
 				},
 				Handler: 'handler.handler',
-				Runtime: 'python3.7'
+				Runtime: 'python3.7',
 			}),
-		async fn => {
+		async (fn) => {
 			const payload = await fn();
 			assert.equal(payload['platform.python_version'], '3.7.2');
-		}
-	)
+		},
+	),
 );
 
 // `ZipFile` Buffer support
@@ -749,25 +745,25 @@ it(
 			return await createFunction({
 				Code: {
 					ZipFile: await readFile(
-						__dirname + '/functions/nodejs-env.zip'
-					)
+						__dirname + '/functions/nodejs-env.zip',
+					),
 				},
 				Handler: 'index.env',
 				Runtime: 'nodejs',
 				Environment: {
 					Variables: {
-						HELLO: 'world'
-					}
-				}
+						HELLO: 'world',
+					},
+				},
 			});
 		},
-		async fn => {
+		async (fn) => {
 			const env = await fn();
 			assert.equal(env.HELLO, 'world');
 			// Assert that the `TASK_ROOT` dir includes the "zeit-fun-" prefix
 			assert(/^zeit-fun-/.test(basename(env.LAMBDA_TASK_ROOT)));
-		}
-	)
+		},
+	),
 );
 
 // `ZipFile` string support
@@ -777,21 +773,21 @@ it(
 		() =>
 			createFunction({
 				Code: {
-					ZipFile: __dirname + '/functions/nodejs-env.zip'
+					ZipFile: __dirname + '/functions/nodejs-env.zip',
 				},
 				Handler: 'index.env',
 				Runtime: 'nodejs',
 				Environment: {
 					Variables: {
-						HELLO: 'world'
-					}
-				}
+						HELLO: 'world',
+					},
+				},
 			}),
-		async fn => {
+		async (fn) => {
 			const env = await fn();
 			assert.equal(env.HELLO, 'world');
 			// Assert that the `TASK_ROOT` dir includes the "zeit-fun-" prefix
 			assert(/^zeit-fun-/.test(basename(env.LAMBDA_TASK_ROOT)));
-		}
-	)
+		},
+	),
 );

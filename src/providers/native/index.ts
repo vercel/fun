@@ -15,7 +15,7 @@ import {
 	InvokeParams,
 	InvokeResult,
 	Lambda,
-	Provider
+	Provider,
 } from '../../types';
 
 const isWin = process.platform === 'win32';
@@ -31,12 +31,12 @@ export default class NativeProvider implements Provider {
 	constructor(fn: Lambda, params: LambdaParams) {
 		const factory = {
 			create: this.createProcess.bind(this),
-			destroy: this.destroyProcess.bind(this)
+			destroy: this.destroyProcess.bind(this),
 		};
 		const opts = {
 			min: 0,
 			max: 10,
-			acquireTimeoutMillis: ms('5s')
+			acquireTimeoutMillis: ms('5s'),
 
 			// XXX: These 3 options are commented out because they cause
 			// the tests to never complete (doesn't exit cleanly).
@@ -52,10 +52,10 @@ export default class NativeProvider implements Provider {
 		this.params = params;
 		this.runtimeApis = new WeakMap();
 		this.pool = createPool(factory, opts);
-		this.pool.on('factoryCreateError', err => {
+		this.pool.on('factoryCreateError', (err) => {
 			console.error('factoryCreateError', { err });
 		});
-		this.pool.on('factoryDestroyError', err => {
+		this.pool.on('factoryDestroyError', (err) => {
 			console.error('factoryDestroyError', { err });
 		});
 	}
@@ -67,7 +67,7 @@ export default class NativeProvider implements Provider {
 			runtime.name === 'executable' ? 'executable' : 'bootstrap';
 		const bootstrap = join(
 			runtime.cacheDir,
-			isWin ? 'bootstrap.js' : bootstrapFile
+			isWin ? 'bootstrap.js' : bootstrapFile,
 		);
 
 		const server = new RuntimeServer(this.lambda);
@@ -80,7 +80,7 @@ export default class NativeProvider implements Provider {
 		const logGroupName = `aws/lambda/${functionName}`;
 		const logStreamName = `2019/01/12/[${version}]${uuid().replace(
 			/\-/g,
-			''
+			'',
 		)}`;
 
 		// https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html
@@ -107,7 +107,7 @@ export default class NativeProvider implements Provider {
 			AWS_LAMBDA_LOG_STREAM_NAME: logStreamName,
 			LAMBDA_RUNTIME_DIR: runtime.cacheDir,
 			LAMBDA_TASK_ROOT: taskDir,
-			TZ: ':UTC'
+			TZ: ':UTC',
 		};
 
 		let bin: string = bootstrap;
@@ -120,7 +120,7 @@ export default class NativeProvider implements Provider {
 		const proc = spawn(bin, args, {
 			env,
 			cwd: taskDir,
-			stdio: ['ignore', 'inherit', 'inherit']
+			stdio: ['ignore', 'inherit', 'inherit'],
 		});
 		this.runtimeApis.set(proc, server);
 
@@ -129,7 +129,7 @@ export default class NativeProvider implements Provider {
 				'Process (pid=%o) exited with code %o, signal %o',
 				proc.pid,
 				code,
-				signal
+				signal,
 			);
 			const server = this.runtimeApis.get(proc);
 			if (server) {
@@ -139,7 +139,7 @@ export default class NativeProvider implements Provider {
 			} else {
 				debug(
 					'No Runtime API server associated with process %o. This SHOULD NOT happen!',
-					proc.pid
+					proc.pid,
 				);
 			}
 		});
@@ -162,7 +162,7 @@ export default class NativeProvider implements Provider {
 				debug(
 					'Got error stopping process %o: %s',
 					proc.pid,
-					err.message
+					err.message,
 				);
 			} else {
 				throw err;
@@ -199,7 +199,7 @@ export default class NativeProvider implements Provider {
 			if (initError) {
 				debug(
 					'Lambda got initialization error on process %o',
-					proc.pid
+					proc.pid,
 				);
 				// An error happend during initialization, so remove the
 				// process from the pool and return the error to the caller
@@ -222,8 +222,8 @@ export default class NativeProvider implements Provider {
 				ExecutedVersion: '$LATEST',
 				// TODO: make this into a `server.createError()` function
 				Payload: JSON.stringify({
-					errorMessage: err.message
-				})
+					errorMessage: err.message,
+				}),
 			};
 		}
 

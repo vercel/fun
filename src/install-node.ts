@@ -13,7 +13,7 @@ const debug = createDebug('@vercel/fun:install-node');
 export function generateNodeTarballUrl(
 	version: string,
 	platform: NodeJS.Platform = process.platform,
-	arch: string = process.arch
+	arch: string = process.arch,
 ): string {
 	if (!version.startsWith('v')) {
 		version = `v${version}`;
@@ -33,7 +33,7 @@ export async function installNode(
 	dest: string,
 	version: string,
 	platform: NodeJS.Platform = process.platform,
-	arch: string = process.arch
+	arch: string = process.arch,
 ): Promise<void> {
 	// For Apple M1, use the x64 binaries for v14 or less,
 	// since there are no arm64 binaries for these versions
@@ -65,6 +65,10 @@ export async function installNode(
 		await unzip(zipFile, finalDest, { strip: 1 });
 	} else {
 		debug('Extracting Node.js %s tarball to %o', version, dest);
-		await pipeline(res.body, createGunzip(), extract({ strip: 1, C: dest }));
+		await pipeline(
+			res.body,
+			createGunzip(),
+			extract({ strip: 1, C: dest }),
+		);
 	}
 }

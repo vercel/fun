@@ -24,7 +24,7 @@ export async function init({ cacheDir }: Runtime): Promise<void> {
 		debug('detected windows, so stripping Setpgid');
 		data = data
 			.split('\n')
-			.filter(line => !line.includes('Setpgid'))
+			.filter((line) => !line.includes('Setpgid'))
 			.join('\n');
 	}
 
