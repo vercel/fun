@@ -65,7 +65,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
-          node-version: 22.14.0
+          node-version: 22.23.4
 
       - name: Use npm with trusted publishing support
         run: npm install -g npm@11.6.2 && npm --version
