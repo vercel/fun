@@ -34,7 +34,11 @@ export async function installPython(
 		throw new Error(`HTTP request ${tarballUrl} failed: ${res.status}`);
 	}
 	debug('Extracting Python %s tarball to %o', version, dest);
-	await pipeline(Readable.fromWeb(res.body), createGunzip(), extract({ strip: 1, C: dest }));
+	await pipeline(
+		Readable.fromWeb(res.body),
+		createGunzip(),
+		extract({ strip: 1, C: dest }),
+	);
 
 	// tar@7.5.9+ drops symlinks whose target is itself a symlink.
 	// The Python tarballs have bin/python -> python3 -> python3.6,
