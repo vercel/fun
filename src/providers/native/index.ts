@@ -2,10 +2,9 @@ import ms from 'ms';
 import { randomUUID as uuid } from 'node:crypto';
 
 import createDebug from 'debug';
-import { promisify } from 'node:util';
 import { AddressInfo } from 'node:net';
 import listen from 'async-listen';
-import _treeKill from 'tree-kill';
+import { killTree } from 'tinyps';
 import { Pool, createPool } from 'generic-pool';
 import { delimiter, basename, join, resolve } from 'node:path';
 import { ChildProcess, spawn } from 'child_process';
@@ -20,7 +19,6 @@ import {
 
 const isWin = process.platform === 'win32';
 const debug = createDebug('@vercel/fun:providers/native');
-const treeKill = promisify(_treeKill);
 
 export default class NativeProvider implements Provider {
 	private pool: Pool<ChildProcess>;
@@ -154,7 +152,7 @@ export default class NativeProvider implements Provider {
 			this.unfreezeProcess(proc);
 
 			debug('Stopping process %o', proc.pid);
-			await treeKill(proc.pid);
+			await killTree(proc.pid);
 		} catch (err) {
 			// ESRCH means that the process ID no longer exists, which is fine
 			// in this case since we're shutting down the process anyways
