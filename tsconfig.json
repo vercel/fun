@@ -7,7 +7,7 @@
     "sourceMap": true,
     "declaration": true,
     "skipLibCheck": true,
-    "lib": ["esnext", "dom"],
+    "lib": ["esnext"],
     "types": ["node", "vitest/globals"]
   },
   "include": [

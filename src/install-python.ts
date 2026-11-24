@@ -1,7 +1,7 @@
 import { extract } from 'tar';
-import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'node:zlib';
+import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { join } from 'node:path';
 import { lstat, symlink } from 'node:fs/promises';
@@ -30,11 +30,11 @@ export async function installPython(
 	const tarballUrl = generatePythonTarballUrl(version, platform, arch);
 	debug('Downloading Python %s tarball %o', version, tarballUrl);
 	const res = await fetch(tarballUrl);
-	if (!res.ok) {
+	if (!res.ok || !res.body) {
 		throw new Error(`HTTP request ${tarballUrl} failed: ${res.status}`);
 	}
 	debug('Extracting Python %s tarball to %o', version, dest);
-	await pipeline(res.body, createGunzip(), extract({ strip: 1, C: dest }));
+	await pipeline(Readable.fromWeb(res.body), createGunzip(), extract({ strip: 1, C: dest }));
 
 	// tar@7.5.9+ drops symlinks whose target is itself a symlink.
 	// The Python tarballs have bin/python -> python3 -> python3.6,
