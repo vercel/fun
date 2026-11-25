@@ -1,7 +1,7 @@
 import { extract } from 'tar';
-import fetch from 'node-fetch';
 import createDebug from 'debug';
 import { createGunzip } from 'node:zlib';
+import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { basename, join } from 'node:path';
 import { createWriteStream } from 'node:fs';
@@ -48,7 +48,7 @@ export async function installNode(
 	const tarballUrl = generateNodeTarballUrl(version, platform, arch);
 	debug('Downloading Node.js %s tarball %o', version, tarballUrl);
 	const res = await fetch(tarballUrl);
-	if (!res.ok) {
+	if (!res.ok || !res.body) {
 		throw new Error(`HTTP request failed: ${res.status}`);
 	}
 	if (platform === 'win32') {
@@ -58,7 +58,7 @@ export async function installNode(
 		const zipPath = join(dest, zipName);
 
 		debug('Saving Node.js %s zip file to %o', version, zipPath);
-		await pipeline(res.body, createWriteStream(zipPath));
+		await pipeline(Readable.fromWeb(res.body), createWriteStream(zipPath));
 
 		debug('Extracting Node.js %s zip file to %o', version, finalDest);
 		const zipFile = await zipFromFile(zipPath);
@@ -66,7 +66,7 @@ export async function installNode(
 	} else {
 		debug('Extracting Node.js %s tarball to %o', version, dest);
 		await pipeline(
-			res.body,
+			Readable.fromWeb(res.body),
 			createGunzip(),
 			extract({ strip: 1, C: dest }),
 		);
