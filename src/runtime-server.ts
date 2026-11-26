@@ -4,7 +4,7 @@ import createDebug from 'debug';
 import { run, text } from 'micro';
 import { randomUUID as uuid } from 'node:crypto';
 import { match } from 'path-to-regexp';
-import once from '@tootallnate/once';
+import { once } from 'node:events';
 
 import { createDeferred, Deferred } from './deferred';
 import { Lambda, InvokeParams, InvokeResult } from './types';

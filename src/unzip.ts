@@ -1,8 +1,7 @@
 import { tmpdir } from 'node:os';
-import Mode from 'stat-mode';
 import createDebug from 'debug';
 import { dirname, join } from 'node:path';
-import { createWriteStream } from 'node:fs';
+import { constants, createWriteStream } from 'node:fs';
 import { mkdir, symlink, unlink } from 'node:fs/promises';
 import { text } from 'node:stream/consumers';
 import { pipeline } from 'node:stream/promises';
@@ -39,9 +38,6 @@ export async function unzipToTemp(
 	return dir;
 }
 
-const getMode = (entry: Entry) =>
-	new Mode({ mode: entry.externalFileAttributes >>> 16 });
-
 interface UnzipOptions {
 	strip?: number;
 }
@@ -68,22 +64,20 @@ export async function unzip(
 				// ensure parent directory exists
 				mkdir(dirname(destPath), { recursive: true }),
 			]);
-			const mode = getMode(entry);
-			if (mode.isSymbolicLink()) {
+			const mode = entry.externalFileAttributes >>> 16;
+			if ((mode & constants.S_IFMT) === constants.S_IFLNK) {
 				const linkDest = await text(entryStream);
 				debug('Creating symboling link %o to %o', destPath, linkDest);
 				await symlink(linkDest, destPath);
 			} else {
-				const modeOctal = mode.toOctal();
-				const modeVal = parseInt(modeOctal, 8);
+				const modeVal = mode & 0o7777;
 				if (modeVal === 0) {
 					debug('Unzipping file to %o', destPath);
 				} else {
 					debug(
-						'Unzipping file to %o with mode %s (%s)',
+						'Unzipping file to %o with mode %s',
 						destPath,
-						modeOctal,
-						String(mode),
+						modeVal.toString(8).padStart(4, '0'),
 					);
 				}
 				try {
