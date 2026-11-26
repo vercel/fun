@@ -3,7 +3,7 @@ import { randomUUID as uuid } from 'node:crypto';
 
 import createDebug from 'debug';
 import { AddressInfo } from 'node:net';
-import listen from 'async-listen';
+import { once } from 'node:events';
 import { killTree } from 'tinyps';
 import { Pool, createPool } from 'generic-pool';
 import { delimiter, basename, join, resolve } from 'node:path';
@@ -69,7 +69,8 @@ export default class NativeProvider implements Provider {
 		);
 
 		const server = new RuntimeServer(this.lambda);
-		await listen(server, 0, '127.0.0.1');
+		server.listen(0, '127.0.0.1');
+		await once(server, 'listening');
 		const { port } = server.address() as AddressInfo;
 
 		debug('Creating process %o', bootstrap);

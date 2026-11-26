@@ -19,7 +19,6 @@
     "dist/src"
   ],
   "dependencies": {
-    "async-listen": "1.2.0",
     "debug": "4.3.4",
     "generic-pool": "3.4.2",
     "micro": "9.3.5-canary.3",
