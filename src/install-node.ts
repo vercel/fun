@@ -1,5 +1,5 @@
-import { extract } from 'tar';
 import createDebug from 'debug';
+import { unpackTar } from 'modern-tar/fs';
 import { createGunzip } from 'node:zlib';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
@@ -68,7 +68,7 @@ export async function installNode(
 		await pipeline(
 			Readable.fromWeb(res.body),
 			createGunzip(),
-			extract({ strip: 1, C: dest }),
+			unpackTar(dest, { strip: 1 }),
 		);
 	}
 }
