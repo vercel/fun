@@ -18,8 +18,8 @@ importers:
         specifier: 9.3.5-canary.3
         version: 9.3.5-canary.3
       modern-tar:
-        specifier: 0.8.6
-        version: 0.8.6
+        specifier: 0.8.7
+        version: 0.8.7
       ms:
         specifier: 2.1.1
         version: 2.1.1
@@ -825,8 +825,8 @@ packages:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
     hasBin: true
 
-  modern-tar@0.8.6:
-    resolution: {integrity: sha512-LYSks0tNVqbtez/9OB0YFP6qLRSqkdAxJWOQpVaR67lNTbj2zNLyYpowkRMia5lXLCZKzxwoxkxH2MbbBR2aEg==}
+  modern-tar@0.8.7:
+    resolution: {integrity: sha512-q17gyzLiCw2wf/Rcl5c3EA5ynB2hOHb5+qMpbaILOQBaTiBx9bumfXC5sMk0wQrVoLtlBhW77dJTnLArlczsGg==}
     engines: {node: '>=18.0.0'}
 
   ms@2.1.1:
@@ -2019,7 +2019,7 @@ snapshots:
     dependencies:
       minimist: 1.2.8
 
-  modern-tar@0.8.6: {}
+  modern-tar@0.8.7: {}
 
   ms@2.1.1: {}
 
